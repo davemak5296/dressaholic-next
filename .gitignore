@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+# linter's configurations
+.eslintignore
+.prettierignore
+.eslintrc
+
 # testing
 /coverage
 
@@ -21,3 +26,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
