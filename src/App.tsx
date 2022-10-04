@@ -1,26 +1,16 @@
-import logo from './logo.svg';
+import * as React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import PageLayout from './pages/page-layout';
+import Home from './pages/home';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div className="container">
-          <p className="border border-solid border-blue-500">
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-        </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route element={<PageLayout />}>
+        <Route index element={<Home />} />
+      </Route>
+    </Routes>
   );
-}
+};
 
 export default App;
