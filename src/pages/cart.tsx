@@ -6,7 +6,7 @@ const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:te
 const Cart: React.FC = () => {
   return (
     <>
-      <main className="mx-auto mt-[46px] h-screen px-3 py-3 sm:container sm:mt-[64px] lg:mt-[72px]">
+      <main className="main-container h-screen px-3 py-3 sm:container">
         <h1 className="mx-auto my-3 flex justify-center text-2xl md:my-5 md:text-3xl lg:my-7 lg:text-4xl xl:my-9 xl:text-5xl">
           CART
         </h1>

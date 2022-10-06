@@ -3,9 +3,9 @@ import { Outlet } from 'react-router';
 
 const ShopLayout: React.FC = () => {
   return (
-    <main className="mx-auto mt-[46px] grid h-[1000px] grid-cols-4 border border-solid border-red-500 sm:mt-[64px] lg:mt-[72px] xl:container">
+    <main className="main-container grid h-[1000px] grid-cols-4 border border-solid border-red-500">
       <div className="relative top-0 col-span-1 border border-solid border-blue-500">
-        <div className="sticky top-[52px] bottom-0">
+        <div className="sticky top-[52px]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga voluptate laudantium,
           adipisci quibusdam eaque commodi deserunt fugiat mollitia est debitis distinctio aut quam
           cum accusantium. Doloremque voluptate libero rem aliquam nemo dignissimos tenetur

@@ -9,7 +9,7 @@ const Carousel: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto mt-[46px] flex max-h-[calc(100vh-64px)] items-center overflow-hidden object-cover sm:mt-[64px] lg:mt-[72px] xl:container">
+    <div className="main-container flex max-h-[calc(100vh-64px)] items-center overflow-hidden object-cover">
       <div className="relative max-h-[calc(100vh-64px)]">
         {/* control buttons in bottom left corner */}
         <div className="absolute left-6 bottom-8 z-10 flex w-[100px] justify-evenly md:w-[200px]">

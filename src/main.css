@@ -12,3 +12,9 @@
     font-family: Noto Sans, system-ui, sans-serif;
   }
 }
+
+@layer components {
+  .main-container {
+    @apply mx-auto mt-[46px] sm:mt-[64px] lg:mt-[72px] xl:container
+  }
+}
