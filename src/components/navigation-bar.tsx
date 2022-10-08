@@ -43,24 +43,25 @@ const Navigation: React.FC<NavBarProps> = (props) => {
             isScrolledOver ? 'hidden' : 'md:flex'
           } hidden md:w-1/2 md:items-center md:justify-around xl:w-1/3`}
         >
-          <div className="daisy-dropdown">
-            <label
-              tabIndex={0}
-              className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary"
-            >
-              Shop
-            </label>
-            <ul
-              tabIndex={0}
-              className="daisy-dropdown-content daisy-menu rounded-box mt-4 w-52 bg-base-100 p-2 shadow"
-            >
-              <li>
-                <a>Men</a>
-              </li>
-              <li>
-                <a>Women</a>
-              </li>
-            </ul>
+          <div className="daisy-dropdown daisy-dropdown-hover">
+            <Link to="/shop">
+              <label
+                tabIndex={0}
+                className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary"
+              >
+                Shop
+              </label>
+            </Link>
+            <div className="daisy-dropdown-content daisy-menu">
+              <ul tabIndex={0} className="rounded-box mt-4 w-52 bg-base-100 p-2 shadow">
+                <li>
+                  <a>Men</a>
+                </li>
+                <li>
+                  <a>Women</a>
+                </li>
+              </ul>
+            </div>
           </div>
           <a className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary">
             Contact Us

@@ -21,7 +21,10 @@ module.exports = {
         'cartXL': '1fr 1.5fr 0.6fr 0.8fr 0.6fr 40px',
         'cart-title': '0.8fr 1.5fr',
         'cart': '0.8fr 0.5fr 0.5fr 0.5fr',
-      }
+      },
+      gridTemplateRows: {
+        'shop-layout': 'auto 1fr'
+      },
     },
   },
   plugins: [require("daisyui"), require('tw-elements/dist/plugin')],

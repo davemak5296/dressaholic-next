@@ -29,7 +29,7 @@ const Cart: React.FC = () => {
           <div className="col-span-1 col-start-1 row-span-2 row-start-1 flex justify-center p-2">
             <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
           </div>
-          <div className="col-span-3 col-start-2 row-span-1 row-start-1 p-2">
+          <div className="col-span-3 col-start-2 row-span-1 row-start-1 p-2 xs:pt-4">
             Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
           </div>
           <div className="col-span-1 col-start-2 row-span-1 row-start-2 flex justify-center">

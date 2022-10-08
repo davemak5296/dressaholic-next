@@ -17,4 +17,7 @@
   .main-container {
     @apply mx-auto mt-[46px] sm:mt-[64px] lg:mt-[72px] xl:container
   }
+  .clsbd {
+    @apply border border-solid
+  }
 }
