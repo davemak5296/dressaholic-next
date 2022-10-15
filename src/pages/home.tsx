@@ -14,6 +14,10 @@ const Home: React.FC = () => {
         opacity: 1,
         scale: 1,
       }}
+      transition={{
+        ease: 'easeInOut',
+        duration: 0.5,
+      }}
     >
       <Carousel />
       <BigMenu />
