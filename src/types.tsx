@@ -8,6 +8,12 @@ export interface BaseCategoryType {
   sub_categories: SubCategoryType | SubCategoryType[];
 }
 
+export type DirectoryItemType = {
+  id: number;
+  mainCategory: string;
+  title: string;
+  imageUrl: string;
+};
 export interface SubCategoryType {
   id: number;
   name: string;

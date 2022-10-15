@@ -30,7 +30,7 @@ const ShopLayout: React.FC = () => {
           <FilterPanel title="Price" />
         </div>
       </div>
-      <div className="col-span-5 col-start-1 row-start-2 overflow-y-scroll pl-4 md:col-span-4 md:col-start-2 ">
+      <div className="col-span-5 col-start-1 row-start-2 overflow-y-scroll pl-6 md:col-span-4 md:col-start-2 ">
         <Outlet />
       </div>
     </motion.main>
