@@ -28,3 +28,48 @@ gu
 amazon
 
 
+---Types---
+
+BaseCategory
+  id: number
+  name: string
+  sub-categories: SubCategory[]
+
+
+SubCategory
+  id: number
+  name: string
+  Master: BaseCategory
+
+
+---Firebase---
+
+SubCat1: {
+  title: string,
+  masterCat: string
+  items: [Item1, Item2, Item3],
+}
+
+Item1: {
+  sku: string,
+  name: string,
+  descriptions: string,
+  color: string,
+  price: number,
+  stock: number,
+  sizes: [
+    {
+      'sm': 0,
+      'md': 5,
+      'lg': 4,
+      'xl': 3,
+    },
+  ]
+}
+
+. Item以顏色區分，例如同一款式有三種色，會分為三個item
+. sku性質為id，unique identifier
+. 商品展示頁面，同款不同色放在同一頁
+. 從FireBase讀取collections & documents時，用Array methods (forEach, reduce)把SubCat1儲存成BaseCategory type
+
+

@@ -5,7 +5,7 @@ import FilterPanel from '../components/filter-panel';
 
 const ShopLayout: React.FC = () => {
   return (
-    <main className="main-container grid grid-cols-5 grid-rows-shop-layout">
+    <main className="main-container grid grid-cols-5 grid-rows-shop-layout px-4 xl:px-0">
       <Breadcrumbs />
       <div className="relative top-0 col-span-1 row-start-2 hidden md:block">
         <div className="sticky top-[36px] lg:top-[52px]">

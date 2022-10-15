@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SIGN_OUT_START } from '../store/user/user.reducer';
+import { selectCurrentUser } from '../store/user/user.selector';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Logo } from '../assets/letter-d.svg';
 import { ReactComponent as MenuIcon } from '../assets/icon-menu.svg';
@@ -9,8 +12,14 @@ type NavBarProps = {
 };
 
 const Navigation: React.FC<NavBarProps> = (props) => {
+  const dispatch = useDispatch();
+  const currUser = useSelector(selectCurrentUser);
   const { scrollY } = props;
   const isScrolledOver = scrollY > 36;
+
+  const signOutHandler: React.MouseEventHandler = () => {
+    dispatch(SIGN_OUT_START());
+  };
 
   return (
     <div className="relative z-10">
@@ -43,7 +52,7 @@ const Navigation: React.FC<NavBarProps> = (props) => {
             isScrolledOver ? 'hidden' : 'md:flex'
           } hidden md:w-1/2 md:items-center md:justify-around xl:w-1/3`}
         >
-          <div className="daisy-dropdown daisy-dropdown-hover">
+          <div className="daisy-dropdown-hover daisy-dropdown">
             <Link to="/shop">
               <label
                 tabIndex={0}
@@ -63,9 +72,21 @@ const Navigation: React.FC<NavBarProps> = (props) => {
               </ul>
             </div>
           </div>
-          <a className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary">
-            Contact Us
-          </a>
+          {currUser ? (
+            <button
+              onClick={signOutHandler}
+              className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-warning-content hover:daisy-btn-warning hover:text-warning-content"
+            >
+              sign out
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-info-content hover:daisy-btn-info hover:text-info-content"
+            >
+              sign in
+            </Link>
+          )}
           <ShoppingBag className="h-6 w-6" />
         </section>
       </nav>
