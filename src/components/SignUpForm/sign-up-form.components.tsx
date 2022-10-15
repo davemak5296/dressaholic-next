@@ -86,9 +86,6 @@ const SignUpForm: React.FC = () => {
           <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase">
             sign up
           </button>
-          {/* <Button type="submit" buttonType="default">
-            sign up
-          </Button> */}
         </div>
       </form>
     </div>

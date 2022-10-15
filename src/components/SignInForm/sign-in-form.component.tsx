@@ -6,7 +6,6 @@ import {
   SIGN_IN_FAILED,
 } from '../../store/user/user.reducer';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../types';
 
 const defaultFormFields = {
   email: '',
@@ -15,7 +14,6 @@ const defaultFormFields = {
 
 const SignInForm: React.FC = () => {
   const dispatch = useDispatch();
-  // const dispatch: AppDispatch = useDispatch();
   const [formFields, setFormFields] = React.useState(defaultFormFields);
   const { email, password } = formFields;
 
@@ -76,13 +74,6 @@ const SignInForm: React.FC = () => {
           <button onClick={signInWithGoogle} className="daisy-btn-secondary px-8 py-4 uppercase">
             sign in with google
           </button>
-          {/* <Button type="submit" buttonType="default">
-            sign in
-          </Button>
-          <div className="h-1.5 xs:hidden"></div>
-            <Button clickHandler={signInWithGoogle} type="button" buttonType="google">
-            sign in with google
-          </Button> */}
         </div>
       </form>
     </div>
