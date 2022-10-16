@@ -2,24 +2,35 @@ import { store } from './store/store';
 import { User } from 'firebase/auth';
 
 export type OnAuthNextFnType = (user: User | null) => void;
-export interface BaseCategoryType {
-  id: number;
+
+export type MainCategoryType = 'Men' | 'Women';
+
+export type SubCategoryType = {
   name: string;
-  sub_categories: SubCategoryType | SubCategoryType[];
-}
+  displayName: string;
+};
 
 export type DirectoryItemType = {
   id: number;
-  mainCategory: string;
-  title: string;
+  mainCategory: MainCategoryType;
+  title: SubCategoryType;
   imageUrl: string;
 };
-export interface SubCategoryType {
+
+export interface Product {
   id: number;
   name: string;
-  master: BaseCategoryType;
+  imageUrl: string;
+  price: number;
 }
 
+export type CartItem = Product & { qty: number };
+export type CategoriesMap = Record<string, Product[]>;
+export interface Catalog {
+  mainCat: MainCategoryType;
+  subCat: SubCategoryType;
+  items: Product[];
+}
 export interface UserState {
   currentUser: User | null;
   isLoading: boolean;
