@@ -9,6 +9,7 @@ const testProduct: Product = {
   brand: 'Spyder',
   descriptions: 'good',
   price: 123,
+  colors: ['red', 'black'],
   stocks: {
     red: {
       sm: 1,
@@ -26,19 +27,13 @@ const testProduct: Product = {
   imageUrls: {
     red: {
       thumbnail: 'https://i.ibb.co/bXCTjty/M-SH-001-blue-thumbnail.jpg',
-      productPics: {
-        one: '/test-red-one.jpg',
-        two: '/test-red-two.jpg',
-        three: '/test-red-three.jpg',
-      },
+      one: '/test-red-one.jpg',
+      two: '/test-red-two.jpg',
     },
     black: {
       thumbnail: 'https://i.ibb.co/C6Tm0wg/M-SH-001-green-thumbnail.jpg',
-      productPics: {
-        one: '/test-black-one.jpg',
-        two: '/test-black-two.jpg',
-        three: '/test-black-three.jpg',
-      },
+      one: '/test-black-one.jpg',
+      two: '/test-black-two.jpg',
     },
   },
 };

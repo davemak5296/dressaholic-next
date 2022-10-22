@@ -23,6 +23,7 @@ export interface Product {
   displayName: string;
   descriptions: string;
   price: number;
+  colors: string[];
   stocks: Record<string, ProductSizeType>;
   imageUrls: Record<string, ImageUrlsType>;
 }
@@ -36,11 +37,8 @@ export type ProductSizeType = {
 
 export type ImageUrlsType = {
   thumbnail: string;
-  productPics: {
-    one: string;
-    two: string;
-    three: string;
-  };
+  one: string | null;
+  two: string | null;
 };
 export type CartItem = Product & { qty: number };
 export type CategoriesMap = Record<string, Product[]>;
