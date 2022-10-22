@@ -1,0 +1,172 @@
+[
+  {
+    "sku": "F-TO-001",
+    "displayName": "Snap Fleece Pullover",
+    "brand": "Nautica",
+    "description":"",
+    "price": 239,
+    "colors": ["green", "brown"],
+    "stocks": {
+      "green": {
+        "sm": 8,
+        "md": 6,
+        "lg": 5,
+        "xl": 1
+      },
+      "brown": {
+        "sm": 1,
+        "md": 11,
+        "lg": 2,
+        "xl": 0
+      }
+    },
+    "imageUrls": {
+      "green": {
+        "thumbnail": "https://i.ibb.co/Pckx6Ht/F-TO-001-green-thumb.jpg",
+        "one": "https://i.ibb.co/tby34jT/F-TO-001-green-one.jpg",
+        "two": null
+      },
+      "brown": {
+        "thumbnail": "https://i.ibb.co/LRMCCW2/F-TO-001-brown-thumb.jpg",
+        "one": "https://i.ibb.co/jM09LZQ/F-TO-001-brown-one.jpg",
+        "two": null
+      }
+    }
+  },
+  {
+    "sku": "F-TO-002",
+    "displayName": "Crewneck Pullover",
+    "brand": "Haggar",
+    "description":"",
+    "price": 199,
+    "colors": ["black", "purple"],
+    "stocks": {
+      "black": {
+        "sm": 1,
+        "md": 6,
+        "lg": 9,
+        "xl": 2
+      },
+      "purple": {
+        "sm": 4,
+        "md": 0,
+        "lg": 3,
+        "xl": 1
+      }
+    },
+    "imageUrls": {
+      "black": {
+        "thumbnail": "https://i.ibb.co/WgYkgwZ/F-TO-002-black-thumb.jpg",
+        "one": "https://i.ibb.co/dk7F8sQ/F-TO-002-black-one.jpg",
+        "two": "https://i.ibb.co/rdd7SXy/F-TO-002-black-two.jpg"
+      },
+      "purple": {
+        "thumbnail": "https://i.ibb.co/yYs4tM4/F-TO-002-purple-thumb.jpg",
+        "one": "https://i.ibb.co/2FNTVGL/F-TO-002-purple-one.jpg",
+        "two": "https://i.ibb.co/4W7w78V/F-TO-002-purple-two.jpg"
+      }
+    }
+  },
+  {
+    "sku": "F-TO-003",
+    "displayName": "Cozy Top",
+    "brand": "Onus",
+    "description":"",
+    "price": 149,
+    "colors": ["tan", "gray"],
+    "stocks": {
+      "tan": {
+        "sm": 4,
+        "md": 3,
+        "lg": 2,
+        "xl": 1
+      },
+      "gray": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0
+      }
+    },
+    "imageUrls": {
+      "tan": {
+        "thumbnail": "https://i.ibb.co/wL0x6J1/F-TO-003-tan-thumb.jpg",
+        "one": "https://i.ibb.co/HBbLwvR/F-TO-003-tan-one.jpg",
+        "two": "https://i.ibb.co/0cr6J5r/F-TO-003-tan-two.jpg"
+      },
+      "gray": {
+        "thumbnail": "https://i.ibb.co/K0rrrTR/F-TO-003-gray-thumb.jpg",
+        "one": "https://i.ibb.co/6PzhXp5/F-TO-003-gray-one.jpg",
+        "two": "https://i.ibb.co/9tXcpcT/F-TO-003-gray-two.jpg"
+      }
+    }
+  },
+  {
+    "sku": "F-TO-004",
+    "displayName": "Crewneck Sweatshirt",
+    "brand": "Haggar",
+    "description":"",
+    "price": 330,
+    "colors": ["green", "pink"],
+    "stocks": {
+      "green": {
+        "sm": 8,
+        "md": 4,
+        "lg": 3,
+        "xl": 9
+      },
+      "pink": {
+        "sm": 2,
+        "md": 4,
+        "lg": 5,
+        "xl": 7
+      }
+    },
+    "imageUrls": {
+      "green": {
+        "thumbnail": "https://i.ibb.co/3dv0z9X/F-TO-004-green-thumb.jpg",
+        "one": "https://i.ibb.co/Phw0v0k/F-TO-004-green-one.jpg",
+        "two": "https://i.ibb.co/VYHpvPJ/F-TO-004-green-two.jpg"
+      },
+      "pink": {
+        "thumbnail": "https://i.ibb.co/SNL1G4v/F-TO-004-pink-thumb.jpg",
+        "one": "https://i.ibb.co/RgQdKwb/F-TO-004-pink-one.jpg",
+        "two": "https://i.ibb.co/PDPcPFp/F-TO-004-pink-two.jpg"
+      }
+    }
+  },
+  {
+    "sku": "F-TO-005",
+    "displayName": "HIGH NECK LONG SLEEVE T-SHIRT",
+    "brand": "Onus",
+    "description":"",
+    "price": 99,
+    "colors": ["yellow", "red"],
+    "stocks": {
+      "yellow": {
+        "sm": 0,
+        "md": 0,
+        "lg": 3,
+        "xl": 2
+      },
+      "red": {
+        "sm": 1,
+        "md": 0,
+        "lg": 0,
+        "xl": 0
+      }
+    },
+    "imageUrls": {
+      "yellow": {
+        "thumbnail": "https://i.ibb.co/YX6QnQS/F-TO-005-yellow-thumb.jpg",
+        "one": null,
+        "two": null
+      },
+      "red": {
+        "thumbnail": "https://i.ibb.co/MGH052n/F-TO-005-red-thumb.jpg",
+        "one": "https://i.ibb.co/4fKSyHG/F-TO-005-red-one.jpg",
+        "two": null
+      }
+    }
+  }
+]
