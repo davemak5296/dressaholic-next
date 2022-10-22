@@ -23,7 +23,7 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
       <div className="left-26 bottom-26 absolute top-2 right-4 z-10 hidden bg-yellow-300 px-1 text-lg sm:block">
         {`\$${price}`}
       </div>
-      <section className="flex w-1/3 flex-col sm:w-auto sm:items-center">
+      <section className="flex w-1/3 grow-0 flex-col sm:w-auto sm:items-center">
         <div className="relative w-2/3">
           <img className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`} src={activePic} />
           {isOutOfStock && (
@@ -43,12 +43,12 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
           ))}
         </div>
       </section>
-      <section className="flex w-2/3 flex-col items-center justify-evenly sm:w-full">
-        <h4 className="text-md mt-1 font-bold">{brand}</h4>
-        <div className="">{displayName}</div>
-        <div className="block bg-yellow-300 px-1 text-lg sm:hidden">{`\$${price}`}</div>
+      <section className="flex w-2/3 grow flex-col items-center justify-evenly sm:w-full">
+        <h4 className="text-md mt-1 grow-0 font-bold">{brand}</h4>
+        <div className="grow">{displayName}</div>
+        <div className="block grow-0 bg-yellow-300 px-1 text-lg sm:hidden">{`\$${price}`}</div>
         <button
-          className={`w-[80%] p-2 text-lg sm:mt-4 sm:w-full ${
+          className={`w-[80%] grow-0 p-2 text-lg sm:mt-4 sm:w-full ${
             isOutOfStock ? 'daisy-btn-ghost daisy-btn-active' : 'daisy-btn-primary'
           }`}
         >

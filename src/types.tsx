@@ -21,7 +21,7 @@ export interface Product {
   sku: string;
   brand: string;
   displayName: string;
-  descriptions: string;
+  description: string;
   price: number;
   colors: string[];
   stocks: Record<string, ProductSizeType>;

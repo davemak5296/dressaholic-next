@@ -7,7 +7,7 @@ const testProduct: Product = {
   sku: 'M-AC-001',
   displayName: "Men's Gait Half Zip Jacket",
   brand: 'Spyder',
-  descriptions: 'good',
+  description: 'good',
   price: 123,
   colors: ['red', 'black'],
   stocks: {
@@ -38,7 +38,6 @@ const testProduct: Product = {
   },
 };
 const ProductsDisplay: React.FC = () => {
-  console.log(data);
   return (
     <main>
       <section className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 xl:gap-6">
