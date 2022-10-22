@@ -6,7 +6,7 @@ type FilterPanelProps = {
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ title }: { title: string }) => {
   return (
-    <div className="daisy-collapse daisy-collapse-arrow border-b border-base-300 bg-base-100">
+    <div className="daisy-collapse-arrow daisy-collapse border-b border-base-300 bg-base-100">
       <input type="checkbox" />
       <div className="daisy-collapse-title text-base">{title}</div>
       <div className="daisy-collapse-content text-sm font-light">

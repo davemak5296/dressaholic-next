@@ -18,12 +18,30 @@ export type DirectoryItemType = {
 };
 
 export interface Product {
-  id: number;
-  name: string;
-  imageUrl: string;
+  sku: string;
+  brand: string;
+  displayName: string;
+  descriptions: string;
   price: number;
+  stocks: Record<string, ProductSizeType>;
+  imageUrls: Record<string, ImageUrlsType>;
 }
 
+export type ProductSizeType = {
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+};
+
+export type ImageUrlsType = {
+  thumbnail: string;
+  productPics: {
+    one: string;
+    two: string;
+    three: string;
+  };
+};
 export type CartItem = Product & { qty: number };
 export type CategoriesMap = Record<string, Product[]>;
 export interface Catalog {
