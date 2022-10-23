@@ -13,15 +13,39 @@ export type SubCategoryType = {
   displayName: string;
 };
 
-export const subCatDisplayNameMap: Record<string, string> = {
-  'men-shirts': 'Shirts',
-  'men-outwear': 'Jackets & Outwear',
-  'men-jeans': 'Pants & Jeans',
-  'men-activewear': 'Activewear',
-  'women-tops': 'Tops',
-  'women-dresses': 'Dresses & Skirts',
-  'women-jeans': 'Pants & Jeans',
-  'women-activewear': 'Activewear',
+export const subCatDisplayNameMap: Record<string, { mainCat: string; displayName: string }> = {
+  'men-shirts': {
+    mainCat: 'Men',
+    displayName: 'Shirt',
+  },
+  'men-outwear': {
+    mainCat: 'Men',
+    displayName: 'Jackets & Outwear',
+  },
+  'men-jeans': {
+    mainCat: 'Men',
+    displayName: 'Pants & Jeans',
+  },
+  'men-activewear': {
+    mainCat: 'Men',
+    displayName: 'Activewear',
+  },
+  'women-tops': {
+    mainCat: 'Women',
+    displayName: 'Tops',
+  },
+  'women-dresses': {
+    mainCat: 'Women',
+    displayName: 'Dresses & Skirts',
+  },
+  'women-jeans': {
+    mainCat: 'Women',
+    displayName: 'Pants & Jeans',
+  },
+  'women-activewear': {
+    mainCat: 'Women',
+    displayName: 'Activewear',
+  },
 };
 export type DirectoryItemType = {
   id: number;

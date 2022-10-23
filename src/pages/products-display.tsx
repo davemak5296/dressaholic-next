@@ -31,7 +31,7 @@ const ProductsDisplay: React.FC = () => {
         duration: 0.4,
       }}
     >
-      <h1 className="p-2 text-2xl sm:p-5">{subCatDisplayNameMap[category]}</h1>
+      <h1 className="p-2 text-2xl sm:p-5">{subCatDisplayNameMap[category]['displayName']}</h1>
       <section className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 xl:gap-6">
         {products && products.map((product, index) => <ProductCard key={index} card={product} />)}
       </section>
