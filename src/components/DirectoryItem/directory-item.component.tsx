@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { DirectoryItemType } from '../../types';
 export type DirectoryItemProps = {
   item: DirectoryItemType;
@@ -8,10 +9,10 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({ item }) => {
   const { title, imageUrl } = item;
 
   return (
-    <div>
+    <Link to={`/shop/${title.name}`}>
       <img className="max-w-full" src={imageUrl} alt="" />
       <div className="mt-2 flex max-w-[200px] justify-center text-lg">{title.displayName}</div>
-    </div>
+    </Link>
   );
 };
 

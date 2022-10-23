@@ -9,7 +9,7 @@ import { Product, UseParams, subCatDisplayNameMap } from '../types';
 const ProductsDisplay: React.FC = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
   const { category } = useParams<keyof UseParams>() as UseParams;
-  const [products, setProducts] = React.useState<Product[]>(categoriesMap['men-shirts']);
+  const [products, setProducts] = React.useState<Product[]>([] as Product[]);
 
   React.useEffect(() => {
     setProducts(categoriesMap[category]);
