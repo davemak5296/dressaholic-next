@@ -16,7 +16,6 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
       setActivePic(e.target.getAttribute('src') as string);
     }
   };
-  console.log(imageUrls[colors[0]]);
   return (
     // <640px, flex; >640px, flex column
     <div className="relative col-span-1 flex border border-solid border-slate-200 p-2 sm:flex-col sm:items-center sm:p-4">

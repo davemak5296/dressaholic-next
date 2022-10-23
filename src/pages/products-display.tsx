@@ -14,8 +14,6 @@ const ProductsDisplay: React.FC = () => {
     setProducts(categoriesMap[category]);
   }, [categoriesMap, category]);
 
-  console.log(products);
-
   return (
     <main key="men-shirts">
       <section className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 xl:gap-6">

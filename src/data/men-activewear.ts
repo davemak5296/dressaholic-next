@@ -71,7 +71,7 @@ const menActivewear: Product[] = [
       },
     },
     imageUrls: {
-      gray: {
+      red: {
         thumbnail: 'https://i.ibb.co/T8SQhbk/M-AC-003-red-thumb.jpg',
         one: null,
         two: null,

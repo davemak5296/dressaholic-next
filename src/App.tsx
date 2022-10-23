@@ -24,9 +24,9 @@ const App: React.FC = () => {
     dispatch(SET_CATEGORIES());
   }, []);
 
-  // React.useEffect(() => {
-  //   addCollectionAndDocs('dressaholic-products', catalogs);
-  // }, []);
+  React.useEffect(() => {
+    addCollectionAndDocs('dressaholic-products', catalogs);
+  }, []);
 
   return (
     <Routes>
