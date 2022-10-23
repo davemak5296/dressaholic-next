@@ -13,7 +13,7 @@ export type SubCategoryType = {
   displayName: string;
 };
 
-export const subCatDisplayNameMap = {
+export const subCatDisplayNameMap: Record<string, string> = {
   'men-activewar': 'Shirts',
   'men-outwear': 'Jackets & Outwear',
   'men-jeans': 'Pants & Jeans',

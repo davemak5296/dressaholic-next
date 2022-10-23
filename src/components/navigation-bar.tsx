@@ -22,7 +22,7 @@ const Navigation: React.FC<NavBarProps> = (props) => {
   };
 
   return (
-    <div className="relative z-10">
+    <div className="relative z-20">
       {/* <nav className="fixed top-0 left-0 right-0 bg-base-200 md:flex md:justify-between"> */}
       {/* <nav className="bg-base-200 md:flex md:justify-between"> */}
       <nav
