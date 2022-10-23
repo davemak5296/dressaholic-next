@@ -9,7 +9,7 @@ const Shop: React.FC = () => {
     <Routes>
       <Route element={<ShopLayout />}>
         <Route index element={<ShopLanding />} />
-        <Route path="/men-shirts" element={<ProductsDisplay />} />
+        <Route path=":category" element={<ProductsDisplay />} />
       </Route>
     </Routes>
   );

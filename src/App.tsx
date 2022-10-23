@@ -8,6 +8,9 @@ import Home from './pages/home';
 import Cart from './pages/cart';
 import Shop from './pages/shop';
 import Authentication from './pages/authentication';
+import { addCollectionAndDocs } from './utils/firebase/firebase.utils';
+import { catalogs } from './data/toFirebase';
+import { SET_CATEGORIES } from './store/category/categories.reducer';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,6 +19,14 @@ const App: React.FC = () => {
   React.useEffect(() => {
     dispatch(CHECK_USER_SESSION());
   }, []);
+
+  React.useEffect(() => {
+    dispatch(SET_CATEGORIES());
+  }, []);
+
+  // React.useEffect(() => {
+  //   addCollectionAndDocs('dressaholic-products', catalogs);
+  // }, []);
 
   return (
     <Routes>

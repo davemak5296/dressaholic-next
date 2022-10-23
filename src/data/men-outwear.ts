@@ -1,0 +1,137 @@
+import { Product } from '../types';
+
+const menOutwear: Product[] = [
+  {
+    sku: 'M-OU-001',
+    displayName: 'Windbreaker Jacket',
+    brand: 'Voyager',
+    price: 379,
+    colors: ['blue', 'gray'],
+    stocks: {
+      blue: {
+        sm: 4,
+        md: 1,
+        lg: 2,
+        xl: 0,
+      },
+      gray: {
+        sm: 1,
+        md: 0,
+        lg: 1,
+        xl: 0,
+      },
+    },
+    imageUrls: {
+      blue: {
+        thumbnail: 'https://i.ibb.co/zGx1r1d/M-OU-001-blue-thumb.jpg',
+        one: 'https://i.ibb.co/0YrVK9Q/M-OU-001-blue-one.jpg',
+        two: 'https://i.ibb.co/6ZR0cDV/M-OU-001-blue-two.jpg',
+      },
+      gray: {
+        thumbnail: 'https://i.ibb.co/86Ysbxr/M-OU-001-gray-thumb.jpg',
+        one: 'https://i.ibb.co/HGYSqQM/M-OU-001-gray-one.jpg',
+        two: 'https://i.ibb.co/rdqrMpP/M-OU-001-gray-two.jpg',
+      },
+    },
+  },
+  {
+    sku: 'M-OU-002',
+    displayName: 'Quilted Puffer Jacket',
+    brand: 'Nautica',
+    price: 409,
+    colors: ['black'],
+    stocks: {
+      black: {
+        sm: 4,
+        md: 2,
+        lg: 3,
+        xl: 1,
+      },
+    },
+    imageUrls: {
+      black: {
+        thumbnail: 'https://i.ibb.co/rpHNRz6/M-OU-002-blue-thumb.jpg',
+        one: 'https://i.ibb.co/4jNJZBD/M-OU-002-blue-one.jpg',
+        two: 'https://i.ibb.co/YDLM44R/M-OU-002-blue-two.jpg',
+      },
+    },
+  },
+  {
+    sku: 'M-OU-003',
+    displayName: 'UV PROTECT',
+    brand: 'Haggar',
+    price: 229,
+    colors: ['yellow', 'white'],
+    stocks: {
+      yellow: {
+        sm: 12,
+        md: 15,
+        lg: 7,
+        xl: 5,
+      },
+      white: {
+        sm: 3,
+        md: 4,
+        lg: 0,
+        xl: 2,
+      },
+    },
+    imageUrls: {
+      yellow: {
+        thumbnail: 'https://i.ibb.co/5j6kddg/M-OU-003-yellow-thumb.jpg',
+        one: 'https://i.ibb.co/WBFVywD/M-OU-003-yellow-one.jpg',
+        two: 'https://i.ibb.co/X28tSNg/M-OU-003-yellow-two.jpg',
+      },
+      white: {
+        thumbnail: 'https://i.ibb.co/4WfMZnM/M-OU-003-white-thumb.jpg',
+        one: 'https://i.ibb.co/3h7KHDf/M-OU-003-white-one.jpg',
+        two: 'https://i.ibb.co/hmP17wb/M-OU-003-white-two.jpg',
+      },
+    },
+  },
+  {
+    sku: 'M-OU-004',
+    displayName: 'ZIP UP BLOUSON',
+    brand: 'Onus',
+    price: 329,
+    colors: ['black'],
+    stocks: {
+      black: {
+        sm: 2,
+        md: 12,
+        lg: 9,
+        xl: 2,
+      },
+    },
+    imageUrls: {
+      black: {
+        thumbnail: 'https://i.ibb.co/7t6KFLK/M-OU-004-black-thumb.jpg',
+        one: 'https://i.ibb.co/J2R0ByP/M-OU-004-black-one.jpg',
+        two: null,
+      },
+    },
+  },
+  {
+    sku: 'M-OU-005',
+    displayName: 'Military Bomber Jackets Coat',
+    brand: 'Crysully',
+    price: 459,
+    colors: ['brown'],
+    stocks: {
+      brown: {
+        sm: 12,
+        md: 3,
+        lg: 2,
+        xl: 1,
+      },
+    },
+    imageUrls: {
+      brown: {
+        thumbnail: 'https://i.ibb.co/V2cKjgx/M-OU-005-brown-thumb.jpg',
+        one: 'https://i.ibb.co/j3ZRL2D/M-OU-005-brown-one.jpg',
+        two: 'https://i.ibb.co/9YSMj53/M-OU-005-brown-two.jpg',
+      },
+    },
+  },
+];
+export default menOutwear;

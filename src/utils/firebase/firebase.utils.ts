@@ -16,6 +16,12 @@ import {
   doc,
   getDoc,
   setDoc,
+  collection,
+  CollectionReference,
+  writeBatch,
+  DocumentData,
+  query,
+  getDocs,
   // collection,
   // writeBatch,
   // query,
@@ -23,7 +29,7 @@ import {
   // DocumentData,
   // CollectionReference,
 } from 'firebase/firestore';
-import { OnAuthNextFnType } from '../../types';
+import { Catalog, OnAuthNextFnType } from '../../types';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -95,25 +101,25 @@ export const getCurrentUser = () => {
   });
 };
 
-// const createCollection = <T = DocumentData>(collectionName: string) =>
-//   collection(db, collectionName) as CollectionReference<T>;
-// export const addCollectionAndDocs = async (collectionKey: string, objectsToAdd: Catalog[]) => {
-//   const collectionRef = createCollection<Catalog>(collectionKey);
+const createCollection = <T = DocumentData>(collectionName: string) =>
+  collection(db, collectionName) as CollectionReference<T>;
+export const addCollectionAndDocs = async (collectionKey: string, objectsToAdd: Catalog[]) => {
+  const collectionRef = createCollection<Catalog>(collectionKey);
 
-//   const batch = writeBatch(db);
+  const batch = writeBatch(db);
 
-//   objectsToAdd.forEach((obj) => {
-//     const docRef = doc(collectionRef, obj.title.toLowerCase());
-//     batch.set(docRef, obj);
-//   });
+  objectsToAdd.forEach((obj) => {
+    const docRef = doc(collectionRef, obj.subCat.toLowerCase());
+    batch.set(docRef, obj);
+  });
 
-//   await batch.commit();
-//   console.log('done');
-// };
-// export const getCategoriesAndDocs = async () => {
-//   const categoriesRef = createCollection<Catalog>('categories');
-//   const q = query(categoriesRef);
+  await batch.commit();
+  console.log('done');
+};
+export const getCategoriesAndDocs = async () => {
+  const categoriesRef = createCollection<Catalog>('dressaholic-products');
+  const q = query(categoriesRef);
 
-//   const querySnapshot = await getDocs(q);
-//   return querySnapshot.docs.map((doc) => doc.data());
-// };
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((doc) => doc.data());
+};

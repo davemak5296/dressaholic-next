@@ -3,6 +3,9 @@ import { User } from 'firebase/auth';
 
 export type OnAuthNextFnType = (user: User | null) => void;
 
+export type UseParams = {
+  category: string;
+};
 export type MainCategoryType = 'Men' | 'Women';
 
 export type SubCategoryType = {
@@ -10,6 +13,16 @@ export type SubCategoryType = {
   displayName: string;
 };
 
+export const subCatDisplayNameMap = {
+  'men-activewar': 'Shirts',
+  'men-outwear': 'Jackets & Outwear',
+  'men-jeans': 'Pants & Jeans',
+  'men-activewear': 'Activewear',
+  'women-tops': 'Tops',
+  'women-dresses': 'Dresses & Skirts',
+  'women-jeans': 'Pants & Jeans',
+  'women-activewear': 'Activewear',
+};
 export type DirectoryItemType = {
   id: number;
   mainCategory: MainCategoryType;
@@ -21,7 +34,6 @@ export interface Product {
   sku: string;
   brand: string;
   displayName: string;
-  description: string;
   price: number;
   colors: string[];
   stocks: Record<string, ProductSizeType>;
@@ -44,8 +56,13 @@ export type CartItem = Product & { qty: number };
 export type CategoriesMap = Record<string, Product[]>;
 export interface Catalog {
   mainCat: MainCategoryType;
-  subCat: SubCategoryType;
+  subCat: string;
   items: Product[];
+}
+export interface CategoriesState {
+  categoriesArray: Catalog[];
+  isLoading: boolean;
+  error: Error | null;
 }
 export interface UserState {
   currentUser: User | null;
@@ -53,7 +70,7 @@ export interface UserState {
   error: unknown | null;
 }
 export interface BaseState {
-  // categories: CategoriesState;
+  categories: CategoriesState;
   // cart: CartState;
   user: UserState;
 }
