@@ -76,7 +76,18 @@ export type ImageUrlsType = {
   one: string | null;
   two: string | null;
 };
-export type CartItem = Product & { qty: number };
+// export type CartItem = Product & { qty: number };
+export type CartItem = {
+  // same item = same (sku, color and size)
+  sku: string;
+  brand: string;
+  displayName: string;
+  imageUrl: string;
+  price: number;
+  color: string;
+  size: string;
+  qty: number;
+};
 export type CategoriesMap = Record<string, Product[]>;
 export interface Catalog {
   mainCat: MainCategoryType;

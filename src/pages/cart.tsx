@@ -1,13 +1,16 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { ReactComponent as MinusSign } from '../assets/circle-minus-solid.svg';
+import { ReactComponent as PlusSign } from '../assets/circle-plus-solid.svg';
+import { ReactComponent as CrossSign } from '../assets/circle-xmark-solid.svg';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
 const Cart: React.FC = () => {
   return (
     <>
-      <main className="main-container h-screen px-3 py-3 sm:container">
-        <h1 className="mx-auto my-3 flex justify-center text-2xl md:my-5 md:text-3xl lg:my-7 lg:text-4xl xl:my-9 xl:text-5xl">
+      <main className="main-container h-screen px-3 sm:container sm:px-0">
+        <h1 className="mx-auto flex justify-center py-2 text-xl md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           CART
         </h1>
         {/* title - when larger than sm */}
@@ -36,9 +39,11 @@ const Cart: React.FC = () => {
             $43.98
           </div>
           <div className="col-span-1 col-start-3 row-span-1 row-start-2 flex justify-center">
-            -1+
+            <MinusSign className="h-4 w-4 cursor-pointer">-</MinusSign>
+            <div className="ml-1">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer">-</PlusSign>
           </div>
-          <div className="col-span-1 col-start-4 row-span-1 row-start-2 flex justify-center">
+          <div className="col-span-1 col-start-4 row-span-1 row-start-2 flex justify-center font-bold">
             $43.98
           </div>
         </section>
@@ -51,13 +56,13 @@ const Cart: React.FC = () => {
             Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
           </div>
           <div>$43.98</div>
-          <div className="flex">
-            <span className="ml-4">-</span>
-            <span>1</span>
-            <span>+</span>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
           </div>
           <div>$43.98</div>
-          <div className="flex justify-center">x</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
         </section>
         <hr />
       </main>

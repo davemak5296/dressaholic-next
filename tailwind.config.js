@@ -18,7 +18,7 @@ module.exports = {
         'sans': ['"Noto Sans"', ...defaultTheme.fontFamily.sans],
       },
       gridTemplateColumns: {
-        'cartXL': '1fr 1.5fr 0.6fr 0.8fr 0.6fr 40px',
+        'cartXL': '0.6fr 1.8fr 0.5fr 0.5fr 0.5fr 40px',
         'cart-title': '0.8fr 1.5fr',
         'cart': '0.8fr 0.5fr 0.5fr 0.5fr',
       },
