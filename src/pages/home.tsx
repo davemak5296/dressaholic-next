@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import BigMenu from '../components/big-menu';
 import Carousel from '../components/carousel.component';
 
+const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
+
 const Home: React.FC = () => {
   return (
     <motion.main
@@ -19,7 +21,11 @@ const Home: React.FC = () => {
         duration: 0.5,
       }}
     >
-      <Carousel />
+      <div className="main-container flex max-h-[calc(100vh-64px)] items-center overflow-hidden object-cover">
+        <div className="relative max-h-[calc(100vh-64px)]">
+          <Carousel dataSource={dataSource} />
+        </div>
+      </div>
       <BigMenu />
     </motion.main>
   );

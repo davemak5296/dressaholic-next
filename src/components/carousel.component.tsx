@@ -1,63 +1,102 @@
 import * as React from 'react';
+import { ReactComponent as LeftArrow } from '../assets/angle-left-solid.svg';
+import { ReactComponent as RightArrow } from '../assets/angle-right-solid.svg';
+import Slide from './Slide.component';
 
-const Carousel: React.FC = () => {
-  const loadHandler = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    if (e.target instanceof HTMLImageElement) {
-      e.target.setAttribute('src', e.target.getAttribute('data-src') as string);
-      console.log('loaded');
-    }
+type CarouselProp = {
+  dataSource: string[];
+};
+
+const slideOneCaptions = (
+  <div className="absolute left-6 top-16 z-20 flex max-w-[35%] flex-wrap sm:top-24 md:top-40 lg:top-48">
+    <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-7xl">Masterpiece</h1>
+    <p className="pl-4 pt-4 text-sm sm:pl-6 sm:pt-6 sm:text-xl md:pl-8 lg:pt-10 lg:text-3xl">
+      Highly-perfected clothes, designed for life&apos;s needs.
+    </p>
+  </div>
+);
+const slideTwoCaptions = (
+  <div className="absolute top-20 left-0 right-0 z-20 mx-auto flex max-w-full flex-wrap text-white sm:top-24 md:top-40 lg:top-48">
+    <h1 className="flex w-full shrink-0 justify-center text-xl sm:text-3xl md:text-5xl lg:text-7xl">
+      Grand Opening Sale
+    </h1>
+    <p className="flex w-full justify-center pt-4 text-sm sm:pt-6 sm:text-xl lg:pt-10 lg:text-3xl">
+      20% off on any purchase
+    </p>
+  </div>
+);
+
+const captions = [slideOneCaptions, slideTwoCaptions];
+
+const Carousel: React.FC<CarouselProp> = ({ dataSource }) => {
+  const [currentIndex, setCurrentIndex] = React.useState(1);
+
+  const getIndexes = () => {
+    const prevIndex = currentIndex - 1 < 0 ? dataSource.length - 1 : currentIndex - 1;
+    // when the list is exhausted, back to the first item
+    const nextIndex = (currentIndex + 1) % dataSource.length;
+
+    return {
+      prevIndex,
+      nextIndex,
+    };
   };
 
+  const handleClickPrev = () => {
+    const { prevIndex } = getIndexes();
+    setCurrentIndex(prevIndex);
+  };
+
+  const handleClickNext = () => {
+    const { nextIndex } = getIndexes();
+    setCurrentIndex(nextIndex);
+  };
+
+  React.useEffect(() => {
+    let intervalId = setInterval(() => {
+      handleClickNext();
+    }, 3000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [handleClickNext, handleClickPrev]);
+
   return (
-    <div className="main-container flex max-h-[calc(100vh-64px)] items-center overflow-hidden object-cover">
-      <div className="relative max-h-[calc(100vh-64px)]">
-        {/* control buttons in bottom left corner */}
-        <div className="absolute left-6 bottom-8 z-10 flex w-[100px] justify-evenly md:w-[200px]">
-          <a
-            className="mr-2 h-1 w-1/3 border border-solid border-slate-300 bg-slate-300"
-            href="#slide-1"
-          ></a>
-          <a
-            className="mr-2 h-1 w-1/3 border border-solid border-slate-300 bg-slate-300"
-            href="#slide-2"
-          ></a>
-        </div>
-        {/* slides */}
-        <div className="flex items-center overflow-hidden scroll-smooth">
-          <div id="slide-1" className="relative w-full shrink-0">
-            <div className="absolute left-6 top-16 flex max-w-[35%] flex-wrap sm:top-24 md:top-40 lg:top-48">
-              <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-7xl">Masterpiece</h1>
-              <p className="pl-4 pt-4 text-sm sm:pl-6 sm:pt-6 sm:text-xl md:pl-8 lg:pt-10 lg:text-3xl">
-                Highly-perfected clothes, designed for life&apos;s needs.
-              </p>
-            </div>
-            <img
-              // src="./placeholder.png"
-              src="./landing-carousel-1.jpg"
-              // data-src="./landing-carousel-1.jpg"
-              alt=""
-              // onLoad={loadHandler}
+    // when screen size < 1280px, fluid container width; when > 1280px, fix container width to 1280px
+    <div className={`relative h-[66.7vw] w-[100vw] xl:h-[calc(1280px*0.667)] xl:w-[1280px]`}>
+      <div className="relative h-full w-full overflow-hidden">
+        {dataSource &&
+          dataSource.map((imageUrl, index) => (
+            <Slide
+              index={index}
+              currIndex={currentIndex}
+              captions={currentIndex == index ? captions[index] : null}
+              imageUrl={imageUrl}
+              key={index}
             />
-          </div>
-          <div id="slide-2" className="relative w-full shrink-0">
-            <div className="absolute top-20 left-0 right-0 mx-auto flex max-w-full flex-wrap text-white sm:top-24 md:top-40 lg:top-48">
-              <h1 className="flex w-full shrink-0 justify-center text-xl sm:text-3xl md:text-5xl lg:text-7xl">
-                Grand Opening Sale
-              </h1>
-              <p className="flex w-full justify-center pt-4 text-sm sm:pt-6 sm:text-xl lg:pt-10 lg:text-3xl">
-                20% off on any purchase
-              </p>
-            </div>
-            <img
-              // src="./placeholder.png"
-              src="./landing-carousel-2.jpg"
-              // data-src="./landing-carousel-2.jpg"
-              alt=""
-              // onLoad={loadHandler}
-            />
-          </div>
-        </div>
+          ))}
       </div>
+      {/* arrows for moving back and forth */}
+      <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-between text-white">
+        <LeftArrow onClick={handleClickPrev} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10" />
+        <RightArrow onClick={handleClickNext} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10" />
+      </div>
+      <section className="absolute left-[50%] top-[80%] z-10 flex h-[66.7vw] translate-x-[-50%] justify-center">
+        {/* dots from jumping to different pic */}
+        {/* spread the array iterator to an array of consecutive numbers from 0 to dataSource.length-1 */}
+        {[...Array(dataSource.length).keys()].map((key, index) => (
+          <div
+            onClick={() => {
+              setCurrentIndex(index);
+            }}
+            key={key}
+            className={`${
+              index == currentIndex ? 'bg-black' : 'bg-none'
+            } ml-2 h-3 w-3 cursor-pointer rounded-full border border-solid border-black transition-all sm:ml-4 sm:h-4 sm:w-4`}
+          ></div>
+        ))}
+      </section>
     </div>
   );
 };
