@@ -6,7 +6,7 @@ import ProductCard from '../components/ProductCard/product-card.component';
 import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParams, subCatDisplayNameMap } from '../types';
 
-const ProductsDisplay: React.FC = () => {
+const Category: React.FC = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
   const { category } = useParams<keyof UseParams>() as UseParams;
   const [products, setProducts] = React.useState<Product[]>([] as Product[]);
@@ -39,4 +39,4 @@ const ProductsDisplay: React.FC = () => {
   );
 };
 
-export default ProductsDisplay;
+export default Category;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router';
-import ProductsDisplay from './products-display';
+import Category from './Category';
 import ShopLanding from './shop-landing';
 import ShopLayout from './shop-layout';
 
@@ -9,7 +9,7 @@ const Shop: React.FC = () => {
     <Routes>
       <Route element={<ShopLayout />}>
         <Route index element={<ShopLanding />} />
-        <Route path=":category" element={<ProductsDisplay />} />
+        <Route path=":category" element={<Category />} />
       </Route>
     </Routes>
   );
