@@ -63,8 +63,7 @@ const Carousel: React.FC<CarouselProp> = ({ dataSource }) => {
   }, [handleClickNext, handleClickPrev]);
 
   return (
-    // when screen size < 1280px, fluid container width; when > 1280px, fix container width to 1280px
-    <div className={`relative h-[66.7vw] w-[100vw] xl:h-[calc(1280px*0.667)] xl:w-[1280px]`}>
+    <div className={`relative aspect-[3/2] w-[100vw] xl:w-[1280px]`}>
       <div className="relative h-full w-full overflow-hidden">
         {dataSource &&
           dataSource.map((imageUrl, index) => (
