@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Product, UseParams } from '../../types';
+import { Product, UseParamsCategoryType } from '../../types';
 type ProductCardProp = {
   card: Product;
 };
@@ -11,7 +11,7 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
   const isOutOfStock = false;
 
   const [activePic, setActivePic] = React.useState(imageUrls[colors[0]]['thumbnail']);
-  const { category } = useParams<keyof UseParams>() as UseParams;
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
 
   const handleClick: React.MouseEventHandler<HTMLImageElement> = (e) => {
     if (e.target instanceof HTMLImageElement) {

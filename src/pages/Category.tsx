@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ProductCard from '../components/ProductCard/product-card.component';
 import { selectCategoriesMap } from '../store/category/categories.selector';
-import { Product, UseParams, subCatDisplayNameMap } from '../types';
+import { Product, UseParamsCategoryType, subCatDisplayNameMap } from '../types';
 
 const Category: React.FC = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
-  const { category } = useParams<keyof UseParams>() as UseParams;
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   const [products, setProducts] = React.useState<Product[]>([] as Product[]);
 
   React.useEffect(() => {

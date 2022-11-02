@@ -13,6 +13,7 @@ const Shop: React.FC = () => {
         <Route path=":category" element={<Category />} />
       </Route>
       <Route path=":category/:skuInUrl" element={<ProductPage />} />
+      {/* <Route path=":category/ABC-001" element={<ProductPage />} /> */}
     </Routes>
   );
 };

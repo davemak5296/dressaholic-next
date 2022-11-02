@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { subCatDisplayNameMap, UseParams } from '../types';
+import { subCatDisplayNameMap, UseParamsCategoryType } from '../types';
 
 const Breadcrumbs: React.FC = () => {
-  const { category } = useParams<keyof UseParams>() as UseParams;
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   console.log(category);
 
   return (

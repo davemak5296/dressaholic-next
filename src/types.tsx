@@ -3,8 +3,11 @@ import { User } from 'firebase/auth';
 
 export type OnAuthNextFnType = (user: User | null) => void;
 
-export type UseParams = {
+export type UseParamsCategoryType = {
   category: string;
+};
+export type UseParamsSkuType = {
+  skuInUrl: string;
 };
 export type MainCategoryType = 'Men' | 'Women';
 
@@ -76,6 +79,7 @@ export type ImageUrlsType = {
   one: string | null;
   two: string | null;
 };
+export type SizeType = 'sm' | 'md' | 'lg' | 'xl';
 // export type CartItem = Product & { qty: number };
 export type CartItem = {
   // same item = same (sku, color and size)

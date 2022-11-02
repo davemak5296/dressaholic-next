@@ -1,10 +1,270 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import validator from 'validator';
+import { useImmer } from 'use-immer';
+import ProductPageSizeBox from '../components/product-page-size-box.component';
+import { selectCategoriesMap } from '../store/category/categories.selector';
+import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
+import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
+import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
+
+export type ActiveType = {
+  color: string;
+  size: SizeType;
+  image: string;
+  stockNum: number;
+  colorBox: number;
+};
+
+const boxStyle = 'mx-2 cursor-pointer border border-solid border-slate-200 px-3 py-1 first:ml-0';
+const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
+  // immer
+  const [active, setActive] = useImmer<ActiveType>({
+    color: '',
+    size: 'sm',
+    image: '',
+    stockNum: 0,
+    colorBox: 0,
+  });
+
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
+  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
+  const [product, setProduct] = React.useState<Product>({} as Product);
+  const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
+  const [activeColor, setActiveColor] = React.useState('');
+  const [activeImage, setActiveImage] = React.useState('');
+  const [activeSize, setActiveSize] = React.useState<SizeType>('sm');
+  const [activeStockNum, setActiveStockNum] = React.useState(0);
+  const [activeColorBox, setActiveColorBox] = React.useState(0);
+  const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
+
+  const categoriesMap = useSelector(selectCategoriesMap);
+  const isEmpty = (object: object) => Object.keys(object).length == 0;
+
+  React.useEffect(() => {
+    if (isEmpty(categoriesMap)) return;
+    setProduct(
+      categoriesMap[category].filter((item) => {
+        return item.sku == skuInUrl;
+      })[0]
+    );
+  }, [categoriesMap, category]);
+
+  React.useEffect(() => {
+    if (isEmpty(product)) return;
+    // setActiveColor(colors[0]);
+    // immer
+    setActive((draft) => {
+      draft.color = colors[0];
+      draft.image = imageUrls[colors[0]]['thumbnail'];
+      draft.stockNum = stocks[colors[0]][draft.size];
+    });
+  }, [product]);
+
+  // React.useEffect(() => {
+  //   if (activeColor.length == 0) return;
+  //   setActiveImage(imageUrls[activeColor]['thumbnail']);
+  // }, [activeColor]);
+
+  // React.useEffect(() => {
+  //   if (stocks == undefined || activeColor.length == 0) return;
+  //   setActiveStockNum(stocks[activeColor][activeSize]);
+  // }, [stocks, activeColor, activeSize]);
+
   return (
-    <div>
-      <div></div>
-    </div>
+    <main className="main-container ">
+      <div className="grid grid-cols-product-page py-4">
+        <div className="m-2 mt-0">
+          {active.color &&
+            // {activeColor &&
+            Object.values(imageUrls[active.color]).map(
+              // Object.values(imageUrls[activeColor]).map(
+              (imageUrl, index) =>
+                imageUrl && (
+                  <img
+                    className={` ${
+                      active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
+                      // activeStockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
+                    } mb-2 cursor-pointer border border-solid border-base-300 p-2 last:mb-0`}
+                    key={index}
+                    src={imageUrl}
+                    onClick={() => {
+                      setActive((draft) => {
+                        draft.image = imageUrl;
+                      });
+                      // setActiveImage(imageUrl);
+                    }}
+                  />
+                )
+            )}
+        </div>
+        <div className="relative ml-5 flex justify-center">
+          {active.stockNum == 0 && (
+            // {activeStockNum == 0 && (
+            <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
+              Out of stock
+            </div>
+          )}
+          <img
+            className={`${active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} w-4/5`}
+            // className={`${activeStockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} w-4/5`}
+            src={active.image}
+            // src={activeImage}
+            alt=""
+          />
+        </div>
+        <div className="flex flex-col">
+          <div className="mt-6 mb-2 text-2xl text-accent-content">{brand}</div>
+          <div className="mb-3 text-3xl font-bold text-primary">{displayName}</div>
+          <div className="my-5 ml-4 text-2xl text-black">{`$${price}.00`}</div>
+          <div className="mb-1 mt-auto text-lg">Color</div>
+          <ul className="flex">
+            {colors &&
+              colors.map((color, index) => (
+                <li
+                  key={index}
+                  className={`${boxStyle} ${
+                    active.colorBox == index
+                      ? // activeColorBox == index
+                        'border-1 border-success bg-success/50 shadow'
+                      : 'shadow-none'
+                  }`}
+                  onClick={() => {
+                    // setActiveColor(color);
+                    setActive((draft) => {
+                      draft.color = color;
+                      draft.image = imageUrls[color]['thumbnail'];
+                      draft.stockNum = stocks[color][draft.size];
+                      draft.colorBox = index;
+                    });
+                    // setActiveColorBox(index);
+                    setQtyToAdd(1);
+                  }}
+                >
+                  {color}
+                </li>
+              ))}
+          </ul>
+          <div className="mt-5 mb-1 text-lg">Size</div>
+          <ul className="flex">
+            {sizes.map((size, index) => (
+              <ProductPageSizeBox
+                key={index}
+                product={product}
+                active={active}
+                sizeName={size}
+                style={boxStyle}
+                // activeSize={activeSize}
+                // setSize={setActiveSize}
+                setQtyToAdd={setQtyToAdd}
+                setActive={setActive}
+              />
+            ))}
+            {/* <ProductPageSizeBox
+              sizeName="sm"
+              style={boxStyle}
+              activeSize={activeSize}
+              setSize={setActiveSize}
+              setQtyToAdd={setQtyToAdd}
+            />
+            <ProductPageSizeBox
+              sizeName="md"
+              style={boxStyle}
+              activeSize={activeSize}
+              setSize={setActiveSize}
+              setQtyToAdd={setQtyToAdd}
+            />
+            <ProductPageSizeBox
+              sizeName="lg"
+              style={boxStyle}
+              activeSize={activeSize}
+              setSize={setActiveSize}
+              setQtyToAdd={setQtyToAdd}
+            />
+            <ProductPageSizeBox
+              sizeName="xl"
+              style={boxStyle}
+              activeSize={activeSize}
+              setSize={setActiveSize}
+              setQtyToAdd={setQtyToAdd}
+            /> */}
+          </ul>
+        </div>
+        <div className="flex h-full w-full items-center">
+          <div className="flex w-full flex-col border border-solid border-primary">
+            <p className="mx-auto mt-4">
+              <span className="mx-auto my-4 text-lg text-secondary-focus underline underline-offset-4">
+                Stocks left:
+              </span>
+              <span
+                className={`${
+                  active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
+                  // activeStockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
+                } font-bold`}
+              >
+                &nbsp;&nbsp;&nbsp;{active.stockNum}
+                {/* &nbsp;&nbsp;&nbsp;{activeStockNum} */}
+              </span>
+            </p>
+            <div className="my-6 flex">
+              <PlusSign
+                className="h-8 w-8 cursor-pointer"
+                onClick={() => {
+                  setQtyToAdd((prev) => {
+                    if (typeof prev == 'number') {
+                      return active.stockNum > prev ? prev + 1 : prev;
+                      // return activeStockNum > prev ? prev + 1 : prev;
+                    }
+                    return 1;
+                  });
+                }}
+              />
+              <input
+                type="text"
+                className="w-[calc(100%-2*32px)] text-center text-xl outline-none"
+                onChange={(e) => {
+                  const str = e.target.value;
+                  if (validator.isNumeric(str)) {
+                    if (str == '0') return setQtyToAdd(1);
+
+                    return active.stockNum >= parseInt(str)
+                      ? // return activeStockNum >= parseInt(str)
+                        setQtyToAdd(parseInt(str))
+                      : setQtyToAdd(active.stockNum);
+                    // : setQtyToAdd(activeStockNum);
+                  } else {
+                    setQtyToAdd('');
+                  }
+                }}
+                value={qtyToAdd}
+              />
+              <MinusSign
+                className="h-8 w-8 cursor-pointer"
+                onClick={() => {
+                  setQtyToAdd((prev) => {
+                    if (typeof prev == 'number') {
+                      return prev > 1 ? prev - 1 : prev;
+                    }
+                    return 1;
+                  });
+                }}
+              />
+            </div>
+            <button
+              className={`${
+                active.stockNum == 0 ? 'daisy-btn-active daisy-btn-ghost ' : 'daisy-btn-primary'
+                // activeStockNum == 0 ? 'daisy-btn-active daisy-btn-ghost ' : 'daisy-btn-primary'
+              } px-8 py-4 uppercase shadow-xl`}
+            >
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 };
 
