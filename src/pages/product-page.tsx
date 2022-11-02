@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import validator from 'validator';
 import { useImmer } from 'use-immer';
+import validator from 'validator';
+
 import ProductPageSizeBox from '../components/product-page-size-box.component';
 import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
@@ -16,12 +17,15 @@ export type ActiveType = {
   stockNum: number;
   colorBox: number;
 };
-
 const boxStyle = 'mx-2 cursor-pointer border border-solid border-slate-200 px-3 py-1 first:ml-0';
 const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
-  // immer
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
+  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
+  const [product, setProduct] = React.useState<Product>({} as Product);
+  const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
+  const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
   const [active, setActive] = useImmer<ActiveType>({
     color: '',
     size: 'sm',
@@ -29,17 +33,6 @@ const ProductPage: React.FC = () => {
     stockNum: 0,
     colorBox: 0,
   });
-
-  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
-  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
-  const [product, setProduct] = React.useState<Product>({} as Product);
-  const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
-  const [activeColor, setActiveColor] = React.useState('');
-  const [activeImage, setActiveImage] = React.useState('');
-  const [activeSize, setActiveSize] = React.useState<SizeType>('sm');
-  const [activeStockNum, setActiveStockNum] = React.useState(0);
-  const [activeColorBox, setActiveColorBox] = React.useState(0);
-  const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
 
   const categoriesMap = useSelector(selectCategoriesMap);
   const isEmpty = (object: object) => Object.keys(object).length == 0;
@@ -55,8 +48,6 @@ const ProductPage: React.FC = () => {
 
   React.useEffect(() => {
     if (isEmpty(product)) return;
-    // setActiveColor(colors[0]);
-    // immer
     setActive((draft) => {
       draft.color = colors[0];
       draft.image = imageUrls[colors[0]]['thumbnail'];
@@ -64,38 +55,26 @@ const ProductPage: React.FC = () => {
     });
   }, [product]);
 
-  // React.useEffect(() => {
-  //   if (activeColor.length == 0) return;
-  //   setActiveImage(imageUrls[activeColor]['thumbnail']);
-  // }, [activeColor]);
-
-  // React.useEffect(() => {
-  //   if (stocks == undefined || activeColor.length == 0) return;
-  //   setActiveStockNum(stocks[activeColor][activeSize]);
-  // }, [stocks, activeColor, activeSize]);
-
   return (
     <main className="main-container ">
       <div className="grid grid-cols-product-page py-4">
         <div className="m-2 mt-0">
           {active.color &&
-            // {activeColor &&
             Object.values(imageUrls[active.color]).map(
-              // Object.values(imageUrls[activeColor]).map(
               (imageUrl, index) =>
                 imageUrl && (
                   <img
-                    className={` ${
-                      active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                      // activeStockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                    } mb-2 cursor-pointer border border-solid border-base-300 p-2 last:mb-0`}
+                    className={` ${active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} ${
+                      active.image == imageUrl
+                        ? 'border-4 border-success'
+                        : 'border border-base-300'
+                    } mb-2 cursor-pointer border-solid p-2 last:mb-0`}
                     key={index}
                     src={imageUrl}
                     onClick={() => {
                       setActive((draft) => {
                         draft.image = imageUrl;
                       });
-                      // setActiveImage(imageUrl);
                     }}
                   />
                 )
@@ -103,16 +82,13 @@ const ProductPage: React.FC = () => {
         </div>
         <div className="relative ml-5 flex justify-center">
           {active.stockNum == 0 && (
-            // {activeStockNum == 0 && (
             <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
               Out of stock
             </div>
           )}
           <img
             className={`${active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} w-4/5`}
-            // className={`${activeStockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} w-4/5`}
             src={active.image}
-            // src={activeImage}
             alt=""
           />
         </div>
@@ -128,19 +104,16 @@ const ProductPage: React.FC = () => {
                   key={index}
                   className={`${boxStyle} ${
                     active.colorBox == index
-                      ? // activeColorBox == index
-                        'border-1 border-success bg-success/50 shadow'
+                      ? 'border-1 border-success bg-success/50 shadow'
                       : 'shadow-none'
                   }`}
                   onClick={() => {
-                    // setActiveColor(color);
                     setActive((draft) => {
                       draft.color = color;
                       draft.image = imageUrls[color]['thumbnail'];
                       draft.stockNum = stocks[color][draft.size];
                       draft.colorBox = index;
                     });
-                    // setActiveColorBox(index);
                     setQtyToAdd(1);
                   }}
                 >
@@ -153,44 +126,14 @@ const ProductPage: React.FC = () => {
             {sizes.map((size, index) => (
               <ProductPageSizeBox
                 key={index}
-                product={product}
+                stocks={stocks}
                 active={active}
+                setActive={setActive}
                 sizeName={size}
                 style={boxStyle}
-                // activeSize={activeSize}
-                // setSize={setActiveSize}
                 setQtyToAdd={setQtyToAdd}
-                setActive={setActive}
               />
             ))}
-            {/* <ProductPageSizeBox
-              sizeName="sm"
-              style={boxStyle}
-              activeSize={activeSize}
-              setSize={setActiveSize}
-              setQtyToAdd={setQtyToAdd}
-            />
-            <ProductPageSizeBox
-              sizeName="md"
-              style={boxStyle}
-              activeSize={activeSize}
-              setSize={setActiveSize}
-              setQtyToAdd={setQtyToAdd}
-            />
-            <ProductPageSizeBox
-              sizeName="lg"
-              style={boxStyle}
-              activeSize={activeSize}
-              setSize={setActiveSize}
-              setQtyToAdd={setQtyToAdd}
-            />
-            <ProductPageSizeBox
-              sizeName="xl"
-              style={boxStyle}
-              activeSize={activeSize}
-              setSize={setActiveSize}
-              setQtyToAdd={setQtyToAdd}
-            /> */}
           </ul>
         </div>
         <div className="flex h-full w-full items-center">
@@ -202,13 +145,14 @@ const ProductPage: React.FC = () => {
               <span
                 className={`${
                   active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
-                  // activeStockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
                 } font-bold`}
               >
                 &nbsp;&nbsp;&nbsp;{active.stockNum}
-                {/* &nbsp;&nbsp;&nbsp;{activeStockNum} */}
               </span>
             </p>
+            {/* {qtyToAdd == '' && (
+              <p className="mx-auto text-sm text-red-500">Please buy at least 1</p>
+            )} */}
             <div className="my-6 flex">
               <PlusSign
                 className="h-8 w-8 cursor-pointer"
@@ -216,9 +160,8 @@ const ProductPage: React.FC = () => {
                   setQtyToAdd((prev) => {
                     if (typeof prev == 'number') {
                       return active.stockNum > prev ? prev + 1 : prev;
-                      // return activeStockNum > prev ? prev + 1 : prev;
                     }
-                    return 1;
+                    return 1; // when input is empty, set to 1
                   });
                 }}
               />
@@ -228,15 +171,13 @@ const ProductPage: React.FC = () => {
                 onChange={(e) => {
                   const str = e.target.value;
                   if (validator.isNumeric(str)) {
-                    if (str == '0') return setQtyToAdd(1);
+                    if (str == '0') return setQtyToAdd(1); //when input 0, set to 1
 
                     return active.stockNum >= parseInt(str)
-                      ? // return activeStockNum >= parseInt(str)
-                        setQtyToAdd(parseInt(str))
-                      : setQtyToAdd(active.stockNum);
-                    // : setQtyToAdd(activeStockNum);
+                      ? setQtyToAdd(parseInt(str))
+                      : setQtyToAdd(active.stockNum); // when input > stockNum, keep unchange
                   } else {
-                    setQtyToAdd('');
+                    setQtyToAdd(''); // when input is not number, clear
                   }
                 }}
                 value={qtyToAdd}
@@ -248,15 +189,16 @@ const ProductPage: React.FC = () => {
                     if (typeof prev == 'number') {
                       return prev > 1 ? prev - 1 : prev;
                     }
-                    return 1;
+                    return 1; // when input is empty, set to 1
                   });
                 }}
               />
             </div>
             <button
               className={`${
-                active.stockNum == 0 ? 'daisy-btn-active daisy-btn-ghost ' : 'daisy-btn-primary'
-                // activeStockNum == 0 ? 'daisy-btn-active daisy-btn-ghost ' : 'daisy-btn-primary'
+                active.stockNum == 0 || qtyToAdd == ''
+                  ? 'daisy-btn-active daisy-btn-ghost '
+                  : 'daisy-btn-primary'
               } px-8 py-4 uppercase shadow-xl`}
             >
               Add to cart
