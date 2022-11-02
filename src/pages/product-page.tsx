@@ -9,6 +9,7 @@ import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
 import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
 import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
+import Breadcrumbs from '../components/breadcrumbs';
 
 export type ActiveType = {
   color: string;
@@ -57,6 +58,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <main className="main-container ">
+      <Breadcrumbs />
       <div className="grid grid-cols-product-page py-4">
         <div className="m-2 mt-0">
           {active.color &&

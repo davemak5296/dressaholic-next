@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { subCatDisplayNameMap, UseParamsCategoryType } from '../types';
+import { subCatDisplayNameMap, UseParamsCategoryType, UseParamsSkuType } from '../types';
 
 const Breadcrumbs: React.FC = () => {
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
+  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
   console.log(category);
 
   return (
@@ -21,9 +22,14 @@ const Breadcrumbs: React.FC = () => {
               <Link to="/shop">{subCatDisplayNameMap[category]['mainCat']}</Link>
             </li>
             <li className="hover:text-primary-focus hover:before:opacity-90">
-              <Link to="/shop">{subCatDisplayNameMap[category]['displayName']}</Link>
+              <Link to={`/shop/${category}`}>{subCatDisplayNameMap[category]['displayName']}</Link>
             </li>
           </>
+        )}
+        {skuInUrl && (
+          <li className="hover:text-primary-focus hover:before:opacity-90">
+            <Link to="/shop">{skuInUrl}</Link>
+          </li>
         )}
       </ul>
     </div>
