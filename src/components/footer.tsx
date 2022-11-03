@@ -7,9 +7,17 @@ import { ReactComponent as TW } from '../assets/twitter.svg';
 
 const iconStyle = clsx('mr-3 h-10 w-10');
 
-const Footer: React.FC = () => {
+type FooterProp = {
+  isFixed?: boolean;
+};
+
+const Footer: React.FC<FooterProp> = ({ isFixed }) => {
   return (
-    <footer className="relative bottom-0 bg-base-200 py-4 xs:py-6 md:py-8">
+    <footer
+      className={`${
+        isFixed ? 'fixed bottom-0 left-0 right-0' : ''
+      } bg-base-200 py-4 xs:py-6 md:py-8`}
+    >
       <section className="mx-2 justify-between xs:flex sm:mx-5 md:container md:mx-6 xl:mx-auto">
         <div className="flex items-center xs:shrink sm:w-1/2 md:w-1/3 md:justify-between lg:w-1/4">
           <FB className={iconStyle} />

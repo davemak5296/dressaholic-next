@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Outlet } from 'react-router';
-import Footer from '../components/footer';
 import Navigation from '../components/navigation-bar';
 
 const PageLayout: React.FC = () => {
@@ -15,7 +14,6 @@ const PageLayout: React.FC = () => {
     <>
       <Navigation scrollY={scrollH} />
       <Outlet />
-      <Footer />
     </>
   );
 };

@@ -3,13 +3,22 @@ import clsx from 'clsx';
 import { ReactComponent as MinusSign } from '../assets/circle-minus-solid.svg';
 import { ReactComponent as PlusSign } from '../assets/circle-plus-solid.svg';
 import { ReactComponent as CrossSign } from '../assets/circle-xmark-solid.svg';
+import Footer from '../components/footer';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
 const Cart: React.FC = () => {
+  const mainRef = React.useRef<HTMLElement>(null);
+  const [isFixed, setIsFixed] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!mainRef.current?.scrollHeight) return;
+    setIsFixed(window.innerHeight > mainRef.current?.scrollHeight);
+  });
+
   return (
     <>
-      <main className="main-container h-screen px-3 sm:container sm:px-0">
+      <main ref={mainRef} className="main-container h-auto px-3 sm:container sm:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           CART
         </h1>
@@ -66,6 +75,7 @@ const Cart: React.FC = () => {
         </section>
         <hr />
       </main>
+      <Footer isFixed={isFixed} />
     </>
   );
 };

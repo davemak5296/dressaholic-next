@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router';
+import Footer from '../components/footer';
 import Category from './Category';
 import ProductPage from './product-page';
 import ShopLanding from './shop-landing';
@@ -12,8 +13,15 @@ const Shop: React.FC = () => {
         <Route index element={<ShopLanding />} />
         <Route path=":category" element={<Category />} />
       </Route>
-      <Route path=":category/:skuInUrl" element={<ProductPage />} />
-      {/* <Route path=":category/ABC-001" element={<ProductPage />} /> */}
+      <Route
+        path=":category/:skuInUrl"
+        element={
+          <>
+            <ProductPage />
+            <Footer isFixed={true} />
+          </>
+        }
+      />
     </Routes>
   );
 };
