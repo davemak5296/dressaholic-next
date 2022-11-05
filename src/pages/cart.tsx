@@ -4,34 +4,12 @@ import { ReactComponent as MinusSign } from '../assets/circle-minus-solid.svg';
 import { ReactComponent as PlusSign } from '../assets/circle-plus-solid.svg';
 import { ReactComponent as CrossSign } from '../assets/circle-xmark-solid.svg';
 import Footer from '../components/footer';
+import useFooterFixed from '../hooks/useFooterFixed';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
 const Cart: React.FC = () => {
-  const mainRef = React.useRef<HTMLElement>(null);
-  const [isFooterFixed, setIsFooterFixed] = React.useState(true);
-
-  const setFooter = (mainRef: React.RefObject<HTMLElement>) => {
-    if (mainRef == null) return;
-    const mainH = mainRef.current?.clientHeight as number;
-    window.innerHeight - 184 < mainH ? setIsFooterFixed(false) : setIsFooterFixed(true);
-  };
-
-  React.useEffect(() => {
-    window.addEventListener('resize', () => setFooter(mainRef));
-    return () => {
-      window.removeEventListener('size', () => setFooter(mainRef));
-    };
-  }, []);
-
-  React.useEffect(() => {
-    let intervalId = setInterval(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  const { isFooterFixed, mainRef } = useFooterFixed();
 
   return (
     <>

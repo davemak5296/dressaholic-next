@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useImmer } from 'use-immer';
 import validator from 'validator';
-import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
+import { selectCategoriesMap } from '../store/category/categories.selector';
+import useFooterFixed from '../hooks/useFooterFixed';
 
 import ProductPageSizeBox from '../components/product-page-size-box.component';
 import Breadcrumbs from '../components/breadcrumbs';
@@ -37,17 +38,9 @@ const ProductPage: React.FC = () => {
     stockNum: 0,
     colorBox: 0,
   });
-
-  const mainRef = React.useRef<HTMLElement>(null);
-  const [isFooterFixed, setIsFooterFixed] = React.useState(true);
+  const { isFooterFixed, mainRef } = useFooterFixed();
 
   const isEmpty = (object: object) => Object.keys(object).length == 0;
-  const setFooter = (mainRef: React.RefObject<HTMLElement>) => {
-    if (mainRef == null) return;
-    const mainH = mainRef.current?.clientHeight as number;
-    window.innerHeight - 184 < mainH ? setIsFooterFixed(false) : setIsFooterFixed(true);
-  };
-
   const qtyBoxHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const str = e.target.value;
     if (validator.isNumeric(str)) {
@@ -77,24 +70,6 @@ const ProductPage: React.FC = () => {
       draft.stockNum = stocks[colors[0]][draft.size];
     });
   }, [product]);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setFooter(mainRef);
-    });
-    return () => {
-      window.removeEventListener('size', () => setFooter(mainRef));
-    };
-  }, []);
-
-  React.useEffect(() => {
-    let intervalId = setInterval(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
 
   return (
     <>
