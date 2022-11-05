@@ -9,12 +9,26 @@ const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:te
 
 const Cart: React.FC = () => {
   const mainRef = React.useRef<HTMLElement>(null);
-  const [isFixed, setIsFixed] = React.useState(true);
+  const [isFooterFixed, setIsFooterFixed] = React.useState(true);
+
+  const setFooter = (mainRef: React.RefObject<HTMLElement>) => {
+    if (mainRef == null) return;
+    const mainH = mainRef.current?.clientHeight as number;
+    window.innerHeight - 184 < mainH ? setIsFooterFixed(false) : setIsFooterFixed(true);
+  };
 
   React.useEffect(() => {
-    if (!mainRef.current?.scrollHeight) return;
-    setIsFixed(window.innerHeight > mainRef.current?.scrollHeight);
-  });
+    window.addEventListener('resize', () => setFooter(mainRef));
+  }, []);
+
+  React.useEffect(() => {
+    let intervalId = setInterval(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <>
@@ -73,9 +87,121 @@ const Cart: React.FC = () => {
           <div>$43.98</div>
           <CrossSign className="flex h-5 w-5 justify-center" />
         </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
+        <section className="hidden grid-cols-cartXL items-center text-sm sm:grid lg:text-base xl:text-lg">
+          <div className="p-4">
+            <img className="w-2/3" src="./men-jacket-1.webp" alt="" />
+          </div>
+          <div className="w-4/5">
+            Kirkland Signature Men&apos;s Jacket Kirkland Signature Men&apos;s Jacket
+          </div>
+          <div>$43.98</div>
+          <div className="flex items-center">
+            <MinusSign className="h-4 w-4 cursor-pointer" />
+            <div className="ml-1 text-lg">1</div>
+            <PlusSign className="ml-1 h-4 w-4 cursor-pointer" />
+          </div>
+          <div>$43.98</div>
+          <CrossSign className="flex h-5 w-5 justify-center" />
+        </section>
         <hr />
       </main>
-      <Footer isFixed={isFixed} />
+      <Footer isFixed={isFooterFixed} />
     </>
   );
 };

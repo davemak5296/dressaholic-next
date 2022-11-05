@@ -84,6 +84,15 @@ const ProductPage: React.FC = () => {
     });
   }, []);
 
+  React.useEffect(() => {
+    let intervalId = setInterval(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <>
       <main ref={mainRef} key={skuInUrl} className="main-container px-4">
