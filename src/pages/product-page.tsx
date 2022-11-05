@@ -82,6 +82,9 @@ const ProductPage: React.FC = () => {
     window.addEventListener('resize', () => {
       setFooter(mainRef);
     });
+    return () => {
+      window.removeEventListener('size', () => setFooter(mainRef));
+    };
   }, []);
 
   React.useEffect(() => {

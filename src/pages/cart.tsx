@@ -19,6 +19,9 @@ const Cart: React.FC = () => {
 
   React.useEffect(() => {
     window.addEventListener('resize', () => setFooter(mainRef));
+    return () => {
+      window.removeEventListener('size', () => setFooter(mainRef));
+    };
   }, []);
 
   React.useEffect(() => {
