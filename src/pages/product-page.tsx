@@ -12,6 +12,7 @@ import Breadcrumbs from '../components/breadcrumbs';
 import Footer from '../components/footer';
 import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
 import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
+import { motion } from 'framer-motion';
 
 export type ActiveStateType = {
   color: string;
@@ -21,7 +22,7 @@ export type ActiveStateType = {
   colorBox: number;
 };
 const boxStyle =
-  'mx-2 text-sm cursor-pointer border border-solid border-slate-200 px-2 py-1 sm:px-3 sm:py-1 sm:text-base first:ml-0';
+  'mx-2 text-sm cursor-pointer transition-all duration-[200] border border-solid border-slate-200 px-2 py-1 sm:px-3 sm:py-1 sm:text-base first:ml-0';
 const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
@@ -73,7 +74,23 @@ const ProductPage: React.FC = () => {
 
   return (
     <>
-      <main ref={mainRef} key={skuInUrl} className="main-container px-4">
+      <motion.main
+        initial={{
+          opacity: 0,
+          scale: 0.8,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          ease: 'easeInOut',
+          duration: 0.3,
+        }}
+        ref={mainRef}
+        key={skuInUrl}
+        className="main-container px-4"
+      >
         <Breadcrumbs />
         <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
           <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
@@ -92,7 +109,7 @@ const ProductPage: React.FC = () => {
                           active.image == imageUrl
                             ? 'border-4 border-success'
                             : 'border border-base-300'
-                        } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
+                        } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 transition-all duration-100 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
                         key={index}
                         src={imageUrl}
                         onClick={() => {
@@ -189,7 +206,7 @@ const ProductPage: React.FC = () => {
                       className={`${boxStyle} ${
                         active.colorBox == index
                           ? 'border-1 border-success bg-success/50 shadow'
-                          : 'shadow-none'
+                          : 'shadow-none transition-all duration-[200]'
                       }`}
                       onClick={() => {
                         setActive((draft) => {
@@ -222,7 +239,7 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </main>
+      </motion.main>
       <Footer isFixed={isFooterFixed} />
     </>
   );
