@@ -3,32 +3,34 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useImmer } from 'use-immer';
 import validator from 'validator';
-
-import ProductPageSizeBox from '../components/product-page-size-box.component';
 import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
-import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
-import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
+
+import ProductPageSizeBox from '../components/product-page-size-box.component';
 import Breadcrumbs from '../components/breadcrumbs';
 import Footer from '../components/footer';
+import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
+import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
 
-export type ActiveType = {
+export type ActiveStateType = {
   color: string;
   size: SizeType;
   image: string;
   stockNum: number;
   colorBox: number;
 };
-const boxStyle = 'mx-2 cursor-pointer border border-solid border-slate-200 px-3 py-1 first:ml-0';
+const boxStyle =
+  'mx-2 text-sm cursor-pointer border border-solid border-slate-200 px-2 py-1 sm:px-3 sm:py-1 sm:text-base first:ml-0';
 const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
+  const categoriesMap = useSelector(selectCategoriesMap);
   const [product, setProduct] = React.useState<Product>({} as Product);
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
-  const [active, setActive] = useImmer<ActiveType>({
+  const [active, setActive] = useImmer<ActiveStateType>({
     color: '',
     size: 'sm',
     image: '',
@@ -36,8 +38,27 @@ const ProductPage: React.FC = () => {
     colorBox: 0,
   });
 
-  const categoriesMap = useSelector(selectCategoriesMap);
+  const mainRef = React.useRef<HTMLElement>(null);
+  const [isFooterFixed, setIsFooterFixed] = React.useState(true);
+
   const isEmpty = (object: object) => Object.keys(object).length == 0;
+  const setFooter = (mainRef: React.RefObject<HTMLElement>) => {
+    if (mainRef == null) return;
+    const mainH = mainRef.current?.clientHeight as number;
+    window.innerHeight - 184 < mainH ? setIsFooterFixed(false) : setIsFooterFixed(true);
+  };
+
+  const qtyBoxHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const str = e.target.value;
+    if (validator.isNumeric(str)) {
+      if (str == '0') return setQtyToAdd(1); //when input 0, set to 1
+
+      return active.stockNum >= parseInt(str)
+        ? setQtyToAdd(parseInt(str))
+        : setQtyToAdd(active.stockNum); // when input > stockNum, keep unchange
+    }
+    setQtyToAdd(''); // when input is not number, clear
+  };
 
   React.useEffect(() => {
     if (isEmpty(categoriesMap)) return;
@@ -57,13 +78,22 @@ const ProductPage: React.FC = () => {
     });
   }, [product]);
 
+  React.useEffect(() => {
+    window.addEventListener('resize', () => {
+      setFooter(mainRef);
+    });
+  }, []);
+
   return (
     <>
-      <main key={skuInUrl} className="main-container px-4">
+      <main ref={mainRef} key={skuInUrl} className="main-container px-4">
         <Breadcrumbs />
-        <div className="grid grid-cols-product-page py-4">
-          <div className="flex">
-            <div className="m-2 mt-0 w-1/6">
+        <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
+          <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
+          <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
+          {/* first column */}
+          <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
+            <div className="order-2 m-2 mt-0 flex w-2/3 lg:order-1 lg:block lg:w-1/6">
               {active.color &&
                 Object.values(imageUrls[active.color]).map(
                   (imageUrl, index) =>
@@ -75,7 +105,7 @@ const ProductPage: React.FC = () => {
                           active.image == imageUrl
                             ? 'border-4 border-success'
                             : 'border border-base-300'
-                        } mb-2 cursor-pointer border-solid p-2 last:mb-0`}
+                        } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
                         key={index}
                         src={imageUrl}
                         onClick={() => {
@@ -87,7 +117,7 @@ const ProductPage: React.FC = () => {
                     )
                 )}
             </div>
-            <div className="relative flex w-5/6 items-start justify-center">
+            <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
               {active.stockNum == 0 && (
                 <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
                   Out of stock
@@ -96,20 +126,75 @@ const ProductPage: React.FC = () => {
               <img
                 className={`${
                   active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                }  w-4/5`}
+                } w-1/3 sm:w-4/5`}
                 src={active.image}
                 alt=""
               />
             </div>
           </div>
-
-          <div className="flex">
-            <div className="flex w-4/6 flex-col">
-              <div className="mt-6 mb-2 text-2xl text-accent-content">{brand}</div>
-              <div className="mb-3 text-3xl font-bold text-primary">{displayName}</div>
-              <div className="my-5 ml-4 text-2xl text-black">{`$${price}.00`}</div>
-              <div className="mb-1 mt-auto text-lg">Color</div>
-              <ul className="flex">
+          {/* second column */}
+          <div className="flex w-full sm:w-1/2">
+            <div className="flex w-full flex-col lg:w-4/6">
+              <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
+              <div className="hidden text-2xl font-bold text-primary sm:block">{displayName}</div>
+              <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
+              <div className="flex w-full items-center">
+                <div className="flex w-full flex-col">
+                  <p className="mt-2 sm:mt-8">
+                    <span className="text-base text-secondary-focus underline underline-offset-4 sm:text-lg">
+                      Stocks left:
+                    </span>
+                    <span
+                      className={`${
+                        active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
+                      } font-bold`}
+                    >
+                      &nbsp;&nbsp;&nbsp;{active.stockNum}
+                    </span>
+                  </p>
+                  <div className="flex items-center">
+                    <PlusSign
+                      className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
+                      onClick={() => {
+                        setQtyToAdd((prev) => {
+                          if (typeof prev == 'number') {
+                            return active.stockNum > prev ? prev + 1 : prev;
+                          }
+                          return 1; // when input is empty, set to 1
+                        });
+                      }}
+                    />
+                    <input
+                      type="text"
+                      className="w-[50px] text-center text-base outline-none sm:text-xl"
+                      onChange={qtyBoxHandler}
+                      value={qtyToAdd}
+                    />
+                    <MinusSign
+                      className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
+                      onClick={() => {
+                        setQtyToAdd((prev) => {
+                          if (typeof prev == 'number') {
+                            return prev > 1 ? prev - 1 : prev;
+                          }
+                          return 1; // when input is empty, set to 1
+                        });
+                      }}
+                    />
+                    <button
+                      className={`${
+                        active.stockNum == 0 || qtyToAdd == ''
+                          ? 'daisy-btn-active daisy-btn-ghost '
+                          : 'daisy-btn-primary'
+                      } ml-12 self-end px-3 py-2 text-sm uppercase shadow-xl sm:px-5 sm:py-3 lg:text-base`}
+                    >
+                      Add to cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <ul className="mt-4 flex items-center sm:mt-14">
+                <span className="text-sm sm:text-lg">Color </span>
                 {colors &&
                   colors.map((color, index) => (
                     <li
@@ -133,8 +218,8 @@ const ProductPage: React.FC = () => {
                     </li>
                   ))}
               </ul>
-              <div className="mt-5 mb-1 text-lg">Size</div>
-              <ul className="flex">
+              <ul className="mt-4 flex items-center sm:mt-6">
+                <span className="text-sm sm:text-lg">Size </span>
                 {sizes.map((size, index) => (
                   <ProductPageSizeBox
                     key={index}
@@ -148,79 +233,10 @@ const ProductPage: React.FC = () => {
                 ))}
               </ul>
             </div>
-            <div className="flex h-full w-2/6 items-center">
-              <div className="flex w-full flex-col border border-solid border-primary">
-                <p className="mx-auto mt-4">
-                  <span className="mx-auto my-4 text-lg text-secondary-focus underline underline-offset-4">
-                    Stocks left:
-                  </span>
-                  <span
-                    className={`${
-                      active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
-                    } font-bold`}
-                  >
-                    &nbsp;&nbsp;&nbsp;{active.stockNum}
-                  </span>
-                </p>
-                {/* {qtyToAdd == '' && (
-              <p className="mx-auto text-sm text-red-500">Please buy at least 1</p>
-            )} */}
-                <div className="my-6 flex">
-                  <PlusSign
-                    className="h-8 w-8 cursor-pointer"
-                    onClick={() => {
-                      setQtyToAdd((prev) => {
-                        if (typeof prev == 'number') {
-                          return active.stockNum > prev ? prev + 1 : prev;
-                        }
-                        return 1; // when input is empty, set to 1
-                      });
-                    }}
-                  />
-                  <input
-                    type="text"
-                    className="w-[calc(100%-2*32px)] text-center text-xl outline-none"
-                    onChange={(e) => {
-                      const str = e.target.value;
-                      if (validator.isNumeric(str)) {
-                        if (str == '0') return setQtyToAdd(1); //when input 0, set to 1
-
-                        return active.stockNum >= parseInt(str)
-                          ? setQtyToAdd(parseInt(str))
-                          : setQtyToAdd(active.stockNum); // when input > stockNum, keep unchange
-                      } else {
-                        setQtyToAdd(''); // when input is not number, clear
-                      }
-                    }}
-                    value={qtyToAdd}
-                  />
-                  <MinusSign
-                    className="h-8 w-8 cursor-pointer"
-                    onClick={() => {
-                      setQtyToAdd((prev) => {
-                        if (typeof prev == 'number') {
-                          return prev > 1 ? prev - 1 : prev;
-                        }
-                        return 1; // when input is empty, set to 1
-                      });
-                    }}
-                  />
-                </div>
-                <button
-                  className={`${
-                    active.stockNum == 0 || qtyToAdd == ''
-                      ? 'daisy-btn-active daisy-btn-ghost '
-                      : 'daisy-btn-primary'
-                  } px-8 py-4 uppercase shadow-xl`}
-                >
-                  Add to cart
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </main>
-      <Footer isFixed={true} />
+      <Footer isFixed={isFooterFixed} />
     </>
   );
 };

@@ -13,15 +13,7 @@ const Shop: React.FC = () => {
         <Route index element={<ShopLanding />} />
         <Route path=":category" element={<Category />} />
       </Route>
-      <Route
-        path=":category/:skuInUrl"
-        element={
-          <>
-            <ProductPage />
-            <Footer isFixed={true} />
-          </>
-        }
-      />
+      <Route path=":category/:skuInUrl" element={<ProductPage />} />
     </Routes>
   );
 };

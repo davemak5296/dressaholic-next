@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Updater } from 'use-immer';
-import { ActiveType } from '../pages/product-page';
+import { ActiveStateType } from '../pages/product-page';
 import { Product, SizeType } from '../types';
 
 type ProductPageSizeBoxProp = {
   style: string;
   stocks: Product['stocks'];
-  active: ActiveType;
+  active: ActiveStateType;
   sizeName: SizeType;
   setQtyToAdd: React.Dispatch<React.SetStateAction<number | string>>;
-  setActive: Updater<ActiveType>;
+  setActive: Updater<ActiveStateType>;
 };
 
 const ProductPageSizeBox: React.FC<ProductPageSizeBoxProp> = ({
