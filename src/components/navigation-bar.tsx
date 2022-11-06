@@ -5,7 +5,9 @@ import { selectCurrentUser } from '../store/user/user.selector';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Logo } from '../assets/letter-d.svg';
 import { ReactComponent as MenuIcon } from '../assets/icon-menu.svg';
-import { ReactComponent as ShoppingBag } from '../assets/icon-shopping-bag.svg';
+import CartDropDown from './cart-dropdown.component';
+import { selectIsCartOpen } from '../store/cart/cart.selector';
+import CartIcon from './cart-icon.component';
 
 type NavBarProps = {
   scrollY: number;
@@ -14,6 +16,7 @@ type NavBarProps = {
 const Navigation: React.FC<NavBarProps> = (props) => {
   const dispatch = useDispatch();
   const currUser = useSelector(selectCurrentUser);
+  const isCartOpen = useSelector(selectIsCartOpen);
   const { scrollY } = props;
   const isScrolledOver = scrollY > 36;
 
@@ -87,7 +90,8 @@ const Navigation: React.FC<NavBarProps> = (props) => {
               sign in
             </Link>
           )}
-          <ShoppingBag className="h-6 w-6" />
+          <CartIcon />
+          {isCartOpen && <CartDropDown />}
         </section>
       </nav>
     </div>

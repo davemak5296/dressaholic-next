@@ -81,7 +81,7 @@ export type ImageUrlsType = {
 };
 export type SizeType = 'sm' | 'md' | 'lg' | 'xl';
 // export type CartItem = Product & { qty: number };
-export type CartItem = {
+export type CartItemType = {
   // same item = same (sku, color and size)
   sku: string;
   brand: string;
@@ -103,6 +103,11 @@ export interface CategoriesState {
   isLoading: boolean;
   error: Error | null;
 }
+
+export interface CartState {
+  isCartOpen: boolean;
+  itemsInCart: CartItemType[];
+}
 export interface UserState {
   currentUser: User | null;
   isLoading: boolean;
@@ -110,7 +115,7 @@ export interface UserState {
 }
 export interface BaseState {
   categories: CategoriesState;
-  // cart: CartState;
+  cart: CartState;
   user: UserState;
 }
 

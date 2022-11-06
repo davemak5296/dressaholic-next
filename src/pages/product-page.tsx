@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useImmer } from 'use-immer';
 import validator from 'validator';
@@ -13,6 +13,9 @@ import Footer from '../components/footer';
 import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
 import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
 import { motion } from 'framer-motion';
+import { addItemToCart } from '../store/cart/cart.action';
+import { selectCartItems } from '../store/cart/cart.selector';
+import { SET_IS_CART_OPEN } from '../store/cart/cart.reducer';
 
 export type ActiveStateType = {
   color: string;
@@ -26,9 +29,11 @@ const boxStyle =
 const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
+  const dispatch = useDispatch();
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
   const categoriesMap = useSelector(selectCategoriesMap);
+  const itemsInCart = useSelector(selectCartItems);
   const [product, setProduct] = React.useState<Product>({} as Product);
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
@@ -52,6 +57,27 @@ const ProductPage: React.FC = () => {
         : setQtyToAdd(active.stockNum); // when input > stockNum, keep unchange
     }
     setQtyToAdd(''); // when input is not number, clear
+  };
+
+  const btnHandler: React.MouseEventHandler = () => {
+    if (active.stockNum == 0 || qtyToAdd == '') return;
+    dispatch(SET_IS_CART_OPEN(true));
+    dispatch(
+      addItemToCart(
+        itemsInCart,
+        {
+          sku,
+          brand,
+          displayName,
+          imageUrl: active.image,
+          price,
+          color: active.color,
+          size: active.size,
+          qty: qtyToAdd as number,
+        },
+        false
+      )
+    );
   };
 
   React.useEffect(() => {
@@ -186,6 +212,7 @@ const ProductPage: React.FC = () => {
                       }}
                     />
                     <button
+                      onClick={btnHandler}
                       className={`${
                         active.stockNum == 0 || qtyToAdd == ''
                           ? 'daisy-btn-active daisy-btn-ghost '

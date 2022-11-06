@@ -2,7 +2,7 @@ import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolki
 import { logger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import categoriesReducer from './category/categories.reducer';
-// import cartReducer from './cart/cart.reducer';
+import cartReducer from './cart/cart.reducer';
 import rootSaga from './root-saga';
 import userReducer from './user/user.reducer';
 // import { BaseState } from '../types';
@@ -11,7 +11,7 @@ const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     categories: categoriesReducer,
-    // cart: cartReducer,
+    cart: cartReducer,
     user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -31,7 +31,7 @@ export const store = configureStore({
 
 export const rootReducer = combineReducers({
   categories: categoriesReducer,
-  // cart: cartReducer,
+  cart: cartReducer,
   user: userReducer,
 });
 
