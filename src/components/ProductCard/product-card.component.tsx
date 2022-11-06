@@ -25,14 +25,13 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
         {`\$${price}`}
       </div>
       <section className="flex w-1/3 grow-0 flex-col sm:w-auto sm:items-center">
-        <Link to={`/shop/${category}/${sku}`} className="relative w-2/3">
-          <img className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`} src={activePic} />
-          {isOutOfStock && (
-            <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
-              out of stock
-            </div>
-          )}
-        </Link>
+        <img className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`} src={activePic} />
+        {isOutOfStock && (
+          <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
+            out of stock
+          </div>
+        )}
+
         <div className="mt-2 grid grid-cols-4 gap-2 place-self-start">
           {colors.map((color) => (
             <img
@@ -45,20 +44,17 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
         </div>
       </section>
       <section className="flex w-2/3 grow flex-col items-center justify-evenly sm:w-full">
-        <Link to={`/shop/${category}/${sku}`} className="text-md mt-1 grow-0 font-bold">
-          {brand}
-        </Link>
-        <Link to={`/shop/${category}/${sku}`} className="grow">
-          {displayName}
-        </Link>
+        <div className="text-md mt-1 grow-0 font-bold">{brand}</div>
+        <div className="grow">{displayName}</div>
         <div className="block grow-0 bg-yellow-300 px-1 text-lg sm:hidden">{`\$${price}`}</div>
-        <button
-          className={`w-[80%] grow-0 p-2 text-lg sm:mt-4 sm:w-full ${
-            isOutOfStock ? 'daisy-btn-ghost daisy-btn-active' : 'daisy-btn-primary'
+        <Link
+          to={`/shop/${category}/${sku}`}
+          className={`block w-[80%] grow-0 p-2 text-lg sm:mt-4 sm:w-full ${
+            isOutOfStock ? 'daisy-btn-ghost daisy-btn-active' : 'daisy-btn-secondary'
           }`}
         >
-          Add to cart
-        </button>
+          <div className="flex w-full justify-center">View</div>
+        </Link>
       </section>
     </div>
   );
