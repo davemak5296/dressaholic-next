@@ -10,14 +10,15 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
   const colors = Object.keys(stocks);
   const isOutOfStock = false;
 
-  const [activePic, setActivePic] = React.useState(imageUrls[colors[0]]['thumbnail']);
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
   const handleClick: React.MouseEventHandler<HTMLImageElement> = (e) => {
     if (e.target instanceof HTMLImageElement) {
-      setActivePic(e.target.getAttribute('src') as string);
+      imgRef.current?.setAttribute('src', e.target.getAttribute('src') as string);
     }
   };
+
   return (
     // <640px, flex; >640px, flex column
     <div className="relative col-span-1 flex border border-solid border-slate-200 p-2 sm:flex-col sm:items-center sm:p-4">
@@ -25,7 +26,11 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
         {`\$${price}`}
       </div>
       <section className="flex w-1/3 grow-0 flex-col sm:w-auto sm:items-center">
-        <img className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`} src={activePic} />
+        <img
+          ref={imgRef}
+          className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
+          src={imageUrls[colors[0]]['thumbnail']}
+        />
         {isOutOfStock && (
           <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
             out of stock

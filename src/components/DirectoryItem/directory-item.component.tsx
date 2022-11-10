@@ -11,7 +11,7 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({ item }) => {
   return (
     <Link to={`/shop/${title.name}`}>
       <img className="max-w-full" src={imageUrl} alt="" />
-      <div className="mt-2 flex max-w-[200px] justify-center text-lg">{title.displayName}</div>
+      <div className="mt-2 flex justify-center text-lg">{title.displayName}</div>
     </Link>
   );
 };
