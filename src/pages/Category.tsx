@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import _ from 'lodash';
 import Breadcrumbs from '../components/breadcrumbs';
-import FilterPanel from '../components/filter-panel';
+import BrandFilter from '../components/brand-filter';
 import Footer from '../components/footer';
 import ProductCard from '../components/ProductCard/product-card.component';
 import useFooterFixed from '../hooks/useFooterFixed';
 import { selectCategoriesMap } from '../store/category/categories.selector';
 import { Product, UseParamsCategoryType, subCatDisplayNameMap } from '../types';
+import PriceFilter from '../components/price-filter';
 
 const Category: React.FC = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
@@ -17,6 +17,8 @@ const Category: React.FC = () => {
   const { isFooterFixed, mainRef } = useFooterFixed();
   const [products, setProducts] = React.useState<Product[]>([] as Product[]);
   const [chosenBrands, setChosenBrands] = React.useState<string[]>([] as string[]);
+  const [minPrice, setMinPrice] = React.useState(0);
+  const [maxPrice, setMaxPrice] = React.useState(0);
 
   React.useEffect(() => {
     setProducts(categoriesMap[category]);
@@ -45,27 +47,32 @@ const Category: React.FC = () => {
         <div className="relative top-0 col-span-full col-start-1 row-start-2 sm:col-span-1 sm:block">
           <div className="sticky top-[36px] lg:top-[52px]">
             <h1 className="border-b border-base-300 p-2 text-xl sm:p-5 sm:text-2xl">Filters</h1>
-            <FilterPanel
-              activeBrands={chosenBrands}
-              setChosenBrands={setChosenBrands}
-              title="Brand"
-            />
-            <FilterPanel
-              activeBrands={chosenBrands}
-              setChosenBrands={setChosenBrands}
-              title="Price"
-            />
+            <BrandFilter setChosenBrands={setChosenBrands} />
+            <PriceFilter min={minPrice} max={maxPrice} setMin={setMinPrice} setMax={setMaxPrice} />
           </div>
         </div>
         <div className="col-span-5 col-start-1 row-start-3 overflow-y-scroll sm:col-start-2 sm:row-start-2 sm:pl-6 md:col-span-4 md:col-start-2 ">
           <h1 className="p-2 text-2xl sm:p-5">{subCatDisplayNameMap[category]['displayName']}</h1>
           <section className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 xl:gap-6">
             {products
-              ? chosenBrands.length == 0
-                ? products.map((product, index) => <ProductCard key={index} card={product} />)
+              ? // when brand filters are not chosen
+                chosenBrands.length == 0
+                ? products
+                    .filter((pdt) => {
+                      return minPrice == 0 && maxPrice == 0
+                        ? true
+                        : pdt.price >= minPrice && pdt.price <= maxPrice;
+                    })
+                    .map((pdt, i) => <ProductCard key={i} card={pdt} />)
                 : products
-                    .filter((product) => chosenBrands.includes(product.brand))
-                    .map((product, index) => <ProductCard key={index} card={product} />)
+                    .filter((pdt) => {
+                      return minPrice == 0 && maxPrice == 0
+                        ? chosenBrands.includes(pdt.brand)
+                        : chosenBrands.includes(pdt.brand) &&
+                            pdt.price >= minPrice &&
+                            pdt.price <= maxPrice;
+                    })
+                    .map((pdt, i) => <ProductCard key={i} card={pdt} />)
               : null}
           </section>
         </div>

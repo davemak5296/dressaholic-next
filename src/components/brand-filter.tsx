@@ -2,16 +2,14 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectCategoriesMap } from '../store/category/categories.selector';
-import { Product, UseParamsCategoryType } from '../types';
+import { UseParamsCategoryType } from '../types';
 import _ from 'lodash';
 
-type FilterPanelProps = {
-  title: string;
-  activeBrands: string[];
+type BrandFilterProps = {
   setChosenBrands: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ title, activeBrands, setChosenBrands }) => {
+const BrandFilter: React.FC<BrandFilterProps> = ({ setChosenBrands }) => {
   const { category } = useParams<UseParamsCategoryType>() as UseParamsCategoryType;
   const categoriesMap = useSelector(selectCategoriesMap);
   const [uniBrands, setUniBrands] = React.useState<string[]>([] as string[]);
@@ -32,17 +30,32 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ title, activeBrands, setChose
   return (
     <div className="daisy-collapse-arrow daisy-collapse border-b border-base-300 bg-base-100">
       <input type="checkbox" />
-      <div className="daisy-collapse-title text-base">{title}</div>
-      <div className="daisy-collapse-content flex flex-wrap justify-start text-sm font-light">
-        {uniBrands.map((el, index) => (
-          <div key={index} className="w-[45%] pr-2">
-            <input onClick={checkBoxHandler} type="checkbox" id={el} value={el} />
-            <label htmlFor={el}>&nbsp;{el}</label>
-          </div>
-        ))}
+      <div className="daisy-collapse-title text-base">Brand</div>
+      <div className="daisy-collapse-content text-sm font-light">
+        <div className="flex flex-wrap justify-start">
+          {uniBrands.map((el, i) => (
+            <div key={i} className="w-[45%] pr-2">
+              <input onClick={checkBoxHandler} type="checkbox" id={el} value={el} />
+              <label htmlFor={el}>&nbsp;{el}</label>
+            </div>
+          ))}
+        </div>
+        <br />
+        <div
+          className="cursor-pointer text-blue-500 underline"
+          onClick={(e) => {
+            setChosenBrands([] as string[]);
+            uniBrands.forEach((el) => {
+              const input = document.getElementById(el) as HTMLInputElement;
+              input.checked = false;
+            });
+          }}
+        >
+          clear
+        </div>
       </div>
     </div>
   );
 };
 
-export default FilterPanel;
+export default BrandFilter;
