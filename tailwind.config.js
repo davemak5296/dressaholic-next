@@ -19,6 +19,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         'cartXL': '0.6fr 1.8fr 0.5fr 0.5fr 0.5fr 40px',
+        'cartXL-order': '0.6fr 1.8fr 0.5fr 0.5fr 0.5fr',
         'cart-title': '0.8fr 1.5fr',
         'cart': '0.8fr 0.5fr 0.5fr 0.5fr',
         'product-page': '0.8fr 1fr',

@@ -5,6 +5,7 @@ import useFooterFixed from '../hooks/useFooterFixed';
 import { useSelector } from 'react-redux';
 import { selectCartItems, selectCartTotal } from '../store/cart/cart.selector';
 import CartItem from '../components/cart-item.component';
+import { Link } from 'react-router-dom';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
@@ -34,6 +35,17 @@ const Cart: React.FC = () => {
           <div className={colTitleStyles}>Description</div>
         </section>
         {itemsInCart && itemsInCart.map((item, index) => <CartItem key={index} item={item} />)}
+        <div className="float-right mt-4 text-2xl">{`TOTAL: ${cartTotal}`}</div>
+        <div className="clear-both"></div>
+        {cartTotal !== 0 && (
+          <Link
+            to="/place-order"
+            className="daisy-btn-primary float-right my-4 px-3 py-2 text-sm uppercase sm:px-5 sm:py-3 lg:text-lg"
+          >
+            Place order
+          </Link>
+        )}
+        <div className="clear-both"></div>
       </main>
       <Footer isFixed={isFooterFixed} />
     </>

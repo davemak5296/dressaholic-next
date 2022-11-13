@@ -11,6 +11,7 @@ import Authentication from './pages/authentication';
 import { addCollectionAndDocs } from './utils/firebase/firebase.utils';
 import { catalogs } from './data/toFirebase';
 import { SET_CATEGORIES } from './store/category/categories.reducer';
+import OrderPage from './pages/order-page';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const App: React.FC = () => {
         <Route index element={<Home />} />
         <Route path="shop/*" element={<Shop />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="place-order" element={<OrderPage />} />
         <Route path="auth" element={currUser ? <Navigate to="/" /> : <Authentication />} />
       </Route>
     </Routes>
