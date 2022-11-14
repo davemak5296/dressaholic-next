@@ -56,21 +56,21 @@ const Navigation: React.FC<NavBarProps> = (props) => {
           } hidden md:w-1/2 md:items-center md:justify-around xl:w-1/3`}
         >
           <div className="daisy-dropdown-hover daisy-dropdown">
-            <Link to="/shop">
-              <label
-                tabIndex={0}
-                className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary"
-              >
-                Shop
-              </label>
-            </Link>
+            {/* <Link to="/shop"> */}
+            <label
+              tabIndex={0}
+              className="daisy-rounded-btn daisy-btn daisy-btn-ghost text-base text-primary hover:daisy-btn-primary"
+            >
+              Shop
+            </label>
+            {/* </Link> */}
             <div className="daisy-dropdown-content daisy-menu">
               <ul tabIndex={0} className="rounded-box mt-4 w-52 bg-base-100 p-2 shadow">
                 <li>
-                  <a>Men</a>
+                  <Link to="/shop/men">Men</Link>
                 </li>
                 <li>
-                  <a>Women</a>
+                  <Link to="/shop/women">Women</Link>
                 </li>
               </ul>
             </div>

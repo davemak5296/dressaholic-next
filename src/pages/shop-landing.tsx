@@ -5,7 +5,11 @@ import directoryItems from '../components/DirectoryItem/directory-item.data';
 import Footer from '../components/footer';
 import useFooterFixed from '../hooks/useFooterFixed';
 
-const ShopLanding: React.FC = () => {
+type ShopLandingProps = {
+  category: 'Men' | 'Women';
+};
+
+const ShopLanding: React.FC<ShopLandingProps> = ({ category }) => {
   const { isFooterFixed, mainRef } = useFooterFixed();
   return (
     <>
@@ -25,17 +29,10 @@ const ShopLanding: React.FC = () => {
         ref={mainRef}
         className="main-container mb-12 px-4"
       >
-        <h1 className="py-4 text-3xl">For Men</h1>
+        <h1 className="py-8 text-3xl">For {category}</h1>
         <section className="grid grid-cols-4">
           {directoryItems.map(
-            (item) => item.mainCategory == 'Men' && <DirectoryItem key={item.id} item={item} />
-          )}
-        </section>
-
-        <h1 className="mt-10 py-4 text-3xl">For Women</h1>
-        <section className="grid grid-cols-4">
-          {directoryItems.map(
-            (item) => item.mainCategory == 'Women' && <DirectoryItem key={item.id} item={item} />
+            (item) => item.mainCategory == category && <DirectoryItem key={item.id} item={item} />
           )}
         </section>
       </motion.main>

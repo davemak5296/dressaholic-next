@@ -13,13 +13,12 @@ const Breadcrumbs: React.FC = () => {
         <li className="hover:text-primary-focus">
           <Link to="/">Home</Link>
         </li>
-        <li className="hover:text-primary-focus hover:before:opacity-90">
-          <Link to="/shop">Shop</Link>
-        </li>
         {category && (
           <>
             <li className="hover:text-primary-focus hover:before:opacity-90">
-              <Link to="/shop">{subCatDisplayNameMap[category]['mainCat']}</Link>
+              <Link to={`/shop/${subCatDisplayNameMap[category]['mainCat']}`}>
+                {subCatDisplayNameMap[category]['mainCat']}
+              </Link>
             </li>
             <li className="hover:text-primary-focus hover:before:opacity-90">
               <Link to={`/shop/${category}`}>{subCatDisplayNameMap[category]['displayName']}</Link>
