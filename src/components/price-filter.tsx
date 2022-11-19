@@ -23,8 +23,8 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ min, max, setMin, setMax }) =
       <input type="checkbox" />
       <div className="daisy-collapse-title text-base">Price</div>
       <div className="daisy-collapse-content text-sm font-light">
-        <div className="flex flex-wrap justify-evenly">
-          $
+        <div className="flex w-1/2 items-center justify-evenly sm:block sm:w-full lg:flex">
+          $&nbsp;
           <input
             id="min-price"
             onChange={changeHandler}
@@ -32,12 +32,15 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ min, max, setMin, setMax }) =
             type="text"
             value={min}
           />
-          <span>to</span>
-          $
+          <span>
+            <span className="lg:hidden">&nbsp;&nbsp;</span>to
+          </span>
+          <br className="lg:hidden" />
+          &nbsp;$&nbsp;
           <input
             id="max-price"
             onChange={changeHandler}
-            className="w-10 border border-solid border-base-300 text-center outline-none"
+            className="w-10 border border-solid border-base-300 text-center outline-none sm:mt-1 lg:mt-0"
             type="text"
             value={max}
           />

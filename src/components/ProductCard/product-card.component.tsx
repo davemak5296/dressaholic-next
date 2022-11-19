@@ -50,7 +50,7 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
       </section>
       <section className="flex w-2/3 grow flex-col items-center justify-evenly sm:w-full">
         <div className="text-md mt-1 grow-0 font-bold">{brand}</div>
-        <div className="grow">{displayName}</div>
+        <div className="">{displayName}</div>
         <div className="block grow-0 bg-yellow-300 px-1 text-lg sm:hidden">{`\$${price}`}</div>
         <Link
           to={`/shop/${category}/${sku}`}

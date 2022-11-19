@@ -30,11 +30,11 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ setChosenBrands }) => {
   return (
     <div className="daisy-collapse-arrow daisy-collapse border-b border-base-300 bg-base-100">
       <input type="checkbox" />
-      <div className="daisy-collapse-title text-base">Brand</div>
+      <div className="daisy-collapse-title min-h-8 text-base">Brand</div>
       <div className="daisy-collapse-content text-sm font-light">
         <div className="flex flex-wrap justify-start">
           {uniBrands.map((el, i) => (
-            <div key={i} className="w-[45%] pr-2">
+            <div key={i} className="w-1/3 sm:w-full xl:w-[45%] xl:pr-2">
               <input onClick={checkBoxHandler} type="checkbox" id={el} value={el} />
               <label htmlFor={el}>&nbsp;{el}</label>
             </div>
