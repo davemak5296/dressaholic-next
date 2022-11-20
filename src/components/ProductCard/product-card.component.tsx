@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useChgDisplayImg from '../../hooks/useChgDisplayImg';
+import useImgLoad from '../../hooks/useImgLoad';
 import { Product, UseParamsCategoryType } from '../../types';
 type ProductCardProp = {
   card: Product;
@@ -11,13 +13,8 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
   const isOutOfStock = false;
 
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
-  const imgRef = React.useRef<HTMLImageElement>(null);
-
-  const handleClick: React.MouseEventHandler<HTMLImageElement> = (e) => {
-    if (e.target instanceof HTMLImageElement) {
-      imgRef.current?.setAttribute('src', e.target.getAttribute('src') as string);
-    }
-  };
+  const { imgRef, chgDisplayImgHandler } = useChgDisplayImg();
+  const { imgOnloadHandler } = useImgLoad();
 
   return (
     // <640px, flex; >640px, flex column
@@ -27,9 +24,11 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
       </div>
       <section className="flex w-1/3 grow-0 flex-col sm:w-auto sm:items-center">
         <img
+          data-src={imageUrls[colors[0]]['thumbnail']}
+          src="/gray.png"
           ref={imgRef}
-          className={`w-full ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
-          src={imageUrls[colors[0]]['thumbnail']}
+          className={`w-full transition-all ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
+          onLoad={imgOnloadHandler}
         />
         {isOutOfStock && (
           <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
@@ -40,17 +39,19 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
         <div className="mt-2 grid grid-cols-4 gap-2 place-self-start">
           {colors.map((color) => (
             <img
+              data-src={imageUrls[color]['thumbnail']}
+              src="/gray-sm.png"
               key={color}
-              src={imageUrls[color]['thumbnail']}
               className="h-10 cursor-pointer"
-              onClick={handleClick}
+              onClick={chgDisplayImgHandler}
+              onLoad={imgOnloadHandler}
             />
           ))}
         </div>
       </section>
       <section className="flex w-2/3 grow flex-col items-center justify-evenly sm:w-full">
         <div className="text-md mt-1 grow-0 font-bold">{brand}</div>
-        <div className="">{displayName}</div>
+        <div className="sm:grow">{displayName}</div>
         <div className="block grow-0 bg-yellow-300 px-1 text-lg sm:hidden">{`\$${price}`}</div>
         <Link
           to={`/shop/${category}/${sku}`}

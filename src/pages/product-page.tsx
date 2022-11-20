@@ -5,7 +5,7 @@ import { useImmer } from 'use-immer';
 import validator from 'validator';
 import { motion } from 'framer-motion';
 import { Product, UseParamsCategoryType, UseParamsSkuType, SizeType } from '../types';
-import { selectCategoriesMap } from '../store/category/categories.selector';
+import { selectCategoriesMap, selectCatIsLoading } from '../store/category/categories.selector';
 import useFooterFixed from '../hooks/useFooterFixed';
 
 import ProductPageSizeBox from '../components/product-page-size-box.component';
@@ -16,6 +16,7 @@ import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg'
 import { addItemToCart } from '../store/cart/cart.action';
 import { selectCartItems } from '../store/cart/cart.selector';
 import { SET_IS_CART_OPEN } from '../store/cart/cart.reducer';
+import Spinner from '../components/spinner.component';
 
 export type ActiveStateType = {
   color: string;
@@ -33,6 +34,7 @@ const ProductPage: React.FC = () => {
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
   const categoriesMap = useSelector(selectCategoriesMap);
+  const catIsLoading = useSelector(selectCatIsLoading);
   const itemsInCart = useSelector(selectCartItems);
   const [product, setProduct] = React.useState<Product>({} as Product);
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
@@ -117,155 +119,168 @@ const ProductPage: React.FC = () => {
         key={skuInUrl}
         className="main-container px-4"
       >
-        <Breadcrumbs />
-        <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
-          <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
-          <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
-          {/* first column */}
-          <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
-            <div className="order-2 m-2 mt-0 flex w-2/3 lg:order-1 lg:block lg:w-1/6">
-              {active.color &&
-                Object.values(imageUrls[active.color]).map(
-                  (imageUrl, index) =>
-                    imageUrl && (
-                      <img
-                        className={` ${
-                          active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                        } ${
-                          active.image == imageUrl
-                            ? 'border-4 border-success'
-                            : 'border border-base-300'
-                        } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 transition-all duration-100 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
-                        key={index}
-                        src={imageUrl}
-                        onClick={() => {
-                          setActive((draft) => {
-                            draft.image = imageUrl;
-                          });
-                        }}
-                      />
-                    )
-                )}
-            </div>
-            <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
-              {active.stockNum == 0 && (
-                <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
-                  Out of stock
+        {catIsLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <Breadcrumbs />
+            <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
+              <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
+              <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
+              {/* first column */}
+              <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
+                <div className="order-2 m-2 mt-0 flex w-2/3 lg:order-1 lg:block lg:w-1/6">
+                  {active.color &&
+                    Object.values(imageUrls[active.color]).map(
+                      (imageUrl, index) =>
+                        imageUrl && (
+                          <img
+                            className={` ${
+                              active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
+                            } ${
+                              active.image == imageUrl
+                                ? 'border-4 border-success'
+                                : 'border border-base-300'
+                            } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 transition-all duration-100 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
+                            key={index}
+                            src="/gray-sm.png"
+                            // src={imageUrl}
+                            onClick={() => {
+                              setActive((draft) => {
+                                draft.image = imageUrl;
+                              });
+                            }}
+                            onLoad={(e) => {
+                              const tgt = e.target as HTMLImageElement;
+                              tgt.setAttribute('src', imageUrl);
+                            }}
+                          />
+                        )
+                    )}
                 </div>
-              )}
-              <img
-                className={`${
-                  active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                } w-1/3 sm:w-4/5`}
-                src={active.image}
-                alt=""
-              />
-            </div>
-          </div>
-          {/* second column */}
-          <div className="flex w-full sm:w-1/2">
-            <div className="flex w-full flex-col lg:w-4/6">
-              <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
-              <div className="hidden text-2xl font-bold text-primary sm:block">{displayName}</div>
-              <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
-              <div className="flex w-full items-center">
-                <div className="flex w-full flex-col">
-                  <p className="mt-2 sm:mt-8">
-                    <span className="text-base text-secondary-focus underline underline-offset-4 sm:text-lg">
-                      Stocks left:
-                    </span>
-                    <span
-                      className={`${
-                        active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
-                      } font-bold`}
-                    >
-                      &nbsp;&nbsp;&nbsp;{active.stockNum}
-                    </span>
-                  </p>
-                  <div className="flex items-center">
-                    <PlusSign
-                      className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
-                      onClick={() => {
-                        setQtyToAdd((prev) => {
-                          if (typeof prev == 'number') {
-                            return active.stockNum > prev ? prev + 1 : prev;
-                          }
-                          return 1; // when input is empty, set to 1
-                        });
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="w-[50px] text-center text-base outline-none sm:text-xl"
-                      onChange={qtyBoxHandler}
-                      value={qtyToAdd}
-                    />
-                    <MinusSign
-                      className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
-                      onClick={() => {
-                        setQtyToAdd((prev) => {
-                          if (typeof prev == 'number') {
-                            return prev > 1 ? prev - 1 : prev;
-                          }
-                          return 1; // when input is empty, set to 1
-                        });
-                      }}
-                    />
-                    <button
-                      onClick={btnHandler}
-                      className={`${
-                        active.stockNum == 0 || qtyToAdd == ''
-                          ? 'daisy-btn-active daisy-btn-ghost '
-                          : 'daisy-btn-primary'
-                      } ml-12 self-end px-3 py-2 text-sm uppercase shadow-xl sm:px-5 sm:py-3 lg:text-base`}
-                    >
-                      Add to cart
-                    </button>
-                  </div>
+                <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
+                  {active.stockNum == 0 && (
+                    <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
+                      Out of stock
+                    </div>
+                  )}
+                  <img
+                    className={`${
+                      active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
+                    } w-1/3 sm:w-4/5`}
+                    src={active.image}
+                    alt=""
+                  />
                 </div>
               </div>
-              <ul className="mt-4 flex items-center sm:mt-14">
-                <span className="text-sm sm:text-lg">Color </span>
-                {colors &&
-                  colors.map((color, index) => (
-                    <li
-                      key={index}
-                      className={`${boxStyle} ${
-                        active.colorBox == index
-                          ? 'border-1 border-success bg-success/50 shadow'
-                          : 'shadow-none transition-all duration-[200]'
-                      }`}
-                      onClick={() => {
-                        setActive((draft) => {
-                          draft.color = color;
-                          draft.image = imageUrls[color]['thumbnail'];
-                          draft.stockNum = stocks[color][draft.size];
-                          draft.colorBox = index;
-                        });
-                        setQtyToAdd(1);
-                      }}
-                    >
-                      {color}
-                    </li>
-                  ))}
-              </ul>
-              <ul className="mt-4 flex items-center sm:mt-6">
-                <span className="text-sm sm:text-lg">Size </span>
-                {sizes.map((size, index) => (
-                  <ProductPageSizeBox
-                    key={index}
-                    stocks={stocks}
-                    active={active}
-                    setActive={setActive}
-                    sizeName={size}
-                    style={boxStyle}
-                    setQtyToAdd={setQtyToAdd}
-                  />
-                ))}
-              </ul>
+              {/* second column */}
+              <div className="flex w-full sm:w-1/2">
+                <div className="flex w-full flex-col lg:w-4/6">
+                  <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
+                  <div className="hidden text-2xl font-bold text-primary sm:block">
+                    {displayName}
+                  </div>
+                  <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
+                  <div className="flex w-full items-center">
+                    <div className="flex w-full flex-col">
+                      <p className="mt-2 sm:mt-8">
+                        <span className="text-base text-secondary-focus underline underline-offset-4 sm:text-lg">
+                          Stocks left:
+                        </span>
+                        <span
+                          className={`${
+                            active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
+                          } font-bold`}
+                        >
+                          &nbsp;&nbsp;&nbsp;{active.stockNum}
+                        </span>
+                      </p>
+                      <div className="flex items-center">
+                        <PlusSign
+                          className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
+                          onClick={() => {
+                            setQtyToAdd((prev) => {
+                              if (typeof prev == 'number') {
+                                return active.stockNum > prev ? prev + 1 : prev;
+                              }
+                              return 1; // when input is empty, set to 1
+                            });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="w-[50px] text-center text-base outline-none sm:text-xl"
+                          onChange={qtyBoxHandler}
+                          value={qtyToAdd}
+                        />
+                        <MinusSign
+                          className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
+                          onClick={() => {
+                            setQtyToAdd((prev) => {
+                              if (typeof prev == 'number') {
+                                return prev > 1 ? prev - 1 : prev;
+                              }
+                              return 1; // when input is empty, set to 1
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={btnHandler}
+                          className={`${
+                            active.stockNum == 0 || qtyToAdd == ''
+                              ? 'daisy-btn-active daisy-btn-ghost '
+                              : 'daisy-btn-primary'
+                          } ml-12 self-end px-3 py-2 text-sm uppercase shadow-xl sm:px-5 sm:py-3 lg:text-base`}
+                        >
+                          Add to cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <ul className="mt-4 flex items-center sm:mt-14">
+                    <span className="text-sm sm:text-lg">Color </span>
+                    {colors &&
+                      colors.map((color, index) => (
+                        <li
+                          key={index}
+                          className={`${boxStyle} ${
+                            active.colorBox == index
+                              ? 'border-1 border-success bg-success/50 shadow'
+                              : 'shadow-none transition-all duration-[200]'
+                          }`}
+                          onClick={() => {
+                            setActive((draft) => {
+                              draft.color = color;
+                              draft.image = imageUrls[color]['thumbnail'];
+                              draft.stockNum = stocks[color][draft.size];
+                              draft.colorBox = index;
+                            });
+                            setQtyToAdd(1);
+                          }}
+                        >
+                          {color}
+                        </li>
+                      ))}
+                  </ul>
+                  <ul className="mt-4 flex items-center sm:mt-6">
+                    <span className="text-sm sm:text-lg">Size </span>
+                    {sizes.map((size, index) => (
+                      <ProductPageSizeBox
+                        key={index}
+                        stocks={stocks}
+                        active={active}
+                        setActive={setActive}
+                        sizeName={size}
+                        style={boxStyle}
+                        setQtyToAdd={setQtyToAdd}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </motion.main>
       <Footer isFixed={isFooterFixed} />
     </>
