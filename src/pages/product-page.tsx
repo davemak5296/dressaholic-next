@@ -17,6 +17,7 @@ import { addItemToCart } from '../store/cart/cart.action';
 import { selectCartItems } from '../store/cart/cart.selector';
 import { SET_IS_CART_OPEN } from '../store/cart/cart.reducer';
 import Spinner from '../components/spinner.component';
+import StockDisplayAndAdd from '../components/stock-display-add.component';
 
 export type ActiveStateType = {
   color: string;
@@ -181,62 +182,13 @@ const ProductPage: React.FC = () => {
                     {displayName}
                   </div>
                   <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
-                  <div className="flex w-full items-center">
-                    <div className="flex w-full flex-col">
-                      <p className="mt-2 sm:mt-8">
-                        <span className="text-base text-secondary-focus underline underline-offset-4 sm:text-lg">
-                          Stocks left:
-                        </span>
-                        <span
-                          className={`${
-                            active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
-                          } font-bold`}
-                        >
-                          &nbsp;&nbsp;&nbsp;{active.stockNum}
-                        </span>
-                      </p>
-                      <div className="flex items-center">
-                        <PlusSign
-                          className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
-                          onClick={() => {
-                            setQtyToAdd((prev) => {
-                              if (typeof prev == 'number') {
-                                return active.stockNum > prev ? prev + 1 : prev;
-                              }
-                              return 1; // when input is empty, set to 1
-                            });
-                          }}
-                        />
-                        <input
-                          type="text"
-                          className="w-[50px] text-center text-base outline-none sm:text-xl"
-                          onChange={qtyBoxHandler}
-                          value={qtyToAdd}
-                        />
-                        <MinusSign
-                          className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
-                          onClick={() => {
-                            setQtyToAdd((prev) => {
-                              if (typeof prev == 'number') {
-                                return prev > 1 ? prev - 1 : prev;
-                              }
-                              return 1; // when input is empty, set to 1
-                            });
-                          }}
-                        />
-                        <button
-                          onClick={btnHandler}
-                          className={`${
-                            active.stockNum == 0 || qtyToAdd == ''
-                              ? 'daisy-btn-active daisy-btn-ghost '
-                              : 'daisy-btn-primary'
-                          } ml-12 self-end px-3 py-2 text-sm uppercase shadow-xl sm:px-5 sm:py-3 lg:text-base`}
-                        >
-                          Add to cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <StockDisplayAndAdd
+                    active={active}
+                    qtyToAdd={qtyToAdd}
+                    setQtyToAdd={setQtyToAdd}
+                    qtyBoxHandler={qtyBoxHandler}
+                    btnHandler={btnHandler}
+                  />
                   <ul className="mt-4 flex items-center sm:mt-14">
                     <span className="text-sm sm:text-lg">Color </span>
                     {colors &&
