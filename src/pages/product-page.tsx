@@ -11,13 +11,12 @@ import useFooterFixed from '../hooks/useFooterFixed';
 import ProductPageSizeBox from '../components/product-page-size-box.component';
 import Breadcrumbs from '../components/breadcrumbs';
 import Footer from '../components/footer';
-import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
-import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
 import { addItemToCart } from '../store/cart/cart.action';
 import { selectCartItems } from '../store/cart/cart.selector';
 import { SET_IS_CART_OPEN } from '../store/cart/cart.reducer';
 import Spinner from '../components/spinner.component';
 import StockDisplayAndAdd from '../components/stock-display-add.component';
+import ProductThumbnails from '../components/product-thumbnails.component';
 
 export type ActiveStateType = {
   color: string;
@@ -26,19 +25,19 @@ export type ActiveStateType = {
   stockNum: number;
   colorBox: number;
 };
+
 const boxStyle =
   'mx-2 text-sm cursor-pointer transition-all duration-[200] border border-solid border-slate-200 px-2 py-1 sm:px-3 sm:py-1 sm:text-base first:ml-0';
+
 const sizes: SizeType[] = ['sm', 'md', 'lg', 'xl'];
 
 const ProductPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
-  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
   const categoriesMap = useSelector(selectCategoriesMap);
   const catIsLoading = useSelector(selectCatIsLoading);
   const itemsInCart = useSelector(selectCartItems);
+
   const [product, setProduct] = React.useState<Product>({} as Product);
-  const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [qtyToAdd, setQtyToAdd] = React.useState<number | string>(1);
   const [active, setActive] = useImmer<ActiveStateType>({
     color: '',
@@ -48,6 +47,10 @@ const ProductPage: React.FC = () => {
     colorBox: 0,
   });
   const { isFooterFixed, mainRef } = useFooterFixed();
+
+  const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
+  const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
+  const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
 
   const isEmpty = (object: object) => Object.keys(object).length == 0;
   const qtyBoxHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -130,35 +133,7 @@ const ProductPage: React.FC = () => {
               <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
               {/* first column */}
               <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
-                <div className="order-2 m-2 mt-0 flex w-2/3 lg:order-1 lg:block lg:w-1/6">
-                  {active.color &&
-                    Object.values(imageUrls[active.color]).map(
-                      (imageUrl, index) =>
-                        imageUrl && (
-                          <img
-                            className={` ${
-                              active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                            } ${
-                              active.image == imageUrl
-                                ? 'border-4 border-success'
-                                : 'border border-base-300'
-                            } mb-2 ml-4 h-full w-1/5 cursor-pointer border-solid p-2 transition-all duration-100 last:mb-0 sm:w-1/3 lg:ml-0 lg:h-auto lg:w-auto`}
-                            key={index}
-                            src="/gray-sm.png"
-                            // src={imageUrl}
-                            onClick={() => {
-                              setActive((draft) => {
-                                draft.image = imageUrl;
-                              });
-                            }}
-                            onLoad={(e) => {
-                              const tgt = e.target as HTMLImageElement;
-                              tgt.setAttribute('src', imageUrl);
-                            }}
-                          />
-                        )
-                    )}
-                </div>
+                <ProductThumbnails product={product} active={active} setActive={setActive} />
                 <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
                   {active.stockNum == 0 && (
                     <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
@@ -191,6 +166,7 @@ const ProductPage: React.FC = () => {
                   />
                   <ul className="mt-4 flex items-center sm:mt-14">
                     <span className="text-sm sm:text-lg">Color </span>
+                    {/* colorBox */}
                     {colors &&
                       colors.map((color, index) => (
                         <li
