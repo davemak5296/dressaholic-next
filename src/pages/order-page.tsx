@@ -8,15 +8,21 @@ import Footer from '../components/footer';
 import useFooterFixed from '../hooks/useFooterFixed';
 import { useImmer } from 'use-immer';
 import _ from 'lodash';
+import validator from 'validator';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');
 
 export type InputValType = {
   name: string;
+  nameValid: boolean;
   contact: string;
+  contactValid: boolean;
   email: string;
+  emailValid: boolean;
   address: string;
+  addressValid: boolean;
   pay: string;
+  payValid: boolean;
   remark: string;
 };
 const OrderPage: React.FC = () => {
@@ -25,14 +31,27 @@ const OrderPage: React.FC = () => {
   const { isFooterFixed, mainRef } = useFooterFixed();
   const [inputVal, setInputVal] = useImmer<InputValType>({
     name: '',
+    nameValid: true,
     contact: '',
+    contactValid: true,
     email: '',
+    emailValid: true,
     address: '',
+    addressValid: true,
     pay: '',
+    payValid: true,
     remark: '',
   });
 
-  const clickHandler: React.MouseEventHandler<HTMLButtonElement> = (e) => {};
+  const clickHandler: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    setInputVal((draft) => {
+      draft['nameValid'] = draft['name'].length !== 0;
+      draft['addressValid'] = draft['address'].length !== 0;
+      draft['payValid'] = draft['pay'].length !== 0;
+      draft['emailValid'] = validator.isEmail(draft['email']);
+      draft['contactValid'] = validator.isMobilePhone(draft['contact'], ['zh-HK']);
+    });
+  };
 
   return (
     <>
@@ -69,6 +88,7 @@ const OrderPage: React.FC = () => {
                 id="name"
                 name="name"
                 value={inputVal.name}
+                valid={inputVal.nameValid}
                 setValue={setInputVal}
                 isTextType={true}
                 required={true}
@@ -78,6 +98,7 @@ const OrderPage: React.FC = () => {
                 id="contact"
                 name="contact no."
                 value={inputVal.contact}
+                valid={inputVal.contactValid}
                 setValue={setInputVal}
                 isTextType={true}
                 required={true}
@@ -88,6 +109,7 @@ const OrderPage: React.FC = () => {
               id="email"
               name="email"
               value={inputVal.email}
+              valid={inputVal.emailValid}
               setValue={setInputVal}
               isTextType={true}
               required={true}
@@ -97,6 +119,7 @@ const OrderPage: React.FC = () => {
               id="address"
               name="address"
               value={inputVal.address}
+              valid={inputVal.addressValid}
               setValue={setInputVal}
               isTextType={true}
               required={true}
@@ -120,8 +143,10 @@ const OrderPage: React.FC = () => {
               id="pay"
               name="payment methods"
               value={inputVal.pay}
+              valid={inputVal.payValid}
               setValue={setInputVal}
               isTextType={false}
+              required={true}
             >
               <select
                 id="ship-pay"
@@ -130,6 +155,7 @@ const OrderPage: React.FC = () => {
                 onChange={(e) =>
                   setInputVal((draft) => {
                     draft.pay = e.target.value;
+                    draft['payValid'] = draft['pay'].length !== 0;
                   })
                 }
                 required
@@ -140,11 +166,6 @@ const OrderPage: React.FC = () => {
                 <option value="bank-transfer">Bank transfer</option>
                 <option value="credit-card">Credit card</option>
               </select>
-              {inputVal.pay.length == 0 && (
-                <label className="text-xs font-light text-red-500">
-                  please select a payment method
-                </label>
-              )}
             </OrderFormInput>
             <button
               type="button"

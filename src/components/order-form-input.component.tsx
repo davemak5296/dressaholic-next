@@ -10,6 +10,7 @@ type OrderFormInputProps = {
   name: string;
   value: string;
   setValue: Updater<InputValType>;
+  valid?: boolean;
   isTextType: boolean;
   required?: boolean;
   children?: React.ReactNode;
@@ -21,22 +22,22 @@ const OrderFormInput: React.FC<OrderFormInputProps> = ({
   id,
   name,
   value,
+  valid,
   setValue,
   isTextType,
   required,
 }) => {
-  const [isValid, setIsValid] = React.useState<boolean>(false);
-
   const focusOutHandler: React.FocusEventHandler<HTMLInputElement> = (e) => {
-    if (id == 'contact') {
-      setIsValid(validator.isMobilePhone(e.target.value, ['zh-HK']));
-    } else if (id == 'email') {
-      setIsValid(validator.isEmail(e.target.value));
-    } else if (id == 'name' || id == 'address') {
-      const len = e.target.value.length;
-      setIsValid(len !== 0);
-    }
+    const len = e.target.value.length;
+    setValue((draft) => {
+      if (id == 'contact')
+        draft['contactValid'] = validator.isMobilePhone(e.target.value, ['zh-HK']);
+      if (id == 'email') draft['emailValid'] = validator.isEmail(e.target.value);
+      if (id == 'name') draft['nameValid'] = len !== 0;
+      if (id == 'address') draft['addressValid'] = len !== 0;
+    });
   };
+
   return (
     <div className={`${width == 'half' ? 'w-[45%]' : 'w-full'} mt-3 flex flex-col`}>
       <label htmlFor={`ship-${id}`} className="pb-[1px] capitalize">
@@ -59,8 +60,8 @@ const OrderFormInput: React.FC<OrderFormInputProps> = ({
         />
       )}
       {children}
-      {required && !isValid && (
-        <label className="text-xs font-light text-red-500">please enter correct {id}</label>
+      {required && !valid && (
+        <label className="text-xs font-light text-red-500">please enter correct {name}</label>
       )}
     </div>
   );
