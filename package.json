@@ -27,7 +27,6 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "build:css": "postcss ./src/main.css -o ./src/output.css",
     "watch:css": "postcss ./src/main.css -o ./src/output.css -w",
     "start": "react-scripts start watch:css",
     "build": "react-scripts build build:css",
