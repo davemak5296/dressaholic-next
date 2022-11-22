@@ -71,7 +71,11 @@ const SignInForm: React.FC = () => {
           <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase">
             sign in
           </button>
-          <button onClick={signInWithGoogle} className="daisy-btn-secondary px-8 py-4 uppercase">
+          <button
+            onClick={signInWithGoogle}
+            type="button"
+            className="daisy-btn-secondary px-8 py-4 uppercase"
+          >
             sign in with google
           </button>
         </div>
