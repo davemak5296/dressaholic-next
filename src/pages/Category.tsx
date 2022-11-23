@@ -62,7 +62,7 @@ const Category: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="col-span-5 col-start-1 row-start-3 my-4 overflow-y-scroll sm:col-start-2 sm:row-start-2 sm:mt-0 sm:pl-6 md:col-span-4 md:col-start-2 ">
+            <div className="col-span-5 col-start-1 row-start-3 my-4 sm:col-start-2 sm:row-start-2 sm:mt-0 sm:pl-6 md:col-span-4 md:col-start-2 ">
               <h1 className="p-2 text-2xl sm:p-5">
                 {subCatDisplayNameMap[category]['displayName']}
               </h1>
