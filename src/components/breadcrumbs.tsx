@@ -5,7 +5,6 @@ import { subCatDisplayNameMap, UseParamsCategoryType, UseParamsSkuType } from '.
 const Breadcrumbs: React.FC = () => {
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
   const { skuInUrl } = useParams<keyof UseParamsSkuType>() as UseParamsSkuType;
-  console.log(category);
 
   return (
     <div className="daisy-breadcrumbs col-span-full row-span-1 row-start-1 text-gray-400 ">

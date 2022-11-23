@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import useChgDisplayImg from '../../hooks/useChgDisplayImg';
-import useImgLoad from '../../hooks/useImgLoad';
 import { Product, UseParamsCategoryType } from '../../types';
 type ProductCardProp = {
   card: Product;
@@ -11,10 +9,23 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
   const { sku, brand, displayName, imageUrls, stocks, price } = props.card;
   const colors = Object.keys(stocks);
   const isOutOfStock = false;
+  const [isThumbnail, setIsThumbnail] = React.useState(false);
 
+  const imgRef = React.useRef<HTMLImageElement>(null);
   const { category } = useParams<keyof UseParamsCategoryType>() as UseParamsCategoryType;
-  const { imgRef, chgDisplayImgHandler } = useChgDisplayImg();
-  const { imgOnloadHandler } = useImgLoad();
+
+  const imgOnloadHandler = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const tgt = e.target as HTMLImageElement;
+    if (isThumbnail) return;
+    tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
+    setIsThumbnail(false);
+  };
+
+  const chgDisplayImgHandler: React.MouseEventHandler<HTMLImageElement> = (e) => {
+    setIsThumbnail(true);
+    const tgt = e.target as HTMLImageElement;
+    imgRef.current?.setAttribute('src', tgt.getAttribute('src') as string);
+  };
 
   return (
     // <640px, flex; >640px, flex column
@@ -44,7 +55,10 @@ const ProductCard: React.FC<ProductCardProp> = (props) => {
               key={color}
               className="h-10 cursor-pointer"
               onClick={chgDisplayImgHandler}
-              onLoad={imgOnloadHandler}
+              onLoad={(e) => {
+                const tgt = e.target as HTMLImageElement;
+                tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
+              }}
             />
           ))}
         </div>
