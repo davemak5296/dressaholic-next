@@ -1,5 +1,13 @@
 import { store } from './store/store';
 import { User } from 'firebase/auth';
+import menJeans from './data/men-jeans';
+import menActivewear from './data/men-activewear';
+import menShirts from './data/men-shirts';
+import menOutwear from './data/men-outwear';
+import womenActivewear from './data/women-activewear';
+import womenDresses from './data/women-dresses';
+import womenJeans from './data/women-jeans';
+import womenTops from './data/women-tops';
 
 export type OnAuthNextFnType = (user: User | null) => void;
 
@@ -50,6 +58,17 @@ export const subCatDisplayNameMap: Record<string, { mainCat: string; displayName
     displayName: 'Activewear',
   },
 };
+
+export const allSkus = new Array().concat(
+  menJeans.map((el) => el.sku),
+  menActivewear.map((el) => el.sku),
+  menShirts.map((el) => el.sku),
+  menOutwear.map((el) => el.sku),
+  womenActivewear.map((el) => el.sku),
+  womenDresses.map((el) => el.sku),
+  womenJeans.map((el) => el.sku),
+  womenTops.map((el) => el.sku)
+);
 export type DirectoryItemType = {
   id: number;
   mainCategory: MainCategoryType;
