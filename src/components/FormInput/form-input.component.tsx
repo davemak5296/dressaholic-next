@@ -12,6 +12,8 @@ interface FormInputProps {
 
 const FormInput: React.FC<FormInputProps> = (props) => {
   const { label, ...otherProps } = props;
+
+  console.log(`${label} is re-executed`);
   return (
     <div className="relative my-6 lg:my-8">
       <input {...otherProps} className={styles.input} />
@@ -22,4 +24,5 @@ const FormInput: React.FC<FormInputProps> = (props) => {
   );
 };
 
-export default FormInput;
+export default React.memo(FormInput);
+// export default FormInput;

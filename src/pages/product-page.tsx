@@ -158,7 +158,7 @@ const ProductPage: React.FC = () => {
                   </div>
                   <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
                   <StockDisplayAndAdd
-                    active={active}
+                    stockNum={active.stockNum}
                     qtyToAdd={qtyToAdd}
                     setQtyToAdd={setQtyToAdd}
                     qtyBoxHandler={qtyBoxHandler}

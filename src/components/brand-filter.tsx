@@ -58,4 +58,4 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ setChosenBrands }) => {
   );
 };
 
-export default BrandFilter;
+export default React.memo(BrandFilter);

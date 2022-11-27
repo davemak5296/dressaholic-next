@@ -60,4 +60,4 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ min, max, setMin, setMax }) =
   );
 };
 
-export default PriceFilter;
+export default React.memo(PriceFilter);

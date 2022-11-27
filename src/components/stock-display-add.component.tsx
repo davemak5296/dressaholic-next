@@ -4,7 +4,7 @@ import { ReactComponent as PlusSign } from '../assets/square-plus-regular.svg';
 import { ReactComponent as MinusSign } from '../assets/square-minus-regular.svg';
 
 type StockDisplayAndAddProps = {
-  active: ActiveStateType;
+  stockNum: ActiveStateType['stockNum'];
   qtyToAdd: string | number;
   setQtyToAdd: React.Dispatch<React.SetStateAction<string | number>>;
   qtyBoxHandler: React.ChangeEventHandler<HTMLInputElement>;
@@ -12,7 +12,7 @@ type StockDisplayAndAddProps = {
 };
 
 const StockDisplayAndAdd: React.FC<StockDisplayAndAddProps> = ({
-  active,
+  stockNum,
   qtyToAdd,
   setQtyToAdd,
   qtyBoxHandler,
@@ -27,10 +27,10 @@ const StockDisplayAndAdd: React.FC<StockDisplayAndAddProps> = ({
           </span>
           <span
             className={`${
-              active.stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
+              stockNum == 1 ? 'text-xl text-red-600' : 'text-secondary-focus '
             } font-bold`}
           >
-            &nbsp;&nbsp;&nbsp;{active.stockNum}
+            &nbsp;&nbsp;&nbsp;{stockNum}
           </span>
         </p>
         <div className="flex items-center">
@@ -39,7 +39,7 @@ const StockDisplayAndAdd: React.FC<StockDisplayAndAddProps> = ({
             onClick={() => {
               setQtyToAdd((prev) => {
                 if (typeof prev == 'number') {
-                  return active.stockNum > prev ? prev + 1 : prev;
+                  return stockNum > prev ? prev + 1 : prev;
                 }
                 return 1; // when input is empty, set to 1
               });
@@ -65,7 +65,7 @@ const StockDisplayAndAdd: React.FC<StockDisplayAndAddProps> = ({
           <button
             onClick={btnHandler}
             className={`${
-              active.stockNum == 0 || qtyToAdd == ''
+              stockNum == 0 || qtyToAdd == ''
                 ? 'daisy-btn-active daisy-btn-ghost '
                 : 'daisy-btn-primary'
             } ml-12 self-end px-3 py-2 text-sm uppercase shadow-xl sm:px-5 sm:py-3 lg:text-base`}
@@ -78,4 +78,4 @@ const StockDisplayAndAdd: React.FC<StockDisplayAndAddProps> = ({
   );
 };
 
-export default StockDisplayAndAdd;
+export default React.memo(StockDisplayAndAdd);

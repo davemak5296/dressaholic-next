@@ -33,4 +33,4 @@ const Footer: React.FC<FooterProp> = ({ isFixed }) => {
   );
 };
 
-export default Footer;
+export default React.memo(Footer);

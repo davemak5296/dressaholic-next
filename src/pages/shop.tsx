@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Route, Routes, useParams, PathRouteProps, LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router';
 import { allSkus, subCatDisplayNameMap, UseParamsCategoryType, UseParamsSkuType } from '../types';
 import Category from './Category';
 import NotFound from './not-found';

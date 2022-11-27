@@ -34,4 +34,4 @@ const Breadcrumbs: React.FC = () => {
   );
 };
 
-export default Breadcrumbs;
+export default React.memo(Breadcrumbs);

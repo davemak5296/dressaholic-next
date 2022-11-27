@@ -101,4 +101,4 @@ const CartItem: React.FC<CartItemProp> = ({ item, orderPage }) => {
   );
 };
 
-export default CartItem;
+export default React.memo(CartItem);
