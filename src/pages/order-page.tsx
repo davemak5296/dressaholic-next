@@ -5,6 +5,7 @@ import { selectCartItems, selectCartTotal } from '../store/cart/cart.selector';
 import CartItem from '../components/cart-item.component';
 import OrderFormInput from '../components/order-form-input.component';
 import Footer from '../components/footer';
+import PaymentForm from '../components/payment-form.component';
 import useFooterFixed from '../hooks/useFooterFixed';
 import { useImmer } from 'use-immer';
 import _ from 'lodash';
@@ -14,32 +15,29 @@ const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text
 
 export type InputValType = {
   name: string;
-  nameValid: boolean;
+  nameValid: 'initial' | boolean;
   contact: string;
-  contactValid: boolean;
+  contactValid: 'initial' | boolean;
   email: string;
-  emailValid: boolean;
+  emailValid: 'initial' | boolean;
   address: string;
-  addressValid: boolean;
-  pay: string;
-  payValid: boolean;
+  addressValid: 'initial' | boolean;
   remark: string;
 };
 const OrderPage: React.FC = () => {
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
   const { isFooterFixed, mainRef } = useFooterFixed();
+  const [showPaymentForm, setShowPaymentForm] = React.useState(false);
   const [inputVal, setInputVal] = useImmer<InputValType>({
     name: '',
-    nameValid: true,
+    nameValid: 'initial',
     contact: '',
-    contactValid: true,
+    contactValid: 'initial',
     email: '',
-    emailValid: true,
+    emailValid: 'initial',
     address: '',
-    addressValid: true,
-    pay: '',
-    payValid: true,
+    addressValid: 'initial',
     remark: '',
   });
 
@@ -47,10 +45,19 @@ const OrderPage: React.FC = () => {
     setInputVal((draft) => {
       draft['nameValid'] = draft['name'].length !== 0;
       draft['addressValid'] = draft['address'].length !== 0;
-      draft['payValid'] = draft['pay'].length !== 0;
       draft['emailValid'] = validator.isEmail(draft['email']);
       draft['contactValid'] = validator.isMobilePhone(draft['contact'], ['zh-HK']);
     });
+    if (
+      inputVal.nameValid === true &&
+      inputVal.contactValid === true &&
+      inputVal.emailValid === true &&
+      inputVal.addressValid === true
+    ) {
+      setShowPaymentForm(true);
+    } else {
+      setShowPaymentForm(false);
+    }
   };
 
   return (
@@ -59,7 +66,7 @@ const OrderPage: React.FC = () => {
         <h1 className="mx-auto flex justify-center py-2 text-xl font-light md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           Order Info
         </h1>
-        <section className="flex w-full flex-col justify-start lg:flex-row">
+        <section className="flex w-full flex-col flex-wrap justify-start lg:flex-row">
           <div className="w-full shrink-0 lg:w-2/5">
             <div className="grid grid-cols-cartXL-order">
               <div className={`${colTitleStyles} pl-1`}>Product</div>
@@ -138,35 +145,13 @@ const OrderPage: React.FC = () => {
                 placeholder="Please enter remarks"
               />
             </OrderFormInput>
-            <OrderFormInput
-              width="full"
-              id="pay"
-              name="payment methods"
-              value={inputVal.pay}
-              valid={inputVal.payValid}
-              setValue={setInputVal}
-              isTextType={false}
-              required={true}
-            >
-              <select
-                id="ship-pay"
-                className="border border-solid border-base-300 bg-white p-1 text-sm"
-                placeholder="Please enter recipient's address:"
-                onChange={(e) =>
-                  setInputVal((draft) => {
-                    draft.pay = e.target.value;
-                    draft['payValid'] = draft['pay'].length !== 0;
-                  })
-                }
-                required
-              >
-                <option value="" disabled selected>
-                  Please select a payment method:
-                </option>
-                <option value="bank-transfer">Bank transfer</option>
-                <option value="credit-card">Credit card</option>
-              </select>
-            </OrderFormInput>
+            <div className="mt-3 flex w-full">
+              <label htmlFor="ship-pay" className="pb-[1px] capitalize">
+                Payment Methods:&nbsp;&nbsp;
+              </label>
+              <input id="ship-pay" type="radio" required={true} defaultChecked={true} />
+              &nbsp;credit card
+            </div>
             <button
               type="button"
               className="daisy-btn-primary float-right mt-4 px-3 py-2 uppercase sm:px-5 sm:py-3"
@@ -175,6 +160,7 @@ const OrderPage: React.FC = () => {
               Confirm
             </button>
           </form>
+          {showPaymentForm && <PaymentForm />}
         </section>
       </main>
       <Footer isFixed={isFooterFixed} />

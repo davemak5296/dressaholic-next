@@ -10,7 +10,7 @@ type OrderFormInputProps = {
   name: string;
   value: string;
   setValue: Updater<InputValType>;
-  valid?: boolean;
+  valid?: 'initial' | boolean;
   isTextType: boolean;
   required?: boolean;
   children?: React.ReactNode;
