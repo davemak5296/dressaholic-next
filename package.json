@@ -10,6 +10,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/validator": "^13.7.10",
     "clsx": "^1.2.1",
+    "dotenv": "^16.0.3",
     "firebase": "^9.12.1",
     "framer-motion": "^7.5.3",
     "immer": "^9.0.16",
