@@ -37,7 +37,7 @@ const PaymentForm: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({ amount: amount }),
       }
     ).then((res) => res.json());
 
