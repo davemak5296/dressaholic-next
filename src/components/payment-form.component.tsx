@@ -61,9 +61,9 @@ const PaymentForm: React.FC<PaymentFormProp> = ({ setValue }) => {
     setIsProcessing(false);
 
     if (paymentResult.error) {
-      alert(paymentResult.error);
+      alert(paymentResult.error?.message);
     } else {
-      if (paymentResult.paymentIntent.status === 'succeeded') {
+      if (paymentResult.paymentIntent?.status === 'succeeded') {
         alert('Payment succeed!');
       }
     }
