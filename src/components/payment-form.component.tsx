@@ -75,6 +75,13 @@ const PaymentForm: React.FC = () => {
         >
           {isProcessing ? <Spinner sm={true} /> : 'Pay now'}
         </button>
+        <p className="mt-2 text-sm text-red-500">
+          *Please use below test card for payments*
+          <br />
+          4242-4242-4242-4242
+          <br />
+          Exp: 04-24 - CVC: 242 - Zip code: 24242
+        </p>
       </form>
     </div>
   );
