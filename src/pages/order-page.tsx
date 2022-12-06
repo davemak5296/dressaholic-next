@@ -160,7 +160,7 @@ const OrderPage: React.FC = () => {
               Confirm
             </button>
           </form>
-          {showPaymentForm && <PaymentForm />}
+          {showPaymentForm && <PaymentForm setValue={setInputVal} />}
         </section>
       </main>
       <Footer isFixed={isFooterFixed} />

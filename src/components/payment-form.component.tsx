@@ -5,8 +5,14 @@ import { useSelector } from 'react-redux';
 import { selectCartTotal } from '../store/cart/cart.selector';
 import { selectCurrentUser } from '../store/user/user.selector';
 import Spinner from './spinner.component';
+import { Updater } from 'use-immer';
+import { InputValType } from '../pages/order-page';
 
-const PaymentForm: React.FC = () => {
+type PaymentFormProp = {
+  setValue: Updater<InputValType>;
+};
+
+const PaymentForm: React.FC<PaymentFormProp> = ({ setValue }) => {
   const stripe = useStripe();
   const elements = useElements();
   const amount = useSelector(selectCartTotal);
@@ -71,6 +77,15 @@ const PaymentForm: React.FC = () => {
         <button
           className="daisy-btn daisy-btn-outline relative mt-4 w-[100px]"
           disabled={isProcessing}
+          onClick={(e) =>
+            setValue((draft) => {
+              draft.address = '';
+              draft.contact = '';
+              draft.email = '';
+              draft.name = '';
+              draft.remark = '';
+            })
+          }
           type="submit"
         >
           {isProcessing ? <Spinner sm={true} /> : 'Pay now'}
