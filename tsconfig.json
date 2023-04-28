@@ -19,9 +19,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
+    // "paths": {
+    //   "@/*": [
+    //     "./*"
+    //   ]
+    // },
+    "incremental": true
   },
   "include": [
-    "src", "netlify"
+    "**/*.ts",
+    "**/*.tsx"
+    // "src", "netlify"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
   ]
 }

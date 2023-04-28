@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# next.js
+/.next/
+/out/
 # production
 /build
 
@@ -33,3 +36,7 @@ yarn-error.log*
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
