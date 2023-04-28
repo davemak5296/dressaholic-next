@@ -20,11 +20,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    // "paths": {
-    //   "@/*": [
-    //     "./*"
-    //   ]
-    // },
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/assets/*": ["public/assets/*"],
+      "@/store/*": ["src/store/*"]
+    },
     "incremental": true
   },
   "include": [
