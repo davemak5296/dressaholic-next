@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEventHandler, MouseEventHandler } from 'react';
+import { useState, useEffect, ChangeEventHandler, MouseEventHandler, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useImmer } from 'use-immer';
@@ -126,94 +126,95 @@ const Product = () => {
         key={skuInUrl}
         className="main-container px-4"
       >
-        {catIsLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <Breadcrumbs />
-            {/* <div className='text-3xl text-red-500'>{category}</div>
-            <div className='text-3xl text-red-500'>{skuInUrl}</div> */}
-            <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
-              <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
-              <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
-              {/* first column */}
-              <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
-                <ProductThumbnails product={product} active={active} setActive={setActive} />
-                <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
-                  {active.stockNum == 0 && (
-                    <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
-                      Out of stock
-                    </div>
-                  )}
-                  <img
-                    className={`${
-                      active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-                    } w-1/3 sm:w-4/5`}
-                    src={active.image}
-                    alt=""
-                  />
-                </div>
-              </div>
-              {/* second column */}
-              <div className="flex w-full sm:w-1/2">
-                <div className="flex w-full flex-col lg:w-4/6">
-                  <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
-                  <div className="hidden text-2xl font-bold text-primary sm:block">
-                    {displayName}
+        <Suspense fallback={<Spinner />}>
+          <Breadcrumbs />
+          {/* <div className='text-3xl text-red-500'>{category}</div>
+          <div className='text-3xl text-red-500'>{skuInUrl}</div> */}
+          <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
+            <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
+            <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
+            {/* first column */}
+            <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
+              <ProductThumbnails product={product} active={active} setActive={setActive} />
+              <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
+                {active.stockNum == 0 && (
+                  <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
+                    Out of stock
                   </div>
-                  <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
-                  <StockDisplayAndAdd
-                    stockNum={active.stockNum}
-                    qtyToAdd={qtyToAdd}
-                    setQtyToAdd={setQtyToAdd}
-                    qtyBoxHandler={qtyBoxHandler}
-                    btnHandler={btnHandler}
-                  />
-                  <ul className="mt-4 flex items-center sm:mt-14">
-                    <span className="text-sm sm:text-lg">Color </span>
-                    {/* colorOptionBox */}
-                    {colors &&
-                      colors.map((color, index) => (
-                        <li
-                          key={index}
-                          className={`${boxStyle} ${
-                            active.colorOptionBox == index
-                              ? 'border-1 border-success bg-success/50 shadow'
-                              : 'shadow-none transition-all duration-[200]'
-                          }`}
-                          onClick={() => {
-                            setActive((draft) => {
-                              draft.color = color;
-                              draft.image = imageUrls[color]['thumbnail'];
-                              draft.stockNum = stocks[color][draft.size];
-                              draft.colorOptionBox = index;
-                            });
-                            setQtyToAdd(1);
-                          }}
-                        >
-                          {color}
-                        </li>
-                      ))}
-                  </ul>
-                  <ul className="mt-4 flex items-center sm:mt-6">
-                    <span className="text-sm sm:text-lg">Size </span>
-                    {sizes.map((size, index) => (
-                      <ProductPageSizeBox
-                        key={index}
-                        stocks={stocks}
-                        active={active}
-                        setActive={setActive}
-                        sizeName={size}
-                        style={boxStyle}
-                        setQtyToAdd={setQtyToAdd}
-                      />
-                    ))}
-                  </ul>
-                </div>
+                )}
+                <img
+                  className={`${
+                    active.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
+                  } w-1/3 sm:w-4/5`}
+                  src={active.image}
+                  alt=""
+                />
               </div>
             </div>
-          </>
-        )}
+            {/* second column */}
+            <div className="flex w-full sm:w-1/2">
+              <div className="flex w-full flex-col lg:w-4/6">
+                <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
+                <div className="hidden text-2xl font-bold text-primary sm:block">
+                  {displayName}
+                </div>
+                <div className="mt-2 ml-0 text-xl text-black sm:mt-5 lg:my-5 lg:ml-4">{`$${price}.00`}</div>
+                <StockDisplayAndAdd
+                  stockNum={active.stockNum}
+                  qtyToAdd={qtyToAdd}
+                  setQtyToAdd={setQtyToAdd}
+                  qtyBoxHandler={qtyBoxHandler}
+                  btnHandler={btnHandler}
+                />
+                <ul className="mt-4 flex items-center sm:mt-14">
+                  <span className="text-sm sm:text-lg">Color </span>
+                  {/* colorOptionBox */}
+                  {colors &&
+                    colors.map((color, index) => (
+                      <li
+                        key={index}
+                        className={`${boxStyle} ${
+                          active.colorOptionBox == index
+                            ? 'border-1 border-success bg-success/50 shadow'
+                            : 'shadow-none transition-all duration-[200]'
+                        }`}
+                        onClick={() => {
+                          setActive((draft) => {
+                            draft.color = color;
+                            draft.image = imageUrls[color]['thumbnail'];
+                            draft.stockNum = stocks[color][draft.size];
+                            draft.colorOptionBox = index;
+                          });
+                          setQtyToAdd(1);
+                        }}
+                      >
+                        {color}
+                      </li>
+                    ))}
+                </ul>
+                <ul className="mt-4 flex items-center sm:mt-6">
+                  <span className="text-sm sm:text-lg">Size </span>
+                  {sizes.map((size, index) => (
+                    <ProductPageSizeBox
+                      key={index}
+                      stocks={stocks}
+                      active={active}
+                      setActive={setActive}
+                      sizeName={size}
+                      style={boxStyle}
+                      setQtyToAdd={setQtyToAdd}
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </Suspense>
+        {/* {catIsLoading ? (
+          <Spinner />
+        ) : (
+
+        )} */}
       </motion.main>
       <Footer isFixed={isFooterFixed} />
     </>
