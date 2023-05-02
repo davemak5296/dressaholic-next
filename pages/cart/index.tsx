@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Footer from '@/components/Footer';
 import useFooterFixed from '@/hooks/useFooterFixed';
 import { selectCartItems, selectCartTotal } from '@/store/cart/cart.selector';
-import CartItem from '@/components/Cart-item.component';
+import CartItem from '@/components/Cart-item';
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
