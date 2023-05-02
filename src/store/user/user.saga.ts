@@ -122,7 +122,7 @@ export function* popUpError({ payload }: PayloadAction<unknown>): Generator<any,
         alert('Cannot sign up, email already in use.');
         break;
       default:
-        console.log(payload.code);
+        alert(payload.code.slice(5))
         break;
     }
   } else {
