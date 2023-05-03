@@ -139,3 +139,5 @@ export interface BaseState {
 }
 
 export type AppDispatch = typeof store.dispatch;
+
+export const objIsEmpty = (object: object) => Object.keys(object).length == 0;

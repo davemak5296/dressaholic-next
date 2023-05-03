@@ -2,11 +2,13 @@ import { useState, useRef, SyntheticEvent, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Product } from '@/src/types';
+import { motion } from 'framer-motion';
 type ProductCardProp = {
   card: Product;
+  chosenBrands: number;
 };
 
-const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price}}: ProductCardProp) => {
+const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price}, chosenBrands}: ProductCardProp) => {
   const colors = Object.keys(stocks);
   const isOutOfStock = false;
   const [isThumbnail, setIsThumbnail] = useState(false);
@@ -30,7 +32,18 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
 
   return (
     // <640px, flex; >640px, flex column
-    <div className="relative col-span-1 flex border border-solid border-slate-200 p-2 sm:flex-col sm:items-center sm:p-4">
+    <motion.div
+      key={chosenBrands}
+      initial={{
+        y: 30,
+        opacity: 0.5
+      }}
+      animate={{
+        y: 0,
+        opacity: 1
+      }}
+      className='relative col-span-1 flex border border-solid border-slate-200 p-2 sm:flex-col sm:items-center sm:p-4'
+    >
       <div className="left-26 bottom-26 absolute top-2 right-4 z-10 hidden bg-yellow-300 px-1 text-lg sm:block">
         {`\$${price}`}
       </div>
@@ -77,7 +90,7 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
           <div className="flex w-full justify-center">View</div>
         </Link>
       </section>
-    </div>
+    </motion.div>
   );
 };
 

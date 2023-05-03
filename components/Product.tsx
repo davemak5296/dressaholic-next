@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useImmer } from 'use-immer';
 import validator from 'validator';
 import { motion } from 'framer-motion';
-import { Product, SizeType } from '@/src/types';
+import { Product, SizeType, objIsEmpty } from '@/src/types';
 import useFooterFixed from '@/hooks/useFooterFixed';
 import { selectCategoriesMap } from '@/store/category/categories.selector';
 import { addItemToCart } from '@/store/cart/cart.action';
@@ -48,8 +48,6 @@ const Product = () => {
   const category = router.query?.category as string;
   const skuInUrl = router.query?.skuInUrl as string;
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = productShown;
-
-  const objIsEmpty = (object: object) => Object.keys(object).length == 0;
 
   const qtyBoxChgHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     const str = e.target.value;

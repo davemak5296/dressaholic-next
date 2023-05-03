@@ -2,7 +2,7 @@ import { useState, useEffect, MouseEventHandler, Dispatch, SetStateAction } from
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { selectCategoriesMap } from '@/store/category/categories.selector';
-import { UseParamsCategoryType } from '@/src/types';
+import { objIsEmpty } from '@/src/types';
 import _ from 'lodash';
 
 type BrandFilterProps = {
@@ -16,7 +16,8 @@ const BrandFilter = ({ setChosenBrands }: BrandFilterProps) => {
   const [uniBrands, setUniBrands] = useState<string[]>([] as string[]);
 
   useEffect(() => {
-    if (Object.keys(categoriesMap).length == 0) return;
+
+    if (objIsEmpty(categoriesMap)) return;
     const allBrands = categoriesMap[category].map((el) => el.brand);
     setUniBrands(_.union(allBrands));
   }, [categoriesMap, category]);
