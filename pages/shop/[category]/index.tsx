@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { subCatDisplayNameMap } from '@/src/types';
-import Custom404 from "pages/404";
 import Category from "@/components/Category";
+import PageWrapper from "@/components/Page-wrapper";
 
 const CategoryPage = () => {
   const router = useRouter();
   const category = router.query?.category as string;
 
-  return Object.keys(subCatDisplayNameMap).includes(category) ? <Category /> : <Custom404 />;
+  return <PageWrapper isValidPage={Object.keys(subCatDisplayNameMap).includes(category)} page={<Category />} />
 }
 
 export default CategoryPage;
