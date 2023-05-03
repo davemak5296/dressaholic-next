@@ -52,7 +52,7 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
           data-src={imageUrls[colors[0]]['thumbnail']}
           src="/gray.png"
           ref={imgRef}
-          className={`w-full transition-all ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
+          className={`w-full max-h-[200px] transition-all ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
           onLoad={imgOnloadHandler}
         />
         {isOutOfStock && (
@@ -60,22 +60,21 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
             out of stock
           </div>
         )}
-
-        <div className="mt-2 grid grid-cols-4 gap-2 place-self-start">
-          {colors.map((color) => (
-            <img
-              data-src={imageUrls[color]['thumbnail']}
-              src="/gray-sm.png"
-              key={color}
-              className="h-10 cursor-pointer"
-              onClick={chgDisplayImgHandler}
-              onLoad={(e) => {
-                const tgt = e.target as HTMLImageElement;
-                tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
-              }}
-            />
-          ))}
-        </div>
+      </section>
+      <section className="mt-2 grid grid-cols-4 gap-2 place-self-start">
+        {colors.map((color) => (
+          <img
+            data-src={imageUrls[color]['thumbnail']}
+            src="/gray-sm.png"
+            key={color}
+            className="h-10 cursor-pointer"
+            onClick={chgDisplayImgHandler}
+            onLoad={(e) => {
+              const tgt = e.target as HTMLImageElement;
+              tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
+            }}
+          />
+        ))}
       </section>
       <section className="flex w-2/3 grow flex-col items-center justify-evenly sm:w-full">
         <div className="text-md mt-1 grow-0 font-bold">{brand}</div>
