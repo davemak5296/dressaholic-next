@@ -47,3 +47,11 @@ export const clearItemInCart = (cartItems: CartItemType[], itemToClear: CartItem
   });
   return SET_CART_ITEMS(newState);
 };
+
+export const emptyItemInCart = (cartItems: CartItemType[]) => {
+  const newState = produce(cartItems, (draft) => {
+    draft.length = 0;
+    // draft.splice(0, draft.length);
+  });
+  return SET_CART_ITEMS(newState);
+};

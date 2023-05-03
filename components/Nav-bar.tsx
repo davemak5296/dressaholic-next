@@ -4,13 +4,14 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { SIGN_OUT_START } from '@/store/user/user.reducer';
 import { selectCurrentUser } from '@/store/user/user.selector';
-import { selectIsCartOpen } from '@/store/cart/cart.selector';
+import { selectCartItems, selectIsCartOpen } from '@/store/cart/cart.selector';
 import CartIcon from './Cart-icon'
 import CartDropDown from './Cart-dropdown'
 import Logo from '@/assets/icons-and-logos/letter-d.svg'
 import ShopIcon from '@/assets/icons-and-logos/icon-shop.svg'
 import LoginIcon from '@/assets/icons-and-logos/icon-login.svg'
 import LogoutIcon from '@/assets/icons-and-logos/icon-logout.svg'
+import { emptyItemInCart } from '@/src/store/cart/cart.action';
 
 type NavBarProps = {
   scrollY: number;
@@ -22,11 +23,13 @@ const NavBar = ({ scrollY }: NavBarProps) => {
   const dispatch = useDispatch();
   const currUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
+  const itemsInCart = useSelector(selectCartItems);
   const router = useRouter();
   const isScrolledOver = scrollY > 36;
 
   const signOutHandler: React.MouseEventHandler = () => {
     dispatch(SIGN_OUT_START());
+    dispatch(emptyItemInCart(itemsInCart))
   };
 
   return (
