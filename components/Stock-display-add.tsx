@@ -8,16 +8,16 @@ type StockDisplayAndAddProps = {
   stockNum: ActiveStateType['stockNum'];
   qtyToAdd: string | number;
   setQtyToAdd: Dispatch<SetStateAction<string | number>>;
-  qtyBoxHandler: ChangeEventHandler<HTMLInputElement>;
-  btnHandler: MouseEventHandler;
+  qtyBoxChgHandler: ChangeEventHandler<HTMLInputElement>;
+  btnClickHandler: MouseEventHandler;
 };
 
 const StockDisplayAndAdd = ({
   stockNum,
   qtyToAdd,
   setQtyToAdd,
-  qtyBoxHandler,
-  btnHandler,
+  qtyBoxChgHandler,
+  btnClickHandler,
 }: StockDisplayAndAddProps) => {
   return (
     <div className="flex w-full items-center">
@@ -49,7 +49,7 @@ const StockDisplayAndAdd = ({
           <input
             type="text"
             className="w-[50px] text-center text-base outline-none sm:text-xl"
-            onChange={qtyBoxHandler}
+            onChange={qtyBoxChgHandler}
             value={qtyToAdd}
           />
           <Image src={MinusSign} alt='minus-sign'
@@ -64,7 +64,7 @@ const StockDisplayAndAdd = ({
             }}
           />
           <button
-            onClick={btnHandler}
+            onClick={btnClickHandler}
             className={`${
               stockNum == 0 || qtyToAdd == ''
                 ? 'daisy-btn-active daisy-btn-ghost '
