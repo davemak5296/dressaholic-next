@@ -1,13 +1,45 @@
+import { GetServerSideProps } from "next";
 import { motion } from "framer-motion";
+import NavBar from "@/components/Nav-bar";
 import Footer from "@/components/Footer";
 import BigMenu from "@/components/Big-menu";
 import Carousel from "@/components/Carousel";
+import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 
 const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
 
-export default function HomePage() {
+type HomePageProps = {
+  isAuth: boolean;
+  cookie: Partial<{
+    [key: string]: string;
+  }>
+}
+
+export const getServerSideProps: GetServerSideProps<HomePageProps>= async (context) => {
+  const cookie = context.req.cookies;
+  const userCookie = context.req.cookies.user;
+  return !userCookie
+    ? {
+      props: {
+        isAuth: false,
+        cookie: cookie
+      } 
+    }
+    : {
+      props: {
+        isAuth: true,
+        cookie: cookie
+      } 
+    }
+}
+export default function HomePage( { isAuth, cookie }: HomePageProps) {
+  const { scrollH } = useNavbarHeight();
+
+  console.log(JSON.stringify(cookie, null, 2))
+
   return (
     <>
+      <NavBar isAuth={isAuth} scrollY={scrollH} />
       <motion.main
         initial={{
           opacity: 0,

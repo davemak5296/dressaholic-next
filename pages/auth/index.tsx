@@ -1,26 +1,35 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import { motion } from 'framer-motion';
 import SignInForm from '@/components/Sign-in-form';
 import SignUpForm from '@/components/Sign-up-form';
 import Footer from '@/components/Footer';
 import useFooterFixed from '@/hooks/useFooterFixed';
-import { selectCurrentUser } from '@/src/store/user/user.selector';
+import NavBar from '@/components/Nav-bar';
+import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 
-const Authentication = () => {
+type AuthPageProps = {
+  isAuth: boolean;
+}
+
+export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async (context) => {
+  const userCookie = context.req.cookies.user;
+  return !userCookie
+    ? { props: { isAuth: false } }
+    : {
+        redirect: {
+          destination: '/',
+          permanent: false
+        }
+      }
+}
+
+const Authentication = ( { isAuth }: AuthPageProps ) => {
   const { isFooterFixed, mainRef } = useFooterFixed();
-  const currUser = useSelector(selectCurrentUser);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (currUser) {
-      router.push('/');
-    }
-  })
+  const { scrollH } = useNavbarHeight();
 
   return (
-    !currUser && <>
+    <>
+      <NavBar isAuth={isAuth} scrollY={scrollH} />
       <motion.main
         ref={mainRef}
         initial={{
@@ -37,7 +46,6 @@ const Authentication = () => {
         }}
         className="main-container flex w-full flex-col items-center py-4 lg:h-[calc(100vh-180px)] lg:w-[850px] lg:flex-row lg:items-start lg:justify-between"
       >
-        {/* <SignInForm /> */}
         <SignInForm />
         <SignUpForm />
       </motion.main>

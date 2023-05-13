@@ -5,16 +5,29 @@ import Footer from '@/components/Footer';
 import useFooterFixed from '@/hooks/useFooterFixed';
 import { selectCartItems, selectCartTotal } from '@/store/cart/cart.selector';
 import CartItem from '@/components/Cart-item';
+import { GetServerSideProps } from 'next';
+import NavBar from '@/components/Nav-bar';
+import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+
+type CartPageProps = {
+  isAuth: boolean;
+}
+export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async (context) => {
+  const userCookie = context.req.cookies.user;
+  return !userCookie ? { props: { isAuth: false } } : { props: { isAuth: true} }
+}
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
-const Cart = () => {
+const Cart = ( { isAuth }: CartPageProps ) => {
   const { isFooterFixed, mainRef } = useFooterFixed();
+  const { scrollH } = useNavbarHeight();
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
 
   return (
     <>
+      <NavBar isAuth={isAuth} scrollY={scrollH} />
       <main ref={mainRef} className="main-container h-auto px-3 sm:container sm:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           CART

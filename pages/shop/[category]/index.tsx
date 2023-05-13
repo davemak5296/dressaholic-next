@@ -1,13 +1,48 @@
-import { useRouter } from "next/router";
 import { subCatDisplayNameMap } from '@/src/types';
 import Category from "@/components/Category";
 import PageWrapper from "@/components/Page-wrapper";
+import { GetServerSideProps } from "next";
+import NavBar from "@/components/Nav-bar";
+import ShopLanding from "@/components/Shop-landing";
+import useNavbarHeight from "@/src/hooks/useNavbarHeight";
+type CategoryPageProps = {
+  isAuth: boolean;
+  param: string
+}
 
-const CategoryPage = () => {
-  const router = useRouter();
-  const category = router.query?.category as string;
+export const getServerSideProps: GetServerSideProps<CategoryPageProps>= async (context) => {
+  const userCookie = context.req.cookies.user;
+  const param = context.params?.category as string;
 
-  return <PageWrapper isValidPage={Object.keys(subCatDisplayNameMap).includes(category)} page={<Category />} />
+  return !userCookie
+    ? {
+      props: {
+        isAuth: false,
+        param: param
+      } 
+    }
+    : {
+      props: {
+        isAuth: true,
+        param: param
+      } 
+    }
+}
+
+const CategoryPage = ( { isAuth, param }: CategoryPageProps ) => {
+  const { scrollH } = useNavbarHeight();
+  
+  return (
+    <>
+      <NavBar isAuth={isAuth} scrollY={scrollH} />
+      { param == 'men'
+          ? <ShopLanding category="Men" />
+          : param == 'women'
+            ? <ShopLanding category="Women" />
+            : <PageWrapper isValidPage={Object.keys(subCatDisplayNameMap).includes(param)} page={<Category />} />
+          }
+    </>
+  )
 }
 
 export default CategoryPage;

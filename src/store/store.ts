@@ -1,8 +1,8 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// import { persistStore, persistReducer } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
 import categoriesReducer from './category/categories.reducer';
 import cartReducer from './cart/cart.reducer';
 import rootSaga from './root-saga';
@@ -15,14 +15,14 @@ export const rootReducer = combineReducers({
   user: userReducer,
 });
 
-const persistConfig = {
-  key: 'root',
-  storage
-}
+// const persistConfig = {
+//   key: 'root',
+//   storage
+// }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false
@@ -30,10 +30,10 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
   return configureStore({
-    reducer: persistedReducer,
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
     preloadedState,
   });

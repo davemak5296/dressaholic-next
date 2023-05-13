@@ -11,6 +11,17 @@ import Footer from '@/components/Footer';
 import PaymentForm from '@/components/Payment-form';
 import useFooterFixed from '@/hooks/useFooterFixed';
 import { CardElement } from '@stripe/react-stripe-js';
+import { GetServerSideProps } from 'next';
+import NavBar from '@/components/Nav-bar';
+import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+type OrderPageProps = {
+  isAuth: boolean;
+}
+
+export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async (context) => {
+  const userCookie = context.req.cookies.user;
+  return !userCookie ? { props: { isAuth: false } } : { props: { isAuth: true} }
+}
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');
 
@@ -25,7 +36,8 @@ export type InputValType = {
   addressValid: 'initial' | boolean;
   remark: string;
 };
-const OrderPage = () => {
+const OrderPage = ( { isAuth }: OrderPageProps) => {
+  const { scrollH } = useNavbarHeight();
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
   const { isFooterFixed, mainRef } = useFooterFixed();
@@ -63,6 +75,7 @@ const OrderPage = () => {
 
   return (
     <>
+      <NavBar isAuth={isAuth} scrollY={scrollH} />
       <main ref={mainRef} className="main-container px-3 sm:container sm:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl font-light md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           Order Info

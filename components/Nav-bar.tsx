@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
+import { useCookies } from 'react-cookie';
 import { SIGN_OUT_START } from '@/store/user/user.reducer';
 import { selectCurrentUser } from '@/store/user/user.selector';
 import { selectCartItems, selectIsCartOpen } from '@/store/cart/cart.selector';
@@ -15,11 +16,13 @@ import { emptyItemInCart } from '@/src/store/cart/cart.action';
 
 type NavBarProps = {
   scrollY: number;
+  isAuth: boolean;
 };
 
 const iconStyle = 'mr-3 h-[25px] w-[25px] cursor-pointer md:hidden';
 
-const NavBar = ({ scrollY }: NavBarProps) => {
+const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
+  const [ cookie, setCookies, removeCookie ] = useCookies();
   const dispatch = useDispatch();
   const currUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
@@ -28,8 +31,12 @@ const NavBar = ({ scrollY }: NavBarProps) => {
   const isScrolledOver = scrollY > 36;
 
   const signOutHandler: React.MouseEventHandler = () => {
-    dispatch(SIGN_OUT_START());
-    dispatch(emptyItemInCart(itemsInCart))
+    setCookies('user', '', {
+      maxAge: -1
+    });
+    router.reload();
+    // dispatch(SIGN_OUT_START());
+    // dispatch(emptyItemInCart(itemsInCart))
   };
 
   return (
@@ -84,7 +91,9 @@ const NavBar = ({ scrollY }: NavBarProps) => {
               </ul>
             </div>
           </div>
-          {currUser ? (
+          {/* <SignInButton /> */}
+          {isAuth ? (
+          // {currUser ? (
             <>
               <button
                 onClick={signOutHandler}

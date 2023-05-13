@@ -1,5 +1,7 @@
 import {useState, ChangeEventHandler, FormEventHandler, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 import FormInput from '@/components/FormInput/Form-input';
 import {
   EMAIL_SIGN_IN_START,
@@ -8,6 +10,7 @@ import {
 } from '@/store/user/user.reducer';
 import { selectCurrentUser, selectUserError } from '@/src/store/user/user.selector';
 import Spinner from './Spinner';
+import { popUpError, signInAuthUserWithEmailAndPw } from '@/src/utils/firebase/firebase.utils';
 
 const defaultFormFields = {
   email: '',
@@ -16,6 +19,8 @@ const defaultFormFields = {
 
 const SignInForm = () => {
   const dispatch = useDispatch();
+  const [ cookies, setCookie, removeCookie ] = useCookies();
+  const router = useRouter();
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
   const currUser = useSelector(selectCurrentUser);
@@ -35,11 +40,28 @@ const SignInForm = () => {
       event.preventDefault();
 
       try {
-        dispatch(EMAIL_SIGN_IN_START({ email, password }));
+        // dispatch(EMAIL_SIGN_IN_START({ email, password }));
         setIsLoading(true);
+        const user = await signInAuthUserWithEmailAndPw(email, password);
+        if (!user) {
+          setIsLoading(false);
+          alert('no user found!');
+          return
+        } else {
+          // console.log(JSON.stringify(user, null, 2));
+          setCookie('user', user.user.uid, {
+            path: '/',
+            maxAge: 3600
+          })
+          router.push('/');
+          setIsLoading(false);
+        }
         resetFormFields();
       } catch (error: unknown) {
-        dispatch(SIGN_IN_FAILED(error));
+        setIsLoading(false);
+        popUpError(error);
+        // dispatch(SIGN_IN_FAILED(error));
+        // console.log(JSON.stringify(error, null, 2))
         resetFormFields();
       }
     };

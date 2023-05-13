@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { FirebaseError, initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithRedirect,
@@ -123,3 +123,24 @@ export const getCategoriesAndDocs = async () => {
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => doc.data());
 };
+
+export const popUpError = (error: FirebaseError | unknown) => {
+  if (error instanceof FirebaseError) {
+    switch (error.code) {
+      case 'auth/wrong-password':
+        alert('Wrong password.');
+        break;
+      case 'auth/user-not-found':
+        alert('User not exists.');
+        break;
+      case 'auth/email-already-in-use':
+        alert('Cannot sign up, email already in use.');
+        break;
+      default:
+        alert(error.code.slice(5))
+        break;
+    }
+  } else {
+    console.log(error);
+  }
+}
