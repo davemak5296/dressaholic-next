@@ -1,10 +1,13 @@
 import { GetServerSideProps } from "next";
 import { motion } from "framer-motion";
+import { ApolloError, gql } from '@apollo/client';
+import client from '@/src/utils/apollo.utils';
 import NavBar from "@/components/Nav-bar";
 import Footer from "@/components/Footer";
 import BigMenu from "@/components/Big-menu";
 import Carousel from "@/components/Carousel";
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+// import { Data } from "./api/graphql";
 
 const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
 
@@ -13,29 +16,57 @@ type HomePageProps = {
   cookie: Partial<{
     [key: string]: string;
   }>
+  data: any;
+  error: ApolloError | null
 }
 
 export const getServerSideProps: GetServerSideProps<HomePageProps>= async (context) => {
   const cookie = context.req.cookies;
   const userCookie = context.req.cookies.user;
+  // const res = await fetch('http://localhost:3000/api/graphql');
+  // const data: string = await res.text();
+  const { data, error } = await client.query({
+    query: gql`
+      query GetUsers {
+        user {
+          id
+          name
+          email
+        }
+      }
+    `
+  })
+  const aError = error instanceof ApolloError ? error : null
+  console.log(`data is ${JSON.stringify(data, null, 2)}`);
+  console.log(`error is ${JSON.stringify(aError, null, 2)}`);
+
   return !userCookie
     ? {
       props: {
         isAuth: false,
-        cookie: cookie
+        cookie: cookie,
+        data: data,
+        // error: error as ApolloError
+        error: aError
       } 
     }
     : {
       props: {
         isAuth: true,
-        cookie: cookie
+        cookie: cookie,
+        data: data,
+        error: aError
+        // error: error
       } 
     }
 }
-export default function HomePage( { isAuth, cookie }: HomePageProps) {
+export default function HomePage( { isAuth, cookie, data, error }: HomePageProps) {
   const { scrollH } = useNavbarHeight();
 
-  console.log(JSON.stringify(cookie, null, 2))
+  // console.log(JSON.stringify(cookie, null, 2))
+  // console.log(`gql error: ${JSON.stringify(error, null, 2)}`)
+  // console.log(`gql data is ${JSON.stringify(data, null, 2)}`);
+  // console.log(`gql error is ${JSON.stringify(error, null, 2)}`);
 
   return (
     <>
