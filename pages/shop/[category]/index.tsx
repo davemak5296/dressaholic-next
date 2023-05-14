@@ -33,7 +33,7 @@ const CategoryPage = ( { isAuth, param }: CategoryPageProps ) => {
   const { scrollH } = useNavbarHeight();
   
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
       { param == 'men'
           ? <ShopLanding category="Men" />
@@ -41,7 +41,7 @@ const CategoryPage = ( { isAuth, param }: CategoryPageProps ) => {
             ? <ShopLanding category="Women" />
             : <PageWrapper isValidPage={Object.keys(subCatDisplayNameMap).includes(param)} page={<Category />} />
           }
-    </>
+    </div>
   )
 }
 

@@ -5,7 +5,6 @@ import { useImmer } from 'use-immer';
 import validator from 'validator';
 import { motion } from 'framer-motion';
 import { Product, SizeType, objIsEmpty } from '@/src/types';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import { selectCategoriesMap } from '@/store/category/categories.selector';
 import { addItemToCart } from '@/store/cart/cart.action';
 import { selectCartItems } from '@/store/cart/cart.selector';
@@ -42,7 +41,6 @@ const Product = () => {
     image: '',
     stockNum: 0,
   });
-  const { isFooterFixed, mainRef } = useFooterFixed();
 
   const router = useRouter();
   const category = router.query?.category as string;
@@ -116,7 +114,6 @@ const Product = () => {
           ease: 'easeInOut',
           duration: 0.3,
         }}
-        ref={mainRef}
         key={skuInUrl}
         className="main-container px-4"
       >
@@ -204,7 +201,7 @@ const Product = () => {
           </div>
         </div>
       </motion.main>
-      <Footer isFixed={isFooterFixed} />
+      <Footer />
     </>
   );
 };

@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Footer from '@/components/Footer';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import { selectCartItems, selectCartTotal } from '@/store/cart/cart.selector';
 import CartItem from '@/components/Cart-item';
 import { GetServerSideProps } from 'next';
@@ -20,15 +19,14 @@ export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:text-lg pl-1');
 
 const Cart = ( { isAuth }: CartPageProps ) => {
-  const { isFooterFixed, mainRef } = useFooterFixed();
   const { scrollH } = useNavbarHeight();
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
 
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
-      <main ref={mainRef} className="main-container h-auto px-3 sm:container sm:px-0">
+      <main className="main-container h-auto px-3 sm:container sm:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           CART
         </h1>
@@ -59,8 +57,8 @@ const Cart = ( { isAuth }: CartPageProps ) => {
         )}
         <div className="clear-both"></div>
       </main>
-      <Footer isFixed={isFooterFixed} />
-    </>
+      <Footer />
+    </div>
   );
 };
 

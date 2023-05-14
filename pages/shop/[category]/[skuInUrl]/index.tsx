@@ -33,10 +33,10 @@ const ProductPage = ( {isAuth, param }: ProductPageProps) => {
   const { scrollH } = useNavbarHeight();
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <NavBar isAuth={isAuth} scrollY={scrollH} />
       <PageWrapper isValidPage={allSkus.includes(param)} page={<Product />} />
-    </>
+    </div>
   )
 }
 

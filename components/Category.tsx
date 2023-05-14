@@ -8,14 +8,12 @@ import Breadcrumbs from './Breadcrumbs';
 import Footer from './Footer';
 import BrandFilter from './Brand-filter';
 import ProductCard from './Product-card';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import PriceFilter from './Price-filter';
 
 const Category = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
   const router = useRouter();
   const category = router.query.category as string;
-  const { isFooterFixed, mainRef } = useFooterFixed();
 
   const [products, setProducts] = useState<Product[]>([] as Product[]);
   const [chosenBrands, setChosenBrands] = useState<string[]>([] as string[]);
@@ -29,7 +27,6 @@ const Category = () => {
   return (
     <>
       <motion.main
-        ref={mainRef}
         key={category}
         initial={{
           opacity: 0,
@@ -86,7 +83,7 @@ const Category = () => {
           </section>
         </div>
       </motion.main>
-      <Footer isFixed={isFooterFixed} />
+      <Footer/>
     </>
   )
 }

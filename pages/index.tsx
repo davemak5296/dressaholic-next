@@ -69,7 +69,7 @@ export default function HomePage( { isAuth, cookie, data, error }: HomePageProps
   // console.log(`gql error is ${JSON.stringify(error, null, 2)}`);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <NavBar isAuth={isAuth} scrollY={scrollH} />
       <motion.main
         initial={{
@@ -92,7 +92,7 @@ export default function HomePage( { isAuth, cookie, data, error }: HomePageProps
         </div>
         <BigMenu />
       </motion.main>
-      <Footer isFixed={false} />
-    </>
+      <Footer />
+    </div>
   )
 }

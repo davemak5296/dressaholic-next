@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import SignInForm from '@/components/Sign-in-form';
 import SignUpForm from '@/components/Sign-up-form';
 import Footer from '@/components/Footer';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 
@@ -24,14 +23,12 @@ export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async
 }
 
 const Authentication = ( { isAuth }: AuthPageProps ) => {
-  const { isFooterFixed, mainRef } = useFooterFixed();
   const { scrollH } = useNavbarHeight();
 
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
       <motion.main
-        ref={mainRef}
         initial={{
           opacity: 0,
           scale: 0.8,
@@ -49,8 +46,8 @@ const Authentication = ( { isAuth }: AuthPageProps ) => {
         <SignInForm />
         <SignUpForm />
       </motion.main>
-      <Footer isFixed={isFooterFixed} />
-    </>
+      <Footer />
+    </div>
   );
 };
 

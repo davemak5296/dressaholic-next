@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import Footer from './Footer';
 import directoryItems from '@/src/data/directory-item.data';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import DirectoryItem from './Directory-item';
 
 type ShopLandingProps = {
@@ -9,7 +8,6 @@ type ShopLandingProps = {
 };
 
 const ShopLanding = ({ category }: ShopLandingProps) => {
-  const { isFooterFixed, mainRef } = useFooterFixed();
 
   return (
     <>
@@ -26,7 +24,6 @@ const ShopLanding = ({ category }: ShopLandingProps) => {
           ease: 'easeInOut',
           duration: 0.5,
         }}
-        ref={mainRef}
         className="main-container mb-12 px-4"
       >
         <h1 className="py-8 text-3xl">For {category}</h1>
@@ -36,7 +33,7 @@ const ShopLanding = ({ category }: ShopLandingProps) => {
           )}
         </section>
       </motion.main>
-      <Footer isFixed={isFooterFixed} />
+      <Footer />
     </>
 
   )

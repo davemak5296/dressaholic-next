@@ -9,7 +9,6 @@ import CartItem from '@/components/Cart-item';
 import OrderFormInput from '@/components/Order-form-input';
 import Footer from '@/components/Footer';
 import PaymentForm from '@/components/Payment-form';
-import useFooterFixed from '@/hooks/useFooterFixed';
 import { CardElement } from '@stripe/react-stripe-js';
 import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
@@ -40,7 +39,6 @@ const OrderPage = ( { isAuth }: OrderPageProps) => {
   const { scrollH } = useNavbarHeight();
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
-  const { isFooterFixed, mainRef } = useFooterFixed();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [inputVal, setInputVal] = useImmer<InputValType>({
     name: '',
@@ -74,9 +72,9 @@ const OrderPage = ( { isAuth }: OrderPageProps) => {
   };
 
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
-      <main ref={mainRef} className="main-container px-3 sm:container sm:px-0">
+      <main className="main-container px-3 sm:container sm:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl font-light md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           Order Info
         </h1>
@@ -177,8 +175,8 @@ const OrderPage = ( { isAuth }: OrderPageProps) => {
           {showPaymentForm && <PaymentForm setValue={setInputVal} />}
         </section>
       </main>
-      <Footer isFixed={isFooterFixed} />
-    </>
+      <Footer />
+    </div>
   );
 };
 
