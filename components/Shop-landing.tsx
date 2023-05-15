@@ -10,31 +10,28 @@ type ShopLandingProps = {
 const ShopLanding = ({ category }: ShopLandingProps) => {
 
   return (
-    <>
-      <motion.main
-        initial={{
-          opacity: 0,
-          scale: 0.9,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-        }}
-        transition={{
-          ease: 'easeInOut',
-          duration: 0.5,
-        }}
-        className="main-container mb-12 px-4"
-      >
-        <h1 className="py-8 text-3xl">For {category}</h1>
-        <section className="grid grid-cols-4">
-          {directoryItems.map(
-            (item) => item.mainCategory == category && <DirectoryItem key={item.id} item={item} />
-          )}
-        </section>
-      </motion.main>
-      <Footer />
-    </>
+    <motion.main
+      initial={{
+        opacity: 0,
+        scale: 0.9,
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+      }}
+      transition={{
+        ease: 'easeInOut',
+        duration: 0.5,
+      }}
+      className="main-container mb-12 px-4"
+    >
+      <h1 className="py-8 text-3xl">For {category}</h1>
+      <section className="grid grid-cols-4">
+        {directoryItems.map(
+          (item) => item.mainCategory == category && <DirectoryItem key={item.id} item={item} />
+        )}
+      </section>
+    </motion.main>
 
   )
 }

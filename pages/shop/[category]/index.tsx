@@ -1,12 +1,12 @@
 import { Product, subCatDisplayNameMap } from '@/src/types';
 import Category from "@/components/Category";
-import PageWrapper from "@/components/Page-wrapper";
 import { GetServerSideProps } from "next";
 import NavBar from "@/components/Nav-bar";
 import ShopLanding from "@/components/Shop-landing";
 import useNavbarHeight from "@/src/hooks/useNavbarHeight";
 import { getCategoriesAndDocs } from '@/src/utils/firebase/firebase.utils';
 import Custom404 from 'pages/404';
+import Footer from '@/components/Footer';
 type CategoryPageProps = {
   isAuth: boolean;
   param: string;
@@ -42,6 +42,7 @@ const CategoryPage = ( { isAuth, param, products }: CategoryPageProps ) => {
             ? <Category categoryName={param} fullProducts={products} />
             : <Custom404 />
       }
+      <Footer />
     </div>
   )
 }
