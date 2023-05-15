@@ -12,7 +12,8 @@ type AuthPageProps = {
 
 export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}) => {
   const isAuth = req.cookies.user ? true : false;
-  return isAuth
+
+  return !isAuth
     ? { props: { isAuth } }
     : {
         redirect: {
