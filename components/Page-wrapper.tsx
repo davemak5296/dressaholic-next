@@ -8,13 +8,14 @@ type PageWrapperPropsType = {
   page: JSX.Element
 }
 const PageWrapper = ({ isValidPage, page }: PageWrapperPropsType) => {
-  const catIsLoading = useSelector(selectCatIsLoading);
+  // const catIsLoading = useSelector(selectCatIsLoading);
 
-  return catIsLoading
-    ? <Spinner />
-    : isValidPage
-      ? page
-      : <Custom404 />
+  return isValidPage ? page : <Custom404 />
+  // return catIsLoading
+  //   ? <Spinner />
+  //   : isValidPage
+  //     ? page
+  //     : <Custom404 />
 }
 
 export default PageWrapper;

@@ -1,46 +1,47 @@
-import { subCatDisplayNameMap } from '@/src/types';
+import { Product, subCatDisplayNameMap } from '@/src/types';
 import Category from "@/components/Category";
 import PageWrapper from "@/components/Page-wrapper";
 import { GetServerSideProps } from "next";
 import NavBar from "@/components/Nav-bar";
 import ShopLanding from "@/components/Shop-landing";
 import useNavbarHeight from "@/src/hooks/useNavbarHeight";
+import { getCategoriesAndDocs } from '@/src/utils/firebase/firebase.utils';
+import Custom404 from 'pages/404';
 type CategoryPageProps = {
   isAuth: boolean;
-  param: string
+  param: string;
+  products: Product[] | null;
 }
 
-export const getServerSideProps: GetServerSideProps<CategoryPageProps>= async (context) => {
-  const userCookie = context.req.cookies.user;
-  const param = context.params?.category as string;
-
-  return !userCookie
-    ? {
-      props: {
-        isAuth: false,
-        param: param
-      } 
+export const getServerSideProps: GetServerSideProps<CategoryPageProps>= async ({ req, params }) => {
+  const isAuth = req.cookies.user ? true : false;
+  const param = params?.category as string;
+  const catalogs = await getCategoriesAndDocs();
+  const productsInCat = catalogs.find( e => e.subCat == param )?.items
+  
+  return {
+    props: {
+      isAuth,
+      param,
+      products: productsInCat ?? null  // if products is undefined, return null
     }
-    : {
-      props: {
-        isAuth: true,
-        param: param
-      } 
-    }
+  }
 }
 
-const CategoryPage = ( { isAuth, param }: CategoryPageProps ) => {
+const CategoryPage = ( { isAuth, param, products }: CategoryPageProps ) => {
   const { scrollH } = useNavbarHeight();
   
   return (
     <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
       { param == 'men'
-          ? <ShopLanding category="Men" />
-          : param == 'women'
-            ? <ShopLanding category="Women" />
-            : <PageWrapper isValidPage={Object.keys(subCatDisplayNameMap).includes(param)} page={<Category />} />
-          }
+        ? <ShopLanding category="Men" />
+        : param == 'women'
+          ? <ShopLanding category="Women" />
+          : !!products  // when products is not null, e.g. param is a valid category
+            ? <Category categoryName={param} fullProducts={products} />
+            : <Custom404 />
+      }
     </div>
   )
 }
