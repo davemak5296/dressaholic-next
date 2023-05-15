@@ -10,10 +10,10 @@ type AuthPageProps = {
   isAuth: boolean;
 }
 
-export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async (context) => {
-  const userCookie = context.req.cookies.user;
-  return !userCookie
-    ? { props: { isAuth: false } }
+export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}) => {
+  const isAuth = req.cookies.user ? true : false;
+  return isAuth
+    ? { props: { isAuth } }
     : {
         redirect: {
           destination: '/',

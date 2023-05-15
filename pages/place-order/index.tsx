@@ -17,9 +17,9 @@ type OrderPageProps = {
   isAuth: boolean;
 }
 
-export const getServerSideProps: GetServerSideProps< { isAuth: boolean }>= async (context) => {
-  const userCookie = context.req.cookies.user;
-  return !userCookie ? { props: { isAuth: false } } : { props: { isAuth: true} }
+export const getServerSideProps: GetServerSideProps<OrderPageProps>= async ({req}) => {
+  const isAuth = req.cookies.user ? true : false;
+  return { props: { isAuth }};
 }
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');

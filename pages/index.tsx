@@ -13,54 +13,57 @@ const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
 
 type HomePageProps = {
   isAuth: boolean;
-  cookie: Partial<{
-    [key: string]: string;
-  }>
-  data: any;
-  error: ApolloError | null
+  // cookie: Partial<{
+  //   [key: string]: string;
+  // }>
+  // data: any;
+  // error: ApolloError | null
 }
 
-export const getServerSideProps: GetServerSideProps<HomePageProps>= async (context) => {
-  const cookie = context.req.cookies;
-  const userCookie = context.req.cookies.user;
+export const getServerSideProps: GetServerSideProps<HomePageProps>= async ({req}) => {
+  const isAuth = req.cookies.user ? true : false;
+  return { props: { isAuth } };
+  // const cookie = context.req.cookies;
+
+  // const userCookie = context.req.cookies.user;
   // const res = await fetch('http://localhost:3000/api/graphql');
   // const data: string = await res.text();
-  const { data, error } = await client.query({
-    query: gql`
-      query GetUsers {
-        user {
-          id
-          name
-          email
-        }
-      }
-    `
-  })
-  const aError = error instanceof ApolloError ? error : null
-  console.log(`data is ${JSON.stringify(data, null, 2)}`);
-  console.log(`error is ${JSON.stringify(aError, null, 2)}`);
+  // const { data, error } = await client.query({
+  //   query: gql`
+  //     query GetUsers {
+  //       user {
+  //         id
+  //         name
+  //         email
+  //       }
+  //     }
+  //   `
+  // })
+  // const aError = error instanceof ApolloError ? error : null
+  // console.log(`data is ${JSON.stringify(data, null, 2)}`);
+  // console.log(`error is ${JSON.stringify(aError, null, 2)}`);
 
-  return !userCookie
-    ? {
-      props: {
-        isAuth: false,
-        cookie: cookie,
-        data: data,
-        // error: error as ApolloError
-        error: aError
-      } 
-    }
-    : {
-      props: {
-        isAuth: true,
-        cookie: cookie,
-        data: data,
-        error: aError
-        // error: error
-      } 
-    }
+  // return !userCookie
+  //   ? {
+  //     props: {
+  //       isAuth: false,
+  //       cookie: cookie,
+  //       data: data,
+  //       // error: error as ApolloError
+  //       error: aError
+  //     } 
+  //   }
+  //   : {
+  //     props: {
+  //       isAuth: true,
+  //       cookie: cookie,
+  //       data: data,
+  //       error: aError
+  //       // error: error
+  //     } 
+  //   }
 }
-export default function HomePage( { isAuth, cookie, data, error }: HomePageProps) {
+export default function HomePage( { isAuth }: HomePageProps) {
   const { scrollH } = useNavbarHeight();
 
   // console.log(JSON.stringify(cookie, null, 2))
