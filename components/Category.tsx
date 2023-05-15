@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { union } from 'lodash';
 import { Product, subCatDisplayNameMap } from '@/src/types';
 import Breadcrumbs from './Breadcrumbs';
 import BrandFilter from './Brand-filter';
@@ -11,6 +12,8 @@ type CategoryProps = {
   fullProducts: Product[];
 }
 const Category = ({ categoryName, fullProducts }: CategoryProps) => {
+  const allBrands = fullProducts.map( item => item.brand);
+  const brandDedup = union(allBrands);
   const [chosenBrands, setChosenBrands] = useState<string[]>([] as string[]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
@@ -37,7 +40,7 @@ const Category = ({ categoryName, fullProducts }: CategoryProps) => {
       <div className="relative top-0 col-span-full col-start-1 row-start-2 sm:col-span-1 sm:block">
         <div className="sticky top-[36px] lg:top-[52px]">
           <h1 className="border-b border-base-300 p-2 text-xl sm:p-5 sm:text-2xl">Filters</h1>
-          <BrandFilter setChosenBrands={setChosenBrands} />
+          <BrandFilter brandDedup={brandDedup} setChosenBrands={setChosenBrands} />
           <PriceFilter
             min={minPrice}
             max={maxPrice}
