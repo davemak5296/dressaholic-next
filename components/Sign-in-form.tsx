@@ -1,16 +1,9 @@
-import {useState, ChangeEventHandler, FormEventHandler, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {useState, ChangeEventHandler, FormEventHandler } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import FormInput from '@/components/FormInput/Form-input';
-import {
-  EMAIL_SIGN_IN_START,
-  GOOGLE_SIGN_IN_START,
-  SIGN_IN_FAILED,
-} from '@/store/user/user.reducer';
-import { selectCurrentUser, selectUserError } from '@/src/store/user/user.selector';
 import Spinner from './Spinner';
-import { popUpError, signInAuthUserWithEmailAndPw } from '@/src/utils/firebase/firebase.utils';
+import { popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase/firebase.utils';
 
 const defaultFormFields = {
   email: '',
@@ -18,13 +11,10 @@ const defaultFormFields = {
 };
 
 const SignInForm = () => {
-  const dispatch = useDispatch();
-  const [ cookies, setCookie, removeCookie ] = useCookies();
+  const [ cookies, setCookie ] = useCookies();
   const router = useRouter();
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-  const currUser = useSelector(selectCurrentUser);
-  const err = useSelector(selectUserError);
   const [isLoading, setIsLoading] = useState(false);
 
   const resetFormFields = () => {
@@ -32,7 +22,24 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = () => {
-    dispatch(GOOGLE_SIGN_IN_START());
+    const handler = async () => {
+      try {
+        const user = await signInWithGooglePopup();
+        setCookie('user', user.user.uid, {
+          path: '/',
+          maxAge: 3600
+        })
+
+        router.push('/');
+        setIsLoading(false)
+
+      } catch (error: unknown) {
+        setIsLoading(false)
+        popUpError(error);
+      }
+    }
+    setIsLoading(true);
+    handler().catch();
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -40,15 +47,12 @@ const SignInForm = () => {
       event.preventDefault();
 
       try {
-        // dispatch(EMAIL_SIGN_IN_START({ email, password }));
-        setIsLoading(true);
         const user = await signInAuthUserWithEmailAndPw(email, password);
         if (!user) {
           setIsLoading(false);
           alert('no user found!');
           return
         } else {
-          // console.log(JSON.stringify(user, null, 2));
           setCookie('user', user.user.uid, {
             path: '/',
             maxAge: 3600
@@ -60,12 +64,11 @@ const SignInForm = () => {
       } catch (error: unknown) {
         setIsLoading(false);
         popUpError(error);
-        // dispatch(SIGN_IN_FAILED(error));
-        // console.log(JSON.stringify(error, null, 2))
         resetFormFields();
       }
     };
 
+    setIsLoading(true);
     handler().catch(Error);
   };
 
@@ -73,10 +76,6 @@ const SignInForm = () => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
-
-  useEffect(() => {
-    if (currUser || err ) setIsLoading(false);
-  }, [currUser, err])
 
   return (
     <>

@@ -1,28 +1,24 @@
 import {useState, FormEventHandler, ChangeEventHandler, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import FormInput from './FormInput/Form-input';
-import { SIGN_UP_FAILED, SIGN_UP_START } from '@/store/user/user.reducer';
-import { selectCurrentUser, selectUserError } from '@/src/store/user/user.selector';
 import Spinner from './Spinner';
+import { createAuthUserWithEmailAndPw, createUserDocFromAuth, popUpError } from '@/src/utils/firebase/firebase.utils';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 
-const defaultFormFields = {
+const SignUpForm = () => {
+  const [ cookies, setCookie ] = useCookies();
+  const router = useRouter();
+  const [formFields, setFormFields] = useState({
   displayName: '',
   email: '',
   password: '',
   confirmPassword: '',
-};
-
-const SignUpForm = () => {
-  const dispatch = useDispatch();
-  const [formFields, setFormFields] = useState(defaultFormFields);
+});
   const { displayName, email, password, confirmPassword } = formFields;
   const [isLoading, setIsLoading] = useState(false);
 
-  const currUser = useSelector(selectCurrentUser);
-  const err = useSelector(selectUserError);
-
-  const resetFormFields = () => {
-    setFormFields(defaultFormFields);
+  const resetPwFields = () => {
+    setFormFields({ ...formFields, password: '', confirmPassword: ''});
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -31,16 +27,27 @@ const SignUpForm = () => {
 
       if (password !== confirmPassword) {
         alert('Passwords unmatch!');
-        resetFormFields();
+        resetPwFields();
         return;
       }
       try {
-        dispatch(SIGN_UP_START({ email, password, displayName }));
         setIsLoading(true);
-        resetFormFields();
+        const user = await createAuthUserWithEmailAndPw(email, password);
+        if (!!user && 'user' in user) {
+          await createUserDocFromAuth(user.user, { displayName });
+          setCookie('user', user.user.uid, {
+            path: '/',
+            maxAge: 3600
+          })
+          alert('You have successfully registered!\n\nWe will bring you back to home page.')
+          router.push('/');
+          setIsLoading(false)
+        }
+        resetPwFields();
       } catch (error: unknown) {
-        dispatch(SIGN_UP_FAILED(error));
-        resetFormFields();
+        setIsLoading(false)
+        popUpError(error);
+        resetPwFields();
       }
     };
 
@@ -52,10 +59,6 @@ const SignUpForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
   
-  useEffect(() => {
-    if ( currUser || err ) setIsLoading(false);
-  }, [currUser, err]);
-
   return (
     <>
       {isLoading && <Spinner />}
