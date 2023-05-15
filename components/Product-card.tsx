@@ -1,4 +1,4 @@
-import { useState, useRef, SyntheticEvent, MouseEventHandler } from 'react';
+import { useState, useRef, MouseEventHandler, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Product } from '@/src/types';
@@ -11,21 +11,17 @@ type ProductCardProp = {
 const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price}, chosenBrands}: ProductCardProp) => {
   const colors = Object.keys(stocks);
   const isOutOfStock = false;
-  const [isThumbnail, setIsThumbnail] = useState(false);
+  const [hasMount, setHasMount] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const router = useRouter();
   const category = router.query?.category as string;
 
-  const imgOnloadHandler = (e: SyntheticEvent<HTMLImageElement>) => {
-    const tgt = e.target as HTMLImageElement;
-    if (isThumbnail) return;
-    tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
-    setIsThumbnail(false);
-  };
+  useEffect(() => {
+    setHasMount(true);
+  }, [])
 
   const chgDisplayImgHandler: MouseEventHandler<HTMLImageElement> = (e) => {
-    setIsThumbnail(true);
     const tgt = e.target as HTMLImageElement;
     imgRef.current?.setAttribute('src', tgt.getAttribute('src') as string);
   };
@@ -49,11 +45,9 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
       </div>
       <section className="flex w-1/3 grow-0 flex-col sm:w-auto sm:items-center">
         <img
-          data-src={imageUrls[colors[0]]['thumbnail']}
-          src="/gray.png"
+          src={ !hasMount ? "/gray.png" : imageUrls[colors[0]]['thumbnail']}
           ref={imgRef}
           className={`w-full max-h-[200px] transition-all ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
-          onLoad={imgOnloadHandler}
         />
         {isOutOfStock && (
           <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
@@ -64,15 +58,10 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
       <section className="mt-2 grid grid-cols-4 gap-2 place-self-start">
         {colors.map((color) => (
           <img
-            data-src={imageUrls[color]['thumbnail']}
-            src="/gray-sm.png"
+            src={ !hasMount ? "/gray-sm.png": imageUrls[color]['thumbnail']}
             key={color}
             className="h-10 cursor-pointer"
             onClick={chgDisplayImgHandler}
-            onLoad={(e) => {
-              const tgt = e.target as HTMLImageElement;
-              tgt.setAttribute('src', tgt.getAttribute('data-src') as string);
-            }}
           />
         ))}
       </section>

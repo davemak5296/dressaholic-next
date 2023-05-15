@@ -9,6 +9,7 @@
     "@reduxjs/toolkit": "^1.8.6",
     "@stripe/react-stripe-js": "1.9.0",
     "@stripe/stripe-js": "1.32.0",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/lodash": "^4.14.188",
     "@types/react-router-dom": "^5.3.3",
     "@types/validator": "^13.7.10",

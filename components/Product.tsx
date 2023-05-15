@@ -92,7 +92,7 @@ const Product = ({ product, param }: ProductProps) => {
         duration: 0.3,
       }}
       key={param}
-      className="main-container px-4"
+      className="main-container px-4 w-full"
     >
       <Breadcrumbs />
       <div className="flex flex-col pt-0 pb-2 sm:flex-row sm:py-4">
@@ -100,11 +100,11 @@ const Product = ({ product, param }: ProductProps) => {
         <div className="my-2 text-xl text-accent-content sm:hidden">{brand}</div>
         <div className="text-2xl font-bold text-primary sm:hidden">{displayName}</div>
         {/* first column - thumbnails of imgs and view window for selected img */}
-        <div className="flex flex-col items-center sm:w-1/2 lg:flex-row">
+        <div className="mt-4 sm:mt-0 sm:w-1/2 flex">
           <ProductThumbnails product={product} active={attrsForSelectedColor} setActive={setAttrsForSelectedColor} />
-          <div className="relative order-1 mb-4 flex w-full items-start justify-center lg:order-2 lg:w-5/6">
+          <div className="@container relative order-2 mb-4 flex items-start justify-center w-5/6 lg:w-5/6">
             {attrsForSelectedColor.stockNum == 0 && (
-              <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 flex skew-y-[-15deg] justify-center bg-base-200/60 py-4 text-4xl font-bold">
+              <div className="absolute right-0 left-0 bottom-[50%] z-20 mx-4 py-4 flex justify-center bg-base-200/60 text-2xl @xs:text-4xl font-bold skew-y-[-15deg]">
                 Out of stock
               </div>
             )}
@@ -112,15 +112,15 @@ const Product = ({ product, param }: ProductProps) => {
             <img
               className={`${
                 attrsForSelectedColor.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
-              } w-1/3 sm:w-4/5`}
+              } max-w-[60%] @xs:max-w-1/3 max-h-[50vh]`}
               src={attrsForSelectedColor.image}
               alt=""
             />
           </div>
         </div>
         {/* second column - product's info and available options */}
-        <div className="flex w-full sm:w-1/2">
-          <div className="flex w-full flex-col lg:w-4/6">
+        <div className="flex w-full sm:w-1/2 pl-auto sm:pl-0 self-end sm:self-start">
+          <div className="mx-auto sm:mx-0 flex flex-col lg:w-4/6">
             <div className="my-2 hidden text-xl text-accent-content sm:block">{brand}</div>
             <div className="hidden text-2xl font-bold text-primary sm:block">
               {displayName}
