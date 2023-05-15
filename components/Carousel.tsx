@@ -78,9 +78,9 @@ const Carousel = ({ dataSource }: CarouselProp) => {
           ))}
       </div>
       {/* arrows for moving back and forth */}
-      <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-between text-white">
-        <Image src={LeftArrow} onClick={handleClickPrev} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10" alt="previous-slide" />
-        <Image src={RightArrow} onClick={handleClickNext} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10" alt="next-slide" />
+      <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-between text-slate-500">
+        <Image src={LeftArrow} onClick={handleClickPrev} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" alt="previous-slide" />
+        <Image src={RightArrow} onClick={handleClickNext} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" alt="next-slide" />
       </div>
       <section className="absolute left-[50%] top-[80%] z-10 flex h-[66.7vw] translate-x-[-50%] justify-center">
         {/* dots from jumping to different pic */}

@@ -16,4 +16,7 @@
   .clsbd {
     @apply border border-solid
   }
+  .arrow-filter {
+    filter: brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(45%) hue-rotate(180deg) brightness(100%) contrast(90%);
+  }
 }
