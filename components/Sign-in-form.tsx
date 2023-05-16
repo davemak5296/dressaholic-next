@@ -5,12 +5,15 @@ import FormInput from '@/components/FormInput/Form-input';
 import Spinner from './Spinner';
 import { popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase/firebase.utils';
 
+type SignInFormProps = {
+  prev: string | false;
+}
 const defaultFormFields = {
   email: '',
   password: '',
 };
 
-const SignInForm = () => {
+const SignInForm = ({ prev }: SignInFormProps) => {
   const [ cookies, setCookie ] = useCookies();
   const router = useRouter();
   const [formFields, setFormFields] = useState(defaultFormFields);
@@ -21,6 +24,18 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
 
+  const backToProductOrHomePage = (prevUrl: string | false) => {
+    if (prevUrl) {
+      setCookie('prev', '', {
+        path: '/',
+        maxAge: -1
+      })
+      router.push(prevUrl);
+    } else {
+      router.push('/')
+    }
+  }
+
   const signInWithGoogle = () => {
     const handler = async () => {
       try {
@@ -29,8 +44,7 @@ const SignInForm = () => {
           path: '/',
           maxAge: 3600
         })
-
-        router.push('/');
+        backToProductOrHomePage(prev);
         setIsLoading(false)
 
       } catch (error: unknown) {
@@ -57,7 +71,7 @@ const SignInForm = () => {
             path: '/',
             maxAge: 3600
           })
-          router.push('/');
+          backToProductOrHomePage(prev);
           setIsLoading(false);
         }
         resetFormFields();

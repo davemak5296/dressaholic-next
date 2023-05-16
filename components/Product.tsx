@@ -12,6 +12,8 @@ import ProductPageSizeBox from './Product-page-size-box';
 import Breadcrumbs from './Breadcrumbs';
 import StockDisplayAndAdd from './Stock-display-add';
 import ProductThumbnails from './Product-thumbnails';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 
 export type ActiveStateType = {
   color: string;
@@ -32,8 +34,13 @@ type ProductProps = {
 
 const Product = ({ product, param }: ProductProps) => {
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
+  const [ cookie ] = useCookies();
   const dispatch = useDispatch();
   const itemsInCart = useSelector(selectCartItems);
+  
+  const { asPath, push } = useRouter();
+  // console.log(`asPath is ${asPath}`);
+  const [ cookies, setCookies ] = useCookies();
 
   const [qtyToAdd, setQtyToAdd] = useState<number | string>(1);
   const [attrsForSelectedColor, setAttrsForSelectedColor] = useImmer<ActiveStateType>({
@@ -58,6 +65,18 @@ const Product = ({ product, param }: ProductProps) => {
 
   const btnClickHandler: MouseEventHandler = () => {
     if (attrsForSelectedColor.stockNum == 0 || qtyToAdd == '') return;  // jump out if no stock or qty box is empty
+
+    if (!cookie['user']) {
+      alert('Please login before shopping!');
+      setCookies('prev', asPath, {
+        path: '/',
+        maxAge: 3600
+      })
+      push('/auth');
+      return;
+      // return
+    }
+
     dispatch(SET_IS_CART_OPEN(true));
     dispatch(
       addItemToCart(

@@ -8,13 +8,15 @@ import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 
 type AuthPageProps = {
   isAuth: boolean;
+  prev: string | false;
 }
 
 export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}) => {
   const isAuth = req.cookies.user ? true : false;
+  const prev = req.cookies.prev ?? false;
 
   return !isAuth
-    ? { props: { isAuth } }
+    ? { props: { isAuth, prev } }
     : {
         redirect: {
           destination: '/',
@@ -23,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}
       }
 }
 
-const Authentication = ( { isAuth }: AuthPageProps ) => {
+const Authentication = ( { isAuth, prev }: AuthPageProps ) => {
   const { scrollH } = useNavbarHeight();
 
   return (
@@ -44,8 +46,8 @@ const Authentication = ( { isAuth }: AuthPageProps ) => {
         }}
         className="main-container flex w-full flex-col items-center py-4 lg:h-[calc(100vh-180px)] lg:w-[850px] lg:flex-row lg:items-start lg:justify-between"
       >
-        <SignInForm />
-        <SignUpForm />
+        <SignInForm prev={prev} />
+        <SignUpForm prev={prev} />
       </motion.main>
       <Footer />
     </div>

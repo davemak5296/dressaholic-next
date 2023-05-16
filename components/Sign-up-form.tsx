@@ -5,7 +5,11 @@ import { createAuthUserWithEmailAndPw, createUserDocFromAuth, popUpError } from 
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 
-const SignUpForm = () => {
+type SignUpFormProps = {
+  prev: string | false;
+}
+
+const SignUpForm = ({ prev }: SignUpFormProps) => {
   const [ cookies, setCookie ] = useCookies();
   const router = useRouter();
   const [formFields, setFormFields] = useState({
@@ -39,11 +43,21 @@ const SignUpForm = () => {
             path: '/',
             maxAge: 3600
           })
-          alert('You have successfully registered!\n\nWe will bring you back to home page.')
-          router.push('/');
+          alert('You have successfully registered!')
+
+          if (prev) {
+            setCookie('prev', '', {
+              path: '/',
+              maxAge: -1
+            })
+            router.push(prev);
+          } else {
+            router.push('/')
+          }
           setIsLoading(false)
         }
         resetPwFields();
+
       } catch (error: unknown) {
         setIsLoading(false)
         popUpError(error);
