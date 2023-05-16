@@ -32,8 +32,10 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
 
   const signOutHandler: React.MouseEventHandler = () => {
     setCookies('user', '', {
+      path: '/',
       maxAge: -1
     });
+    console.log(cookie['user']);
     router.reload();
     // dispatch(SIGN_OUT_START());
     // dispatch(emptyItemInCart(itemsInCart))
