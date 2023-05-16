@@ -5,6 +5,15 @@ import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
 import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
 import { selectCartCount, selectIsCartOpen } from '@/store/cart/cart.selector';
 
+import { gql, useQuery } from '@apollo/client';
+import { useCookies } from 'react-cookie';
+import ClientOnly from './ClientOnly';
+
+const GET_SUMOFITEM = gql`
+  query GetSumOfItems($uid: String!) {
+    sumOfItems(uid: $uid)
+  }
+`
 const CartIcon = () => {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -15,6 +24,16 @@ const CartIcon = () => {
     e.stopPropagation();
     dispatch(SET_IS_CART_OPEN(!isCartOpen));
   };
+
+  const [ cookies ] = useCookies();
+  const {loading, error, data} = useQuery(GET_SUMOFITEM, {
+    variables: {
+      uid: cookies.user
+    },
+    skip: !cookies.user,
+    pollInterval: 500,
+    fetchPolicy: 'cache-and-network'
+  });
 
   const handleClickOutside = (event: MouseEvent): void => {
     const tgt = event.target as Element;
@@ -38,7 +57,18 @@ const CartIcon = () => {
       className="relative flex h-full w-11 cursor-pointer items-center justify-center"
     >
       <Image src={ShoppingBag} className="h-6 w-6" alt='shopping-bag'/>
-      <span className="absolute text-xs font-bold">{sumOfCartItems}</span>
+      <ClientOnly>
+        <span className="absolute text-xs font-bold">
+          { cookies['user']
+              ? loading
+                ? ''
+                : data?.sumOfItems
+              : '0'
+          }
+          {/* loading ? '': data.sumOfItems} */}
+        </span>
+      </ClientOnly>
+      {/* <span className="absolute text-xs font-bold">{sumOfCartItems}</span> */}
     </div>
   )
 }

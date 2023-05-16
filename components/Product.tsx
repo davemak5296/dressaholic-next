@@ -39,7 +39,6 @@ const Product = ({ product, param }: ProductProps) => {
   const itemsInCart = useSelector(selectCartItems);
   
   const { asPath, push } = useRouter();
-  // console.log(`asPath is ${asPath}`);
   const [ cookies, setCookies ] = useCookies();
 
   const [qtyToAdd, setQtyToAdd] = useState<number | string>(1);
@@ -66,7 +65,7 @@ const Product = ({ product, param }: ProductProps) => {
   const btnClickHandler: MouseEventHandler = () => {
     if (attrsForSelectedColor.stockNum == 0 || qtyToAdd == '') return;  // jump out if no stock or qty box is empty
 
-    if (!cookie['user']) {
+    if (!cookie.user) {
       alert('Please login before shopping!');
       setCookies('prev', asPath, {
         path: '/',
@@ -74,7 +73,6 @@ const Product = ({ product, param }: ProductProps) => {
       })
       push('/auth');
       return;
-      // return
     }
 
     dispatch(SET_IS_CART_OPEN(true));

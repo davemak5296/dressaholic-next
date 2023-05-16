@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import BigMenu from "@/components/Big-menu";
 import Carousel from "@/components/Carousel";
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
-// import { Data } from "./api/graphql";
+import { db } from "@/src/utils/firebase/firebase.utils";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
 
@@ -20,9 +21,40 @@ type HomePageProps = {
   // error: ApolloError | null
 }
 
+type skuType = {
+  sku: string;
+  price: number;
+  quantity: number;
+}
 export const getServerSideProps: GetServerSideProps<HomePageProps>= async ({req}) => {
   const isAuth = req.cookies.user ? true : false;
-  return { props: { isAuth } };
+  console.log(`current user is ${req.cookies.user}`)
+
+  const cartDocRef = doc(db, 'cart', 'OhdsjIrLSlcFrnx4SISffJUcp6q2');
+  // const cartSnapShot = await getDoc(cartDocRef);
+  // const currCart = cartSnapShot.data()?.cart as skuType[];
+
+  // await setDoc(cartDocRef, {
+  //   cart: [
+  //     {
+  //       "sku": "M-JE-001",
+  //       "brand": "Haggar",
+  //       "displayName": "Non Iron Pant",
+  //       "imageUrl": "https://i.ibb.co/yfHjDFL/M-JE-001-tan-thumbnail.jpg",
+  //       "price": 159,
+  //       "color": "tan",
+  //       "size": "sm",
+  //       "qty": 1
+  //     }
+  //   ]
+  // })
+  // console.log(`cart is update!`);
+
+  // const cartDocRef = doc(db, 'cart', 'testuser1');
+  // const cartSnapShot = await getDoc(cartDocRef);
+  // const currCart = cartSnapShot.data()?.cart as skuType[];
+
+
   // const cookie = context.req.cookies;
 
   // const userCookie = context.req.cookies.user;
@@ -30,38 +62,13 @@ export const getServerSideProps: GetServerSideProps<HomePageProps>= async ({req}
   // const data: string = await res.text();
   // const { data, error } = await client.query({
   //   query: gql`
-  //     query GetUsers {
-  //       user {
-  //         id
-  //         name
-  //         email
-  //       }
+  //     query {
+  //       testNull
   //     }
   //   `
   // })
-  // const aError = error instanceof ApolloError ? error : null
   // console.log(`data is ${JSON.stringify(data, null, 2)}`);
-  // console.log(`error is ${JSON.stringify(aError, null, 2)}`);
-
-  // return !userCookie
-  //   ? {
-  //     props: {
-  //       isAuth: false,
-  //       cookie: cookie,
-  //       data: data,
-  //       // error: error as ApolloError
-  //       error: aError
-  //     } 
-  //   }
-  //   : {
-  //     props: {
-  //       isAuth: true,
-  //       cookie: cookie,
-  //       data: data,
-  //       error: aError
-  //       // error: error
-  //     } 
-  //   }
+  return { props: { isAuth } };
 }
 export default function HomePage( { isAuth }: HomePageProps) {
   const { scrollH } = useNavbarHeight();

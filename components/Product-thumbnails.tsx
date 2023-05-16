@@ -23,7 +23,7 @@ const ProductThumbnails = ({ product, active, setActive }: ProductThumbnailsProp
         Object.values(imageUrls[color]).map(
           (imageUrl, index) =>
             imageUrl && (
-              <div className={ `mb-2 last:mb-0 p-2 h-[80px] sm:h-[100px] border-solid ${image == imageUrl ? 'border-4 border-success' : 'border border-base-300'} cursor-pointer transition-all duration-100` }>
+              <div key={index} className={ `mb-2 last:mb-0 p-2 h-[80px] sm:h-[100px] border-solid ${image == imageUrl ? 'border-4 border-success' : 'border border-base-300'} cursor-pointer transition-all duration-100` }>
                 <img
                   className={` ${stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'} mx-auto max-h-full`}
                   key={index}
