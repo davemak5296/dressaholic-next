@@ -62,7 +62,7 @@ const CartIcon = () => {
           { cookies['user']
               ? loading
                 ? ''
-                : data?.sumOfItems
+                : data?.sumOfItems ?? '0'
               : '0'
           }
           {/* loading ? '': data.sumOfItems} */}

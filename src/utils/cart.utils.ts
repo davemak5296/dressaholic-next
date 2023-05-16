@@ -32,3 +32,16 @@ export const addItemToCart = (
 
   return newState;
 };
+export const subtractItemInCart = (cartItems: CartItemType[], itemToSubtract: CartItemType) => {
+  const newState = produce(cartItems, (draft) => {
+    const index = indexInCart(draft, itemToSubtract);
+    draft[index].qty > 1 ? (draft[index].qty -= 1) : draft.splice(index, 1);
+  });
+  return newState;
+};
+export const clearItemInCart = (cartItems: CartItemType[], itemToClear: CartItemType) => {
+  const newState = produce(cartItems, (draft) => {
+    draft.splice(indexInCart(draft, itemToClear), 1);
+  });
+  return newState;
+};

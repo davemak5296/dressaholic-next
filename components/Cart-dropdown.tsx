@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
 import { CartItemFieldNames } from '@/src/utils/apollo.utils';
 
-export const GET_CARTITEM = gql`
+export const GET_CART_ITEM = gql`
   query GetCurrCart($uid: String!) {
     currentCart(uid: $uid) {
       ${CartItemFieldNames}
@@ -22,7 +22,7 @@ const CartDropDown = () => {
   const dispatch = useDispatch();
 
   const [ cookies ] = useCookies();
-  const {loading, error, data} = useQuery(GET_CARTITEM, {
+  const {loading, error, data} = useQuery(GET_CART_ITEM, {
     variables: {
       uid: cookies.user
     },

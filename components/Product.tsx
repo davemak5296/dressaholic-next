@@ -16,7 +16,7 @@ import ProductPageSizeBox from './Product-page-size-box';
 import Breadcrumbs from './Breadcrumbs';
 import StockDisplayAndAdd from './Stock-display-add';
 import ProductThumbnails from './Product-thumbnails';
-import { GET_CARTITEM } from './Cart-dropdown';
+import { GET_CART_ITEM } from './Cart-dropdown';
 import { GET_SUMOFITEM } from './Cart-icon';
 
 export type ActiveStateType = {
@@ -28,7 +28,7 @@ export type ActiveStateType = {
 
 const ADD_ITEM = gql`
   mutation AddItem ($uid: String!, $newItem: CartItemInput!) {
-    addItem (uid: $uid, newItem: $newItem)
+    addItem (uid: $uid, newItem: $newItem, inCart: false)
   }
 `
 
@@ -100,7 +100,7 @@ const Product = ({ product, param }: ProductProps) => {
         }
       },
       refetchQueries: [
-        GET_CARTITEM, GET_SUMOFITEM
+        GET_CART_ITEM, GET_SUMOFITEM
       ]
     })
 

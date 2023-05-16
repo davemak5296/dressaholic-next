@@ -5,7 +5,7 @@ import { UserTypeGQL, CartItemTypeFields } from "@/src/utils/apollo.utils";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/src/utils/firebase/firebase.utils";
 import { CartItemType } from "@/src/types";
-import { addItemToCart } from "@/src/utils/cart.utils";
+import { addItemToCart, clearItemInCart, subtractItemInCart } from "@/src/utils/cart.utils";
 
 const resolvers = {
   Query: {
@@ -21,10 +21,28 @@ const resolvers = {
     },
   },
   Mutation: {
-    addItem: async (_, { uid, newItem }) => {
+    addItem: async (_, { uid, newItem, inCart }) => {
       const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
       const currCartArray = cartSnapShot.data()?.cart as CartItemType[];
-      const newCartArray = addItemToCart(currCartArray, newItem, false);
+      const newCartArray = addItemToCart(currCartArray, newItem, inCart);
+      await setDoc( doc(db, 'cart', uid), {
+        cart: newCartArray
+      })
+      return 'OK'
+    },
+    subtractQty: async (_, {uid, targetItem }) => {
+      const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
+      const currCartArray = cartSnapShot.data()?.cart as CartItemType[];
+      const newCartArray = subtractItemInCart(currCartArray, targetItem );
+      await setDoc( doc(db, 'cart', uid), {
+        cart: newCartArray
+      })
+      return 'OK'
+    },
+    deleteItem: async (_, {uid, targetItem}) => {
+      const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
+      const currCartArray = cartSnapShot.data()?.cart as CartItemType[];
+      const newCartArray = clearItemInCart(currCartArray, targetItem );
       await setDoc( doc(db, 'cart', uid), {
         cart: newCartArray
       })
@@ -46,7 +64,9 @@ const typeDefs = gql`
     sumOfItems (uid: String!): Int
   }
   type Mutation {
-    addItem (uid: String!, newItem: CartItemInput!): String
+    addItem (uid: String!, newItem: CartItemInput!, inCart: Boolean!): String
+    subtractQty (uid: String!, targetItem: CartItemInput! ): String
+    deleteItem (uid: String!, targetItem: CartItemInput!): String
   }
 `;
 

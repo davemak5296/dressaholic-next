@@ -13,13 +13,42 @@ import { CardElement } from '@stripe/react-stripe-js';
 import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+import { gql, useQuery } from '@apollo/client';
+import { GET_CART_ITEM } from '@/components/Cart-dropdown';
+import client, { CartItemFieldNames } from '@/src/utils/apollo.utils';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/src/utils/firebase/firebase.utils';
+import Spinner from '@/components/Spinner';
+import ClientOnly from '@/components/ClientOnly';
 type OrderPageProps = {
   isAuth: boolean;
+  uid: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps<OrderPageProps>= async ({req}) => {
-  const isAuth = req.cookies.user ? true : false;
-  return { props: { isAuth }};
+  const isAuth = req.cookies.user ? true : false; 
+
+  if (isAuth) {
+    const cartDocRef = doc(db, 'cart', req.cookies.user as string);
+    const cartSnapShot = await getDoc(cartDocRef);
+    
+    return !!cartSnapShot.data()?.cart?.length
+      ? { props: { 
+            isAuth: isAuth,
+            uid: req.cookies.user ?? null
+        }}
+      // if no item in cart, redirect to home page
+      : { redirect: {
+            destination: '/',
+            permanent: false
+        }}
+  }
+  return {
+    redirect: {
+      destination: '/',
+      permanent: false
+    }
+  }
 }
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');
@@ -35,7 +64,7 @@ export type InputValType = {
   addressValid: 'initial' | boolean;
   remark: string;
 };
-const OrderPage = ( { isAuth }: OrderPageProps) => {
+const OrderPage = ( { isAuth, uid }: OrderPageProps) => {
   const { scrollH } = useNavbarHeight();
   const itemsInCart = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
@@ -50,6 +79,15 @@ const OrderPage = ( { isAuth }: OrderPageProps) => {
     address: '',
     addressValid: 'initial',
     remark: '',
+  });
+
+  const {loading, error, data} = useQuery(GET_CART_ITEM, {
+    variables: {
+      uid: uid
+    },
+    skip: !uid
+    // pollInterval: 500,
+    // fetchPolicy: 'cache-and-network'
   });
 
   const clickHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -88,9 +126,17 @@ const OrderPage = ( { isAuth }: OrderPageProps) => {
               <div className={colTitleStyles}>Sub</div>
             </div>
             <div className="max-h-[50vh] overflow-y-scroll">
-              {itemsInCart.map((item, index) => (
+            <ClientOnly>
+              { loading
+                  ? <Spinner />
+                  : data?.currentCart?.map((item, index) => (
+                      <CartItem key={index} uid={uid as string} item={item} orderPage={true} />
+                    ))
+              }
+            </ClientOnly>
+              {/* {itemsInCart.map((item, index) => (
                 <CartItem key={index} item={item} orderPage={true} />
-              ))}
+              ))} */}
             </div>
             <div className="mx-4 mt-1 flex justify-between text-2xl">
               <div className="font-normal">TOTAL</div>
