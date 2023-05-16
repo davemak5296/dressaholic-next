@@ -9,7 +9,7 @@ import { gql, useQuery } from '@apollo/client';
 import { useCookies } from 'react-cookie';
 import ClientOnly from './ClientOnly';
 
-const GET_SUMOFITEM = gql`
+export const GET_SUMOFITEM = gql`
   query GetSumOfItems($uid: String!) {
     sumOfItems(uid: $uid)
   }
@@ -31,8 +31,8 @@ const CartIcon = () => {
       uid: cookies.user
     },
     skip: !cookies.user,
-    pollInterval: 500,
-    fetchPolicy: 'cache-and-network'
+    // pollInterval: 500,
+    // fetchPolicy: 'cache-and-network'
   });
 
   const handleClickOutside = (event: MouseEvent): void => {

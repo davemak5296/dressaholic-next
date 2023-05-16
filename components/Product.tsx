@@ -1,19 +1,23 @@
 import { useState, useEffect, ChangeEventHandler, MouseEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useImmer } from 'use-immer';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 import validator from 'validator';
 import { motion } from 'framer-motion';
+import { gql, useMutation } from '@apollo/client';
+
 import { Product, SizeType } from '@/src/types';
-import { addItemToCart } from '@/store/cart/cart.action';
-import { selectCartItems } from '@/store/cart/cart.selector';
+// import { addItemToCart } from '@/store/cart/cart.action';
+// import { selectCartItems } from '@/store/cart/cart.selector';
 import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
 
 import ProductPageSizeBox from './Product-page-size-box';
 import Breadcrumbs from './Breadcrumbs';
 import StockDisplayAndAdd from './Stock-display-add';
 import ProductThumbnails from './Product-thumbnails';
-import { useCookies } from 'react-cookie';
-import { useRouter } from 'next/router';
+import { GET_CARTITEM } from './Cart-dropdown';
+import { GET_SUMOFITEM } from './Cart-icon';
 
 export type ActiveStateType = {
   color: string;
@@ -21,6 +25,12 @@ export type ActiveStateType = {
   image: string;
   stockNum: number;
 };
+
+const ADD_ITEM = gql`
+  mutation AddItem ($uid: String!, $newItem: CartItemInput!) {
+    addItem (uid: $uid, newItem: $newItem)
+  }
+`
 
 const boxStyle =
   'mx-2 text-sm cursor-pointer transition-all duration-[200] border border-solid border-slate-200 px-2 py-1 sm:px-3 sm:py-1 sm:text-base first:ml-0';
@@ -36,10 +46,11 @@ const Product = ({ product, param }: ProductProps) => {
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [ cookie ] = useCookies();
   const dispatch = useDispatch();
-  const itemsInCart = useSelector(selectCartItems);
+  // const itemsInCart = useSelector(selectCartItems);
   
   const { asPath, push } = useRouter();
   const [ cookies, setCookies ] = useCookies();
+  const [ addItem ] = useMutation(ADD_ITEM);
 
   const [qtyToAdd, setQtyToAdd] = useState<number | string>(1);
   const [attrsForSelectedColor, setAttrsForSelectedColor] = useImmer<ActiveStateType>({
@@ -74,24 +85,42 @@ const Product = ({ product, param }: ProductProps) => {
       push('/auth');
       return;
     }
-
-    dispatch(SET_IS_CART_OPEN(true));
-    dispatch(
-      addItemToCart(
-        itemsInCart,
-        {
-          sku,
-          brand,
-          displayName,
+    addItem({
+      variables: {
+        uid: cookies.user,
+        newItem: {
+          sku: sku,
+          brand: brand,
+          displayName: displayName,
           imageUrl: attrsForSelectedColor.image,
-          price,
+          price: price,
           color: attrsForSelectedColor.color,
           size: attrsForSelectedColor.size,
           qty: qtyToAdd as number,
-        },
-        false
-      )
-    );
+        }
+      },
+      refetchQueries: [
+        GET_CARTITEM, GET_SUMOFITEM
+      ]
+    })
+
+    dispatch(SET_IS_CART_OPEN(true));
+    // dispatch(
+    //   addItemToCart(
+    //     itemsInCart,
+    //     {
+    //       sku,
+    //       brand,
+    //       displayName,
+    //       imageUrl: attrsForSelectedColor.image,
+    //       price,
+    //       color: attrsForSelectedColor.color,
+    //       size: attrsForSelectedColor.size,
+    //       qty: qtyToAdd as number,
+    //     },
+    //     false
+    //   )
+    // );
   };
 
   return (
