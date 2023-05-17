@@ -101,6 +101,12 @@ export const getCurrentUser = () => {
   });
 };
 
+export const initialCartForUser = async (uid: UserCredential['user']['uid']) => {
+  const cartDocRef = doc(db, 'cart', uid);
+  await setDoc(cartDocRef, {
+    cart: []
+  });
+}
 const createCollection = <T = DocumentData>(collectionName: string) =>
   collection(db, collectionName) as CollectionReference<T>;
 export const addCollectionAndDocs = async (collectionKey: string, objectsToAdd: Catalog[]) => {

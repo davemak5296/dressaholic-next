@@ -1,7 +1,7 @@
 import {useState, FormEventHandler, ChangeEventHandler, useEffect} from 'react';
 import FormInput from './FormInput/Form-input';
 import Spinner from './Spinner';
-import { createAuthUserWithEmailAndPw, createUserDocFromAuth, popUpError } from '@/src/utils/firebase/firebase.utils';
+import { createAuthUserWithEmailAndPw, createUserDocFromAuth, initialCartForUser, popUpError } from '@/src/utils/firebase/firebase.utils';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 
@@ -39,6 +39,8 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
         const user = await createAuthUserWithEmailAndPw(email, password);
         if (!!user && 'user' in user) {
           await createUserDocFromAuth(user.user, { displayName });
+          await initialCartForUser(user.user.uid);
+
           setCookie('user', user.user.uid, {
             path: '/',
             maxAge: 3600
