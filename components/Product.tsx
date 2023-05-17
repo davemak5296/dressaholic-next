@@ -1,5 +1,5 @@
-import { useState, useEffect, ChangeEventHandler, MouseEventHandler } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, ChangeEventHandler, MouseEventHandler } from 'react';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
@@ -8,8 +8,6 @@ import { motion } from 'framer-motion';
 import { gql, useMutation } from '@apollo/client';
 
 import { Product, SizeType } from '@/src/types';
-// import { addItemToCart } from '@/store/cart/cart.action';
-// import { selectCartItems } from '@/store/cart/cart.selector';
 import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
 
 import ProductPageSizeBox from './Product-page-size-box';
@@ -18,6 +16,7 @@ import StockDisplayAndAdd from './Stock-display-add';
 import ProductThumbnails from './Product-thumbnails';
 import { GET_CART_ITEM } from './Cart-dropdown';
 import { GET_SUMOFITEM } from './Cart-icon';
+import { GET_CART_AND_TOTAL } from 'pages/cart';
 
 export type ActiveStateType = {
   color: string;
@@ -46,7 +45,6 @@ const Product = ({ product, param }: ProductProps) => {
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [ cookie ] = useCookies();
   const dispatch = useDispatch();
-  // const itemsInCart = useSelector(selectCartItems);
   
   const { asPath, push } = useRouter();
   const [ cookies, setCookies ] = useCookies();
@@ -100,27 +98,11 @@ const Product = ({ product, param }: ProductProps) => {
         }
       },
       refetchQueries: [
-        GET_CART_ITEM, GET_SUMOFITEM
+        GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
       ]
     })
 
     dispatch(SET_IS_CART_OPEN(true));
-    // dispatch(
-    //   addItemToCart(
-    //     itemsInCart,
-    //     {
-    //       sku,
-    //       brand,
-    //       displayName,
-    //       imageUrl: attrsForSelectedColor.image,
-    //       price,
-    //       color: attrsForSelectedColor.color,
-    //       size: attrsForSelectedColor.size,
-    //       qty: qtyToAdd as number,
-    //     },
-    //     false
-    //   )
-    // );
   };
 
   return (

@@ -1,19 +1,26 @@
-import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Footer from '@/components/Footer';
-import { selectCartItems, selectCartTotal } from '@/store/cart/cart.selector';
 import CartItem from '@/components/Cart-item';
 import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 import { useCookies } from 'react-cookie';
 import { gql, useQuery } from '@apollo/client';
-import { GET_CART_ITEM } from '@/components/Cart-dropdown';
-import client from '@/src/utils/apollo.utils';
 import ClientOnly from '@/components/ClientOnly';
 import Spinner from '@/components/Spinner';
+import { CartItemFieldNames } from '@/src/utils/apollo.utils';
 
+export const GET_CART_AND_TOTAL = gql`
+  query GetCartAndTotal($uid: String!) {
+    currentCartAndTotal(uid: $uid) {
+      cart {
+        ${CartItemFieldNames}
+      }
+      total
+    }
+  }
+`
 type CartPageProps = {
   isAuth: boolean;
 }
@@ -26,18 +33,15 @@ const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:te
 
 const Cart = ( { isAuth }: CartPageProps ) => {
   const { scrollH } = useNavbarHeight();
-  const itemsInCart = useSelector(selectCartItems);
-  const cartTotal = useSelector(selectCartTotal);
 
   const [ cookies ] = useCookies();
-  const {loading, error, data} = useQuery(GET_CART_ITEM, {
+  const {loading, error, data} = useQuery(GET_CART_AND_TOTAL, {
     variables: {
       uid: cookies.user
     },
     skip: !cookies.user,
-    // pollInterval: 500,
-    // fetchPolicy: 'cache-and-network'
   });
+  console.log(`data is ${!!data?.currentCartAndTotal?.cart.length}`)
 
   return (
     <div className='flex flex-col min-h-screen'>
@@ -61,27 +65,38 @@ const Cart = ( { isAuth }: CartPageProps ) => {
           <div className={colTitleStyles}>Description</div>
         </section>
         <ClientOnly>
-          {
-            cookies.user
-            ? loading
-              ? <Spinner />
-              : !data?.currentCart
-                ? <div className="flex w-full h-[200px] justify-center items-center text-3xl">Your cart is empty, let's go shopping!</div>
-                : data?.currentCart?.map((item, index) => <CartItem uid={cookies.user} key={index} item={item} />)
-            : <div className='flex w-full h-[200px] justify-center items-center text-3xl'>Login to shop!</div>
-          }
+          <>
+            {/* items */}
+            { cookies.user
+              ? loading
+                ? <Spinner />
+                : data?.currentCartAndTotal?.cart?.length > 0
+                  ? data.currentCartAndTotal.cart.map(({__typename, ...otherfields}, index) => <CartItem uid={cookies.user} key={index} item={otherfields} />)
+                  : <div className="flex w-full h-[200px] justify-center items-center text-3xl">Your cart is empty, let's go shopping!</div> 
+              : <div className='flex w-full h-[200px] justify-center items-center text-3xl'>Login to shop!</div>
+            }
+
+            {/* Total */}
+            { cookies.user
+              ? loading || data?.currentCartAndTotal?.total == 0
+                ? null 
+                : <div className='float-right mt-4 text-2xl'>{`Total: ${data?.currentCartAndTotal?.total}`}</div>
+              : null
+            }
+
+            {/* Place order button */}
+            <div className="clear-both"></div>
+            { !data?.currentCartAndTotal?.total ? null : (
+              <Link
+                href="/place-order"
+                className="daisy-btn-primary float-right my-4 px-3 py-2 text-sm uppercase sm:px-5 sm:py-3 lg:text-lg"
+              >
+                Place order
+              </Link>
+            )}
+            <div className="clear-both"></div>
+          </>
         </ClientOnly>
-        <div className="float-right mt-4 text-2xl">{`TOTAL: ${cartTotal}`}</div>
-        <div className="clear-both"></div>
-        {cartTotal !== 0 && (
-          <Link
-            href="/place-order"
-            className="daisy-btn-primary float-right my-4 px-3 py-2 text-sm uppercase sm:px-5 sm:py-3 lg:text-lg"
-          >
-            Place order
-          </Link>
-        )}
-        <div className="clear-both"></div>
       </main>
       <Footer />
     </div>

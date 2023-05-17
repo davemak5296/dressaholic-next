@@ -1,54 +1,35 @@
-import {useState, MouseEventHandler, useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import {useState, MouseEventHandler} from 'react';
 import { useImmer } from 'use-immer';
-import _ from 'lodash';
 import validator from 'validator';
 import clsx from 'clsx';
-import { selectCartItems, selectCartTotal } from '@/store/cart/cart.selector';
 import CartItem from '@/components/Cart-item';
 import OrderFormInput from '@/components/Order-form-input';
 import Footer from '@/components/Footer';
 import PaymentForm from '@/components/Payment-form';
-import { CardElement } from '@stripe/react-stripe-js';
 import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
-import { gql, useQuery } from '@apollo/client';
-import { GET_CART_ITEM } from '@/components/Cart-dropdown';
-import client, { CartItemFieldNames } from '@/src/utils/apollo.utils';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/src/utils/firebase/firebase.utils';
-import Spinner from '@/components/Spinner';
-import ClientOnly from '@/components/ClientOnly';
+import { CartItemType } from '@/src/types';
 type OrderPageProps = {
   isAuth: boolean;
-  uid: string | null;
+  uid: string;
+  cart: CartItemType[];
+  total: number;
 }
 
 export const getServerSideProps: GetServerSideProps<OrderPageProps>= async ({req}) => {
   const isAuth = req.cookies.user ? true : false; 
+  if (!isAuth) return { redirect: { destination: '/', permanent: false } }
 
-  if (isAuth) {
-    const cartDocRef = doc(db, 'cart', req.cookies.user as string);
-    const cartSnapShot = await getDoc(cartDocRef);
-    
-    return !!cartSnapShot.data()?.cart?.length
-      ? { props: { 
-            isAuth: isAuth,
-            uid: req.cookies.user ?? null
-        }}
-      // if no item in cart, redirect to home page
-      : { redirect: {
-            destination: '/',
-            permanent: false
-        }}
-  }
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false
-    }
-  }
+  const uid = req.cookies.user as string;
+  const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
+  const cart = cartSnapShot.data()?.cart as CartItemType[];
+  if (cart?.length == 0) return { redirect: { destination: '/', permanent: false } } 
+
+  const total = cart.reduce( (total, curr) => ( total + curr.qty*curr.price), 0);
+  return { props: { isAuth, uid, cart, total }}
 }
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');
@@ -64,10 +45,8 @@ export type InputValType = {
   addressValid: 'initial' | boolean;
   remark: string;
 };
-const OrderPage = ( { isAuth, uid }: OrderPageProps) => {
+const OrderPage = ( { isAuth, uid, cart, total }: OrderPageProps) => {
   const { scrollH } = useNavbarHeight();
-  const itemsInCart = useSelector(selectCartItems);
-  const cartTotal = useSelector(selectCartTotal);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [inputVal, setInputVal] = useImmer<InputValType>({
     name: '',
@@ -79,15 +58,6 @@ const OrderPage = ( { isAuth, uid }: OrderPageProps) => {
     address: '',
     addressValid: 'initial',
     remark: '',
-  });
-
-  const {loading, error, data} = useQuery(GET_CART_ITEM, {
-    variables: {
-      uid: uid
-    },
-    skip: !uid
-    // pollInterval: 500,
-    // fetchPolicy: 'cache-and-network'
   });
 
   const clickHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -108,7 +78,7 @@ const OrderPage = ( { isAuth, uid }: OrderPageProps) => {
       setShowPaymentForm(false);
     }
   };
-
+  
   return (
     <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
@@ -126,21 +96,13 @@ const OrderPage = ( { isAuth, uid }: OrderPageProps) => {
               <div className={colTitleStyles}>Sub</div>
             </div>
             <div className="max-h-[50vh] overflow-y-scroll">
-            <ClientOnly>
-              { loading
-                  ? <Spinner />
-                  : data?.currentCart?.map((item, index) => (
-                      <CartItem key={index} uid={uid as string} item={item} orderPage={true} />
-                    ))
-              }
-            </ClientOnly>
-              {/* {itemsInCart.map((item, index) => (
-                <CartItem key={index} item={item} orderPage={true} />
-              ))} */}
+              { cart && cart.map((item, index) => (
+                <CartItem key={index} uid={uid} item={item} orderPage={true} />
+              ))}
             </div>
             <div className="mx-4 mt-1 flex justify-between text-2xl">
               <div className="font-normal">TOTAL</div>
-              <div className="mr-8 font-normal lg:mr-2">${cartTotal}</div>
+              <div className="mr-8 font-normal lg:mr-2">${total}</div>
             </div>
           </div>
           <form className="mx-2 mt-4 w-full p-2 lg:mx-0 lg:mt-0 lg:ml-4 lg:w-1/2">

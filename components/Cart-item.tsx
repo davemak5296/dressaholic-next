@@ -1,8 +1,4 @@
-import { MouseEventHandler} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CartItemType } from '@/src/types';
-import { selectCartItems } from '@/store/cart/cart.selector';
-import { addItemToCart, clearItemInCart, subtractItemInCart } from '@/store/cart/cart.action';
 import AddButton from './Add-button';
 import MinusButton from './Minus-button';
 import DeleteButton from './Delete-button';
@@ -11,30 +7,13 @@ import DeleteButton from './Delete-button';
 // when used in /cart, "orderPage" Props is omitted, so Minus, Plus or Cross icon will be rendered
 // when used in /place-order, "orderPage" Props is set to "true", so Minus, Plus or Cross icon will be not rendered. 
 type CartItemProp = {
-  item: CartItemType & { __typename: string};
+  item: CartItemType;
   orderPage?: boolean;
   uid: string
 };
 
 const CartItem = ({ item, orderPage, uid }: CartItemProp) => {
   const { displayName, price, qty, size, color, imageUrl } = item;
-  const dispatch = useDispatch();
-  const itemsInCart = useSelector(selectCartItems);
-
-  const addOne: MouseEventHandler<HTMLOrSVGElement> = (e) => {
-    e.stopPropagation();
-    dispatch(addItemToCart(itemsInCart, item, true));
-  };
-
-  const deductOne: MouseEventHandler<HTMLOrSVGElement> = (e) => {
-    e.stopPropagation();
-    dispatch(subtractItemInCart(itemsInCart, item));
-  };
-
-  const removeItem: MouseEventHandler<HTMLOrSVGElement> = (e) => {
-    e.stopPropagation();
-    dispatch(clearItemInCart(itemsInCart, item));
-  };
 
   return (
     <>
@@ -83,18 +62,12 @@ const CartItem = ({ item, orderPage, uid }: CartItemProp) => {
         )}
         <div className={orderPage ? 'text-sm' : 'text-base'}>{price}</div>
         <div className="flex items-center">
-          {!orderPage &&
-            <MinusButton uid={uid} item={item}/>
-          }
+          {!orderPage && <MinusButton uid={uid} item={item}/> }
           <div className={orderPage ? 'text-sm' : 'text-base'}>&nbsp;{qty}&nbsp;</div>
-          {!orderPage &&
-            <AddButton uid={uid} item={item} />
-          }
+          {!orderPage && <AddButton uid={uid} item={item} /> }
         </div>
         <div className={orderPage ? 'text-sm' : 'text-base'}>{`${qty * price}`}</div>
-        {!orderPage && (
-          <DeleteButton uid={uid} item={item} />
-        )}
+        {!orderPage && ( <DeleteButton uid={uid} item={item} />)}
       </section>
       <hr />
     </>

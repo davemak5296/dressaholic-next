@@ -17,8 +17,17 @@ const resolvers = {
     sumOfItems: async (_, { uid }) => {
       const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
       const currCartArray = cartSnapShot.data()?.cart as CartItemType[];
-      return currCartArray.reduce( (prev, curr) => ( prev + curr.qty), 0)
+      return currCartArray.reduce( (sum, curr) => ( sum + curr.qty), 0)
     },
+    currentCartAndTotal: async (_, { uid }) => {
+      const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
+      const currCartArray = cartSnapShot.data()?.cart as CartItemType[];
+      const total = currCartArray.reduce( (total, curr) => ( total + curr.qty*curr.price), 0);
+      return {
+        cart: currCartArray,
+        total: total as number
+      }
+    }
   },
   Mutation: {
     addItem: async (_, { uid, newItem, inCart }) => {
@@ -56,12 +65,18 @@ const typeDefs = gql`
   type CartItemType {
     ${CartItemTypeFields}
   }
+  type CartItemAndTotalType {
+    cart: [CartItemType]!
+    total: Int!
+  }
   input CartItemInput {
     ${CartItemTypeFields}
   }
   type Query {
     currentCart (uid: String!): [CartItemType]
+    currentCartAndTotal (uid: String!): CartItemAndTotalType
     sumOfItems (uid: String!): Int
+    totalPrice (uid: String!): Int
   }
   type Mutation {
     addItem (uid: String!, newItem: CartItemInput!, inCart: Boolean!): String
