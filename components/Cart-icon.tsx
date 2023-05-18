@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Image from 'next/image';
 import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
 import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
-import { selectCartCount, selectIsCartOpen } from '@/store/cart/cart.selector';
+import { selectIsCartOpen } from '@/store/cart/cart.selector';
 
 import { gql, useQuery } from '@apollo/client';
 import { useCookies } from 'react-cookie';
@@ -18,7 +18,6 @@ const CartIcon = () => {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const isCartOpen = useSelector(selectIsCartOpen);
-  const sumOfCartItems = useSelector(selectCartCount);
 
   const toggleDropDown: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
@@ -31,8 +30,6 @@ const CartIcon = () => {
       uid: cookies.user
     },
     skip: !cookies.user,
-    // pollInterval: 500,
-    // fetchPolicy: 'cache-and-network'
   });
 
   const handleClickOutside = (event: MouseEvent): void => {
@@ -65,10 +62,8 @@ const CartIcon = () => {
                 : data?.sumOfItems ?? '0'
               : '0'
           }
-          {/* loading ? '': data.sumOfItems} */}
         </span>
       </ClientOnly>
-      {/* <span className="absolute text-xs font-bold">{sumOfCartItems}</span> */}
     </div>
   )
 }

@@ -1,18 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useCookies } from 'react-cookie';
-import { SIGN_OUT_START } from '@/store/user/user.reducer';
-import { selectCurrentUser } from '@/store/user/user.selector';
-import { selectCartItems, selectIsCartOpen } from '@/store/cart/cart.selector';
+import { selectIsCartOpen } from '@/store/cart/cart.selector';
 import CartIcon from './Cart-icon'
 import CartDropDown from './Cart-dropdown'
 import Logo from '@/assets/icons-and-logos/letter-d.svg'
 import ShopIcon from '@/assets/icons-and-logos/icon-shop.svg'
 import LoginIcon from '@/assets/icons-and-logos/icon-login.svg'
 import LogoutIcon from '@/assets/icons-and-logos/icon-logout.svg'
-import { emptyItemInCart } from '@/src/store/cart/cart.action';
 
 type NavBarProps = {
   scrollY: number;
@@ -22,11 +19,8 @@ type NavBarProps = {
 const iconStyle = 'mr-3 h-[25px] w-[25px] cursor-pointer md:hidden';
 
 const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
-  const [ cookie, setCookies, removeCookie ] = useCookies();
-  const dispatch = useDispatch();
-  const currUser = useSelector(selectCurrentUser);
+  const [ cookie, setCookies ] = useCookies();
   const isCartOpen = useSelector(selectIsCartOpen);
-  const itemsInCart = useSelector(selectCartItems);
   const router = useRouter();
   const isScrolledOver = scrollY > 36;
 
@@ -37,8 +31,6 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
     });
     console.log(cookie['user']);
     router.reload();
-    // dispatch(SIGN_OUT_START());
-    // dispatch(emptyItemInCart(itemsInCart))
   };
 
   return (
@@ -73,7 +65,6 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
           } w-2/5 items-center justify-around xl:w-1/3`}
         >
           <div className="daisy-dropdown-hover daisy-dropdown">
-            {/* <Link to="/shop"> */}
             <label
               tabIndex={0}
               className="daisy-rounded-btn daisy-btn daisy-btn-ghost hidden text-base text-primary hover:daisy-btn-primary md:inline-flex"
@@ -95,7 +86,6 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
           </div>
           {/* <SignInButton /> */}
           {isAuth ? (
-          // {currUser ? (
             <>
               <button
                 onClick={signOutHandler}
