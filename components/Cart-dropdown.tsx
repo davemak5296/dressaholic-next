@@ -1,19 +1,26 @@
 import { MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { graphql } from '@/src/gql';
 import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
-import { CartItemFieldNames } from '@/src/utils/apollo.utils';
 import { cartOpenAtom } from 'pages/_app';
 import { useAtom } from 'jotai';
 
-export const GET_CART_ITEM = gql`
-  query GetCurrCart($uid: String!) {
+export const GET_CART_ITEM = graphql(`
+  query GetCurrentCart($uid: String!) {
     currentCart(uid: $uid) {
-      ${CartItemFieldNames}
+      sku
+      brand
+      displayName
+      imageUrl
+      price
+      color
+      size
+      qty
     }
   }
-`
+`)
 
 const CartDropDown = () => {
   const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);

@@ -1,0 +1,35 @@
+type CartItemType {
+  sku: String!
+  brand: String!
+  displayName: String!
+  imageUrl: String!
+  price: Int!
+  color: String!
+  size: String!
+  qty: Int!
+}
+type CartItemAndTotalType {
+  cart: [CartItemType]!
+  total: Int!
+}
+input CartItemInput {
+  sku: String!
+  brand: String!
+  displayName: String!
+  imageUrl: String!
+  price: Int!
+  color: String!
+  size: String!
+  qty: Int!
+}
+type Query {
+  currentCart (uid: String!): [CartItemType]!
+  currentCartAndTotal (uid: String!): CartItemAndTotalType!
+  sumOfItems (uid: String!): Int!
+  totalPrice (uid: String!): Int!
+}
+type Mutation {
+  addItem (uid: String!, newItem: CartItemInput!, inCart: Boolean!): String!
+  subtractQty (uid: String!, targetItem: CartItemInput! ): String!
+  deleteItem (uid: String!, targetItem: CartItemInput!): String!
+}

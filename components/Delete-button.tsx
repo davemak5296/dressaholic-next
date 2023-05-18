@@ -1,16 +1,18 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Image from "next/image";
+import { graphql } from '@/src/gql';
 import CrossSign from '@/assets/icons-and-logos/circle-xmark-solid.svg';
 import { GET_CART_ITEM } from "./Cart-dropdown";
 import { GET_SUMOFITEM } from "./Cart-icon";
 import { CartItemType } from "@/src/types";
 import { GET_CART_AND_TOTAL } from "pages/cart";
 
-const DELETE_ITEM = gql`
+const DELETE_ITEM = graphql(`
   mutation DeleteItem ($uid: String!, $targetItem: CartItemInput!) {
     deleteItem (uid: $uid, targetItem: $targetItem)
   }
-`
+`)
+
 type DelButtonProps = {
   uid: string;
   item: CartItemType;

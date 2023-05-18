@@ -1,17 +1,17 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Image from "next/image";
+import { graphql } from '@/src/gql';
 import MinusSign from '@/assets/icons-and-logos/circle-minus-solid.svg';
-import {  } from "./Product";
 import { GET_CART_ITEM } from "./Cart-dropdown";
 import { GET_SUMOFITEM } from "./Cart-icon";
 import { CartItemType } from "@/src/types";
 import { GET_CART_AND_TOTAL } from "pages/cart";
 
-const SUBTRACT_QTY = gql`
+const SUBTRACT_QTY = graphql(`
   mutation SubtractItem ($uid: String!, $targetItem: CartItemInput!) {
     subtractQty (uid: $uid, targetItem: $targetItem)
   }
-`
+`)
 type MinusButtonProps = {
   uid: string;
   item: CartItemType;

@@ -1,16 +1,19 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Image from "next/image";
+
+import { graphql } from '@/src/gql';
 import PlusSign from '@/assets/icons-and-logos/circle-plus-solid.svg';
 import { GET_CART_ITEM } from "./Cart-dropdown";
 import { GET_SUMOFITEM } from "./Cart-icon";
 import { CartItemType } from "@/src/types";
 import { GET_CART_AND_TOTAL } from "pages/cart";
 
-const ADD_ITEM = gql`
+const ADD_ITEM = graphql(`
   mutation AddItem ($uid: String!, $newItem: CartItemInput!) {
     addItem (uid: $uid, newItem: $newItem, inCart: true)
   }
-`
+`)
+
 type AddButtonProps = {
   uid: string;
   item: CartItemType;

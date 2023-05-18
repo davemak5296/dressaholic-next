@@ -6,21 +6,28 @@ import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 import { useCookies } from 'react-cookie';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { graphql } from '@/src/gql';
 import ClientOnly from '@/components/ClientOnly';
 import Spinner from '@/components/Spinner';
-import { CartItemFieldNames } from '@/src/utils/apollo.utils';
 
-export const GET_CART_AND_TOTAL = gql`
-  query GetCartAndTotal($uid: String!) {
+export const GET_CART_AND_TOTAL = graphql(`
+  query GetCurrentCartAndTotal($uid: String!) {
     currentCartAndTotal(uid: $uid) {
       cart {
-        ${CartItemFieldNames}
+        sku
+        brand
+        displayName
+        imageUrl
+        price
+        color
+        size
+        qty
       }
       total
     }
   }
-`
+`)
 type CartPageProps = {
   isAuth: boolean;
 }
@@ -69,7 +76,7 @@ const Cart = ( { isAuth }: CartPageProps ) => {
             { cookies.user
               ? loading
                 ? <Spinner />
-                : data?.currentCartAndTotal?.cart?.length > 0
+                : data && data?.currentCartAndTotal?.cart?.length > 0
                   ? data.currentCartAndTotal.cart.map(({__typename, ...otherfields}, index) => <CartItem uid={cookies.user} key={index} item={otherfields} />)
                   : <div className="flex w-full h-[200px] justify-center items-center text-3xl">Your cart is empty, let's go shopping!</div> 
               : <div className='flex w-full h-[200px] justify-center items-center text-3xl'>Login to shop!</div>

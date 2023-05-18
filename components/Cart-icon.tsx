@@ -1,18 +1,19 @@
 import { MouseEventHandler, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useCookies } from 'react-cookie';
 import { useAtom } from 'jotai';
 
+import { graphql } from '@/src/gql';
 import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
 import ClientOnly from './ClientOnly';
 import { cartOpenAtom } from 'pages/_app';
 
-export const GET_SUMOFITEM = gql`
+export const GET_SUMOFITEM = graphql(`
   query GetSumOfItems($uid: String!) {
     sumOfItems(uid: $uid)
   }
-`
+`)
 const CartIcon = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);

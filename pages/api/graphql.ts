@@ -6,8 +6,12 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/src/utils/firebase/firebase.utils";
 import { CartItemType } from "@/src/types";
 import { addItemToCart, clearItemInCart, subtractItemInCart } from "@/src/utils/cart.utils";
+import { Resolvers } from "resolvers-types";
+import { readFileSync } from "fs";
 
-const resolvers = {
+const typeDefs = readFileSync('./src/gql/schema.graphql', 'utf8');
+
+const resolvers: Resolvers = {
   Query: {
     currentCart: async (_, { uid }) => {
       const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
@@ -59,31 +63,30 @@ const resolvers = {
     }
   }
 }
-
-const typeDefs = gql`
-  ${UserTypeGQL}
-  type CartItemType {
-    ${CartItemTypeFields}
-  }
-  type CartItemAndTotalType {
-    cart: [CartItemType]!
-    total: Int!
-  }
-  input CartItemInput {
-    ${CartItemTypeFields}
-  }
-  type Query {
-    currentCart (uid: String!): [CartItemType]
-    currentCartAndTotal (uid: String!): CartItemAndTotalType
-    sumOfItems (uid: String!): Int
-    totalPrice (uid: String!): Int
-  }
-  type Mutation {
-    addItem (uid: String!, newItem: CartItemInput!, inCart: Boolean!): String
-    subtractQty (uid: String!, targetItem: CartItemInput! ): String
-    deleteItem (uid: String!, targetItem: CartItemInput!): String
-  }
-`;
+// const typeDefs = gql`
+//   ${UserTypeGQL}
+//   type CartItemType {
+//     ${CartItemTypeFields}
+//   }
+//   type CartItemAndTotalType {
+//     cart: [CartItemType]!
+//     total: Int!
+//   }
+//   input CartItemInput {
+//     ${CartItemTypeFields}
+//   }
+//   type Query {
+//     currentCart (uid: String!): [CartItemType]
+//     currentCartAndTotal (uid: String!): CartItemAndTotalType
+//     sumOfItems (uid: String!): Int
+//     totalPrice (uid: String!): Int
+//   }
+//   type Mutation {
+//     addItem (uid: String!, newItem: CartItemInput!, inCart: Boolean!): String
+//     subtractQty (uid: String!, targetItem: CartItemInput! ): String
+//     deleteItem (uid: String!, targetItem: CartItemInput!): String
+//   }
+// `;
 
 const server = new ApolloServer({
   resolvers,
