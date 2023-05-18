@@ -41,7 +41,6 @@ const Cart = ( { isAuth }: CartPageProps ) => {
     },
     skip: !cookies.user,
   });
-  console.log(`data is ${!!data?.currentCartAndTotal?.cart.length}`)
 
   return (
     <div className='flex flex-col min-h-screen'>

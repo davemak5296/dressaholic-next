@@ -1,15 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import { useCookies } from 'react-cookie';
-import { selectIsCartOpen } from '@/store/cart/cart.selector';
 import CartIcon from './Cart-icon'
 import CartDropDown from './Cart-dropdown'
 import Logo from '@/assets/icons-and-logos/letter-d.svg'
 import ShopIcon from '@/assets/icons-and-logos/icon-shop.svg'
 import LoginIcon from '@/assets/icons-and-logos/icon-login.svg'
 import LogoutIcon from '@/assets/icons-and-logos/icon-logout.svg'
+import { useAtom } from 'jotai';
+import { cartOpenAtom } from 'pages/_app';
 
 type NavBarProps = {
   scrollY: number;
@@ -19,8 +19,8 @@ type NavBarProps = {
 const iconStyle = 'mr-3 h-[25px] w-[25px] cursor-pointer md:hidden';
 
 const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
+  const [isCartOpen] = useAtom(cartOpenAtom);
   const [ cookie, setCookies ] = useCookies();
-  const isCartOpen = useSelector(selectIsCartOpen);
   const router = useRouter();
   const isScrolledOver = scrollY > 36;
 
@@ -29,7 +29,6 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
       path: '/',
       maxAge: -1
     });
-    console.log(cookie['user']);
     router.reload();
   };
 

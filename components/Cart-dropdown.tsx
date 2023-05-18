@@ -1,11 +1,11 @@
 import { MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
 import { gql, useQuery } from '@apollo/client';
 import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
 import { CartItemFieldNames } from '@/src/utils/apollo.utils';
+import { cartOpenAtom } from 'pages/_app';
+import { useAtom } from 'jotai';
 
 export const GET_CART_ITEM = gql`
   query GetCurrCart($uid: String!) {
@@ -16,8 +16,8 @@ export const GET_CART_ITEM = gql`
 `
 
 const CartDropDown = () => {
+  const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const [ cookies ] = useCookies();
   const {loading, error, data} = useQuery(GET_CART_ITEM, {
@@ -29,10 +29,8 @@ const CartDropDown = () => {
 
   const navHandler: MouseEventHandler = () => {
     router.push('/cart');
-    dispatch(SET_IS_CART_OPEN(false));
+    setIsCartOpen(false);
   };
-
-  console.log('data from useQuery is \n' + JSON.stringify(data, null, 2))
 
   return (
     <div className="absolute top-[64px] right-[3%] z-[1] flex w-60 flex-col border border-solid border-black bg-white p-2 lg:top-[72px]">

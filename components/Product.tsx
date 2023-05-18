@@ -1,15 +1,13 @@
 import { useState, ChangeEventHandler, MouseEventHandler } from 'react';
-import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import validator from 'validator';
 import { motion } from 'framer-motion';
 import { gql, useMutation } from '@apollo/client';
+import { useAtom } from 'jotai';
 
 import { Product, SizeType } from '@/src/types';
-import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
-
 import ProductPageSizeBox from './Product-page-size-box';
 import Breadcrumbs from './Breadcrumbs';
 import StockDisplayAndAdd from './Stock-display-add';
@@ -17,6 +15,7 @@ import ProductThumbnails from './Product-thumbnails';
 import { GET_CART_ITEM } from './Cart-dropdown';
 import { GET_SUMOFITEM } from './Cart-icon';
 import { GET_CART_AND_TOTAL } from 'pages/cart';
+import { cartOpenAtom } from 'pages/_app';
 
 export type ActiveStateType = {
   color: string;
@@ -43,8 +42,8 @@ type ProductProps = {
 
 const Product = ({ product, param }: ProductProps) => {
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
+  const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
   const [ cookie ] = useCookies();
-  const dispatch = useDispatch();
   
   const { asPath, push } = useRouter();
   const [ cookies, setCookies ] = useCookies();
@@ -102,7 +101,7 @@ const Product = ({ product, param }: ProductProps) => {
       ]
     })
 
-    dispatch(SET_IS_CART_OPEN(true));
+    setIsCartOpen(true);
   };
 
   return (

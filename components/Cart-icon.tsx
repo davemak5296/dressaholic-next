@@ -1,13 +1,12 @@
 import { MouseEventHandler, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import Image from 'next/image';
-import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
-import { SET_IS_CART_OPEN } from '@/store/cart/cart.reducer';
-import { selectIsCartOpen } from '@/store/cart/cart.selector';
-
 import { gql, useQuery } from '@apollo/client';
 import { useCookies } from 'react-cookie';
+import { useAtom } from 'jotai';
+
+import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
 import ClientOnly from './ClientOnly';
+import { cartOpenAtom } from 'pages/_app';
 
 export const GET_SUMOFITEM = gql`
   query GetSumOfItems($uid: String!) {
@@ -16,12 +15,11 @@ export const GET_SUMOFITEM = gql`
 `
 const CartIcon = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
-  const isCartOpen = useSelector(selectIsCartOpen);
+  const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
 
   const toggleDropDown: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
-    dispatch(SET_IS_CART_OPEN(!isCartOpen));
+    setIsCartOpen(!isCartOpen);
   };
 
   const [ cookies ] = useCookies();
@@ -36,7 +34,7 @@ const CartIcon = () => {
     const tgt = event.target as Element;
     if (tgt.id == 'checkOutBtn') return;
     if (!ref.current?.contains(event.target as Node)) {
-      dispatch(SET_IS_CART_OPEN(false));
+      setIsCartOpen(false);
     }
   };
 
