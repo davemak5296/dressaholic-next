@@ -1,38 +1,34 @@
 import { useState, FormEventHandler } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { PaymentIntentResult, StripeCardElement } from '@stripe/stripe-js';
-import { useSelector } from 'react-redux';
-import { selectCartTotal } from '@/store/cart/cart.selector';
-import { selectCurrentUser } from '@/store/user/user.selector';
 import Spinner from './Spinner';
 import { Updater } from 'use-immer';
 import { InputValType } from 'pages/place-order';
+import { useRouter } from 'next/router';
 
 type PaymentFormProp = {
+  amount: number;
+  displayName: string;
   setValue: Updater<InputValType>;
 };
 
-const PaymentForm = ({ setValue }: PaymentFormProp) => {
+const PaymentForm = ({ amount, displayName, setValue }: PaymentFormProp) => {
   const stripe = useStripe();
   const elements = useElements();
-  const amount = useSelector(selectCartTotal);
-  const currUser = useSelector(selectCurrentUser);
+  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const paymentHandler: FormEventHandler = async (e) => {
     e.preventDefault();
-
     if (!stripe || !elements) return;
-
     if (amount === 0) {
       alert('Your cart is empty!');
       return;
     }
-
     setIsProcessing(true);
 
     const { paymentIntent }: PaymentIntentResult = await fetch(
-      '/.netlify/functions/create-payment-intent',
+      '/api/payment',
       {
         method: 'post',
         headers: {
@@ -48,11 +44,10 @@ const PaymentForm = ({ setValue }: PaymentFormProp) => {
       payment_method: {
         card: elements.getElement(CardElement) as StripeCardElement,
         billing_details: {
-          name: currUser ? (currUser.displayName as string) : 'Guest',
+          name: displayName
         },
       },
     });
-
     setIsProcessing(false);
 
     if (paymentResult.error) {
@@ -60,6 +55,7 @@ const PaymentForm = ({ setValue }: PaymentFormProp) => {
     } else {
       if (paymentResult.paymentIntent?.status === 'succeeded') {
         alert('Payment succeed!');
+        router.push('/');
       }
     }
   };

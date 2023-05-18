@@ -15,6 +15,7 @@ import { CartItemType } from '@/src/types';
 type OrderPageProps = {
   isAuth: boolean;
   uid: string;
+  displayName: string;
   cart: CartItemType[];
   total: number;
 }
@@ -24,12 +25,15 @@ export const getServerSideProps: GetServerSideProps<OrderPageProps>= async ({req
   if (!isAuth) return { redirect: { destination: '/', permanent: false } }
 
   const uid = req.cookies.user as string;
+  const userSnapShot = await getDoc( doc(db, 'users', uid));
+  const displayName = userSnapShot.data()?.displayName as string;
+
   const cartSnapShot = await getDoc( doc( db, 'cart', uid ) );
   const cart = cartSnapShot.data()?.cart as CartItemType[];
   if (cart?.length == 0) return { redirect: { destination: '/', permanent: false } } 
 
   const total = cart.reduce( (total, curr) => ( total + curr.qty*curr.price), 0);
-  return { props: { isAuth, uid, cart, total }}
+  return { props: { isAuth, uid, displayName, cart, total }}
 }
 
 const colTitleStyles = clsx('bg-secondary text-secondary-content text-xs sm:text-sm xl:text-base');
@@ -45,7 +49,7 @@ export type InputValType = {
   addressValid: 'initial' | boolean;
   remark: string;
 };
-const OrderPage = ( { isAuth, uid, cart, total }: OrderPageProps) => {
+const OrderPage = ( { isAuth, uid, displayName, cart, total }: OrderPageProps) => {
   const { scrollH } = useNavbarHeight();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [inputVal, setInputVal] = useImmer<InputValType>({
@@ -180,7 +184,7 @@ const OrderPage = ( { isAuth, uid, cart, total }: OrderPageProps) => {
               Confirm
             </button>
           </form>
-          {showPaymentForm && <PaymentForm setValue={setInputVal} />}
+          {showPaymentForm && <PaymentForm amount={total} displayName={displayName} setValue={setInputVal} />}
         </section>
       </main>
       <Footer />
