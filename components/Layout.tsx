@@ -1,6 +1,6 @@
 import Meta from "./Meta";
 type LayoutProps = {
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => (
