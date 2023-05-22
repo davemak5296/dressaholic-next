@@ -13,7 +13,6 @@ type ProductPageProps = {
 
 export const getServerSideProps: GetServerSideProps<ProductPageProps>= async ({req, params}) => {
   const isAuth = req.cookies.user ? true : false;
-  console.log(req.cookies.user);
   const paramCat = params?.category as string;
   const paramSku = params?.skuInUrl as string;
 

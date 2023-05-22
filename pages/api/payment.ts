@@ -7,13 +7,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
   try {
     const {amount} = req.body;
-    console.log('1')
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: 'usd',
       payment_method_types: ['card']
     });
-    console.log(paymentIntent)
     
     return res.status(200).json({paymentIntent, amount})
 

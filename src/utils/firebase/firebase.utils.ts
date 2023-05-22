@@ -33,7 +33,7 @@ import { Catalog, OnAuthNextFnType } from '../../types';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCyRnzfQJHDNLD0BZM1MVftczEGWt2Y3fY',
+  apiKey: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
   authDomain: 'ztm-crwn-2d3cc.firebaseapp.com',
   projectId: 'ztm-crwn-2d3cc',
   storageBucket: 'ztm-crwn-2d3cc.appspot.com',
@@ -46,8 +46,8 @@ const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
-export const db = getFirestore();
-export const auth = getAuth();
+export const db = getFirestore(firebaseApp);
+export const auth = getAuth(firebaseApp);
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 export const createUserDocFromAuth = async (
