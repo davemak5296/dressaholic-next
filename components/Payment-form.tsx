@@ -5,6 +5,7 @@ import Spinner from './Spinner';
 import { Updater } from 'use-immer';
 import { InputValType } from 'pages/place-order';
 import { useRouter } from 'next/router';
+import { server } from 'config';
 
 type PaymentFormProp = {
   amount: number;
@@ -28,7 +29,7 @@ const PaymentForm = ({ amount, displayName, setValue }: PaymentFormProp) => {
     setIsProcessing(true);
 
     const { paymentIntent }: PaymentIntentResult = await fetch(
-      '/api/payment',
+      `${server}/api/payment`,
       {
         method: 'post',
         headers: {
