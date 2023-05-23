@@ -181,6 +181,17 @@ const Product = ({ product, param }: ProductProps) => {
                       });
                       setQtyToAdd(1);
                     }}
+                    onKeyDown={ e => {
+                      if (e.key === 'Enter') {
+                        setAttrsForSelectedColor((draft) => {
+                          draft.color = color;
+                          draft.image = imageUrls[color]['thumbnail'];
+                          draft.stockNum = stocks[color][draft.size];
+                        });
+                        setQtyToAdd(1);
+                      }
+                    }}
+                    tabIndex={0}
                   >
                     {color}
                   </li>

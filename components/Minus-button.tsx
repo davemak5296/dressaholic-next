@@ -20,14 +20,34 @@ type MinusButtonProps = {
 const MinusButton = ({uid, item}: MinusButtonProps) => {
   const [ subtract ] = useMutation(SUBTRACT_QTY);
 
-  return <Image src={MinusSign} onClick={() => subtract({
-    variables: {
-      uid: uid,
-      targetItem: item
-    },
-    refetchQueries: [
-      GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
-    ]
-  })} className='ml-1 h-4 w-4 cursor-pointer' alt='plus-sign' />
+  return (
+    <Image
+      src={MinusSign}
+      onClick={() => subtract({
+        variables: {
+          uid: uid,
+          targetItem: item
+        },
+        refetchQueries: [
+          GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+        ]
+      })}
+      onKeyDown={e => {
+        if (e.key === 'Enter') { 
+          subtract({
+            variables: {
+              uid: uid,
+              targetItem: item
+            },
+            refetchQueries: [
+              GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+            ]
+          })
+        }
+      }}
+      className='ml-1 h-4 w-4 cursor-pointer' alt='plus-sign'
+      tabIndex={0}
+    />
+  )
 }
 export default MinusButton;

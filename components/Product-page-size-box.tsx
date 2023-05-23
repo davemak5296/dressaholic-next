@@ -32,6 +32,16 @@ const ProductPageSizeBox = ({
         });
         setQtyToAdd(1);
       }}
+      onKeyDown={e => {
+        if (e.key === 'Enter') {
+          setActive((draft) => {
+            draft.size = sizeName;
+            draft.stockNum = stocks[draft.color][sizeName];
+          });
+          setQtyToAdd(1);
+        }
+      }}
+      tabIndex={0}
     >
       {sizeName}
     </li>

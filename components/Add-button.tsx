@@ -22,14 +22,35 @@ type AddButtonProps = {
 const AddButton = ({uid, item}: AddButtonProps) => {
   const [ addQty ] = useMutation(ADD_ITEM);
 
-  return <Image src={PlusSign} onClick={() => addQty({
-    variables: {
-      uid: uid,
-      newItem: item
-    },
-    refetchQueries: [
-      GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
-    ]
-  })} className='ml-1 h-4 w-4 cursor-pointer' alt='plus-sign' />
+  return (
+  <Image
+    src={PlusSign}
+    onClick={() => addQty({
+      variables: {
+        uid: uid,
+        newItem: item
+      },
+      refetchQueries: [
+        GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+      ]
+    })}
+    onKeyDown={e => {
+      if (e.key === 'Enter') {
+        addQty({
+          variables: {
+            uid: uid,
+            newItem: item
+          },
+          refetchQueries: [
+            GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+          ]
+        })
+      }
+    }}
+    className='ml-1 h-4 w-4 cursor-pointer'
+    alt='plus-sign'
+    tabIndex={0}
+  />
+  )
 }
 export default AddButton;

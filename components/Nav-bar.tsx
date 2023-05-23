@@ -53,9 +53,9 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
               isScrolledOver
                 ? 'text-sm lg:text-lg'
                 : 'p-1 text-lg sm:pl-3 sm:text-2xl lg:text-[28px]'
-            } font-bold text-primary`}
+            } font-bold text-primary `}
           >
-            <Link href="/">Dressaholic</Link>
+            <Link href="/" tabIndex={0}>Dressaholic</Link>
           </div>
         </section>
         <section
@@ -70,10 +70,10 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
             >
               Shop
             </label>
-            <Image src={ShopIcon} className={iconStyle} alt='shop-icon'/>
+            <Image src={ShopIcon} className={iconStyle} alt='shop-icon' tabIndex={0}/>
             {/* </Link> */}
             <div className="daisy-dropdown-content daisy-menu">
-              <ul tabIndex={0} className="rounded-box mt-4 w-52 bg-base-100 p-2 shadow">
+              <ul className="rounded-box mt-4 w-52 bg-base-100 p-2 shadow">
                 <li>
                   <Link href="/shop/men">Men</Link>
                 </li>
@@ -89,20 +89,24 @@ const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
               <button
                 onClick={signOutHandler}
                 className="daisy-rounded-btn daisy-btn daisy-btn-ghost hidden text-base text-warning-content hover:daisy-btn-warning hover:text-warning-content md:inline-flex"
+                aria-label="click to sign out"
+                tabIndex={0}
               >
                 sign out
               </button>
-              <Image src={LogoutIcon} onClick={signOutHandler} className={iconStyle} alt='logout-icon'/>
+              <Image src={LogoutIcon} onClick={signOutHandler} className={iconStyle} alt='logout-icon' tabIndex={0}/>
             </>
           ) : (
             <>
               <Link
                 href="/auth"
                 className="daisy-rounded-btn daisy-btn daisy-btn-ghost hidden text-base text-info-content hover:daisy-btn-info hover:text-info-content md:inline-flex"
+                aria-label="click to sign in"
+                tabIndex={0}
               >
                 sign in
               </Link>
-              <Image src={LoginIcon} onClick={() => router.push('/auth')} className={iconStyle} alt='login-icon'/>
+              <Image src={LoginIcon} onClick={() => router.push('/auth')} className={iconStyle} alt='login-icon' tabIndex={0}/>
             </>
           )}
           <CartIcon />

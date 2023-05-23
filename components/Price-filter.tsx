@@ -20,8 +20,15 @@ const PriceFilter = ({ min, max, setMin, setMax }: PriceFilterProps) => {
   };
 
   return (
-    <div className="daisy-collapse-arrow daisy-collapse border-b border-base-300 bg-base-100">
-      <input type="checkbox" />
+    <div
+      className="daisy-collapse-arrow daisy-collapse border-b border-base-300 bg-base-100"
+      onKeyDown={ e => { if (e.key === 'Tab') {
+        let input = document.getElementById('price-filter-toggle') as HTMLInputElement;
+        input.checked = true;
+      }}}
+      tabIndex={0}
+    >
+      <input id="price-filter-toggle" type="checkbox" />
       <div className="daisy-collapse-title text-base">Price</div>
       <div className="daisy-collapse-content text-sm font-light">
         <div className="flex w-1/2 items-center justify-evenly sm:block sm:w-full lg:flex">
@@ -53,6 +60,13 @@ const PriceFilter = ({ min, max, setMin, setMax }: PriceFilterProps) => {
             setMin(0);
             setMax(0);
           }}
+          onKeyDown={ e => {
+            if (e.key === 'Enter') {
+              setMin(0);
+              setMax(0);
+            }
+          }}
+          tabIndex={0}
         >
           clear
         </div>

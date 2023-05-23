@@ -7,7 +7,7 @@ export type DirectoryItemProps = {
 const DirectoryItem = ({ item: { title, imageUrl} }: DirectoryItemProps) => {
 
   return (
-    <Link href={`/shop/${title.name}`}>
+    <Link href={`/shop/${title.name}`} tabIndex={0}>
       <img className="max-w-full" src={imageUrl} alt="" />
       <div className="mt-2 flex justify-center text-lg">{title.displayName}</div>
     </Link>

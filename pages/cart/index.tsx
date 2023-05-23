@@ -96,6 +96,7 @@ const Cart = ( { isAuth }: CartPageProps ) => {
               <Link
                 href="/place-order"
                 className="daisy-btn-primary float-right my-4 px-3 py-2 text-sm uppercase sm:px-5 sm:py-3 lg:text-lg"
+                tabIndex={0}
               >
                 Place order
               </Link>

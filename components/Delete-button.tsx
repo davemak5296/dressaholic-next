@@ -21,14 +21,35 @@ type DelButtonProps = {
 const DeleteButton = ({uid, item}: DelButtonProps) => {
   const [ delItem ] = useMutation(DELETE_ITEM);
 
-  return <Image src={CrossSign} onClick={() => delItem({
-    variables: {
-      uid: uid,
-      targetItem: item
-    },
-    refetchQueries: [
-      GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
-    ]
-  })} className='ml-1 h-4 w-4 cursor-pointer' alt='plus-sign' />
+  return (
+  <Image
+    src={CrossSign}
+    onClick={() => delItem({
+      variables: {
+        uid: uid,
+        targetItem: item
+      },
+      refetchQueries: [
+        GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+      ]
+    })}
+    onKeyDown={e => {
+      if (e.key === 'Enter') {
+        delItem({
+          variables: {
+            uid: uid,
+            targetItem: item
+          },
+          refetchQueries: [
+            GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+          ]
+        })
+      }
+    }}
+    className='ml-1 h-4 w-4 cursor-pointer'
+    alt='plus-sign'
+    tabIndex={0}
+  />
+  )
 }
 export default DeleteButton;

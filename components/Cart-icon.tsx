@@ -50,7 +50,9 @@ const CartIcon = () => {
     <div
       ref={ref}
       onClick={toggleDropDown}
+      onKeyDown={ e => e.key === "Enter" && setIsCartOpen(!isCartOpen)}
       className="relative flex h-full w-11 cursor-pointer items-center justify-center"
+      tabIndex={0}
     >
       <Image src={ShoppingBag} className="h-6 w-6" alt='shopping-bag'/>
       <ClientOnly>
