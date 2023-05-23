@@ -1,15 +1,11 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import {
   getAuth,
-  signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
   UserCredential,
-  // User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -22,14 +18,8 @@ import {
   DocumentData,
   query,
   getDocs,
-  // collection,
-  // writeBatch,
-  // query,
-  // getDocs,
-  // DocumentData,
-  // CollectionReference,
 } from 'firebase/firestore';
-import { Catalog, OnAuthNextFnType } from '../types';
+import { Catalog } from '../types';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -49,7 +39,6 @@ googleProvider.setCustomParameters({
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 export const createUserDocFromAuth = async (
   userAuth: UserCredential['user'],
   additionalInfo: object = {}
@@ -85,21 +74,6 @@ export const signInAuthUserWithEmailAndPw = async (email: string, pw: string) =>
   if (!email || !pw) return;
   return signInWithEmailAndPassword(auth, email, pw);
 };
-export const signOutUser = async () => signOut(auth);
-export const onAuthStateChangedListener = (nextFn: OnAuthNextFnType) =>
-  onAuthStateChanged(auth, nextFn);
-export const getCurrentUser = () => {
-  return new Promise((res, rej) => {
-    const unsub = onAuthStateChanged(
-      auth,
-      (userAuth) => {
-        unsub();
-        res(userAuth);
-      },
-      rej
-    );
-  });
-};
 
 export const initialCartForUser = async (uid: UserCredential['user']['uid']) => {
   const cartDocRef = doc(db, 'cart', uid);
@@ -107,6 +81,7 @@ export const initialCartForUser = async (uid: UserCredential['user']['uid']) => 
     cart: []
   });
 }
+
 const createCollection = <T = DocumentData>(collectionName: string) =>
   collection(db, collectionName) as CollectionReference<T>;
 export const addCollectionAndDocs = async (collectionKey: string, objectsToAdd: Catalog[]) => {
@@ -122,6 +97,7 @@ export const addCollectionAndDocs = async (collectionKey: string, objectsToAdd: 
   await batch.commit();
   console.log('done');
 };
+
 export const getCategoriesAndDocs = async () => {
   const categoriesRef = createCollection<Catalog>('dressaholic-products');
   const q = query(categoriesRef);
