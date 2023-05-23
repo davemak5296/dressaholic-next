@@ -8,7 +8,7 @@ import Home from './pages/home';
 import Cart from './pages/cart';
 import Shop from './pages/shop';
 import Authentication from './pages/authentication';
-import { addCollectionAndDocs } from './utils/firebase/firebase.utils';
+import { addCollectionAndDocs } from './utils/firebase.utils';
 import { catalogs } from './data/toFirebase';
 import { SET_CATEGORIES } from './store/category/categories.reducer';
 import OrderPage from './pages/order-page';

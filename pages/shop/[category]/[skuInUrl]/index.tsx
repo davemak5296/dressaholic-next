@@ -2,7 +2,7 @@ import Product from "@/components/Product";
 import { GetServerSideProps } from "next";
 import NavBar from "@/components/Nav-bar";
 import useNavbarHeight from "@/src/hooks/useNavbarHeight";
-import { getCategoriesAndDocs } from "@/src/utils/firebase/firebase.utils";
+import { getCategoriesAndDocs } from "@/src/utils/firebase.utils";
 import Custom404 from "pages/404";
 import Footer from "@/components/Footer";
 type ProductPageProps = {

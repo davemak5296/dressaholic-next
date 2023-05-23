@@ -29,7 +29,7 @@ import {
   // DocumentData,
   // CollectionReference,
 } from 'firebase/firestore';
-import { Catalog, OnAuthNextFnType } from '../../types';
+import { Catalog, OnAuthNextFnType } from '../types';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

@@ -1,7 +1,7 @@
 import {useState, FormEventHandler, ChangeEventHandler, useEffect} from 'react';
 import FormInput from './FormInput/Form-input';
 import Spinner from './Spinner';
-import { createAuthUserWithEmailAndPw, createUserDocFromAuth, initialCartForUser, popUpError } from '@/src/utils/firebase/firebase.utils';
+import { createAuthUserWithEmailAndPw, createUserDocFromAuth, initialCartForUser, popUpError } from '@/src/utils/firebase.utils';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 

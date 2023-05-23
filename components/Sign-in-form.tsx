@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import FormInput from '@/components/FormInput/Form-input';
 import Spinner from './Spinner';
-import { popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase/firebase.utils';
+import { popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase.utils';
 
 type SignInFormProps = {
   prev: string | false;

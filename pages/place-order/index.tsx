@@ -10,7 +10,7 @@ import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/src/utils/firebase/firebase.utils';
+import { db } from '@/src/utils/firebase.utils';
 import { CartItemType } from '@/src/types';
 type OrderPageProps = {
   isAuth: boolean;

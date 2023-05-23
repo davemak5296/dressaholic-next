@@ -3,7 +3,7 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { gql } from '@apollo/client'
 import { UserTypeGQL, CartItemTypeFields } from "@/src/utils/apollo.utils";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/src/utils/firebase/firebase.utils";
+import { db } from "@/src/utils/firebase.utils";
 import { CartItemType } from "@/src/types";
 import { addItemToCart, clearItemInCart, subtractItemInCart } from "@/src/utils/cart.utils";
 import { Resolvers } from "resolvers-types";
