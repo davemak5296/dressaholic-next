@@ -21,7 +21,7 @@ const BrandFilter = ({ brandDedup, setChosenBrands }: BrandFilterProps) => {
         <div className="flex flex-wrap justify-start">
           {brandDedup.map((el, i) => (
             <div key={i} className="w-1/3 sm:w-full xl:w-[45%] xl:pr-2">
-              <input onClick={checkBoxHandler} type="checkbox" id={el} value={el} />
+              <input onClick={checkBoxHandler} type="checkbox" id={el} value={el} aria-label={`check to include or exclude products under ${el} brand`}/>
               <label htmlFor={el}>&nbsp;{el}</label>
             </div>
           ))}
@@ -36,6 +36,8 @@ const BrandFilter = ({ brandDedup, setChosenBrands }: BrandFilterProps) => {
               input.checked = false;
             });
           }}
+          role="button"
+          aria-label="click to clear the brand filter"
         >
           clear
         </div>

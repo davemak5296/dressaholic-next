@@ -104,7 +104,8 @@ const SignInForm = ({ prev }: SignInFormProps) => {
             onChange={handleChange}
             name="email"
             value={email}
-            aria-label="email"
+            aria-label="enter your email"
+            aria-required="true"
             required
           />
           <FormInput
@@ -113,16 +114,19 @@ const SignInForm = ({ prev }: SignInFormProps) => {
             onChange={handleChange}
             name="password"
             value={password}
+            aria-label="enter your password"
+            aria-required="true"
             required
           />
           <div className="flex flex-col justify-evenly xs:flex-row">
-            <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase">
+            <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase" aria-label="click to sign in">
               sign in
             </button>
             <button
               onClick={signInWithGoogle}
               type="button"
               className="daisy-btn-secondary px-8 py-4 uppercase"
+              aria-label="click to sign in with your Google account"
             >
               sign in with google
             </button>

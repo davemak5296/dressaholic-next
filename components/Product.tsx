@@ -141,7 +141,7 @@ const Product = ({ product, param }: ProductProps) => {
                 attrsForSelectedColor.stockNum == 0 ? 'opacity-40 grayscale' : 'grayscale-0'
               } max-w-[60%] @xs:max-w-1/3 max-h-[50vh]`}
               src={attrsForSelectedColor.image}
-              alt=""
+              alt={`${brand} ${displayName}`}
             />
           </div>
         </div>

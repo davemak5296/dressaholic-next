@@ -20,7 +20,7 @@ const CartItem = ({ item, orderPage, uid }: CartItemProp) => {
       {/* cart item - when smaller than sm */}
       {!orderPage && (
         <section className="h-[80px] grid grid-cols-cart-below-sm grid-rows-2 text-xs xs:text-sm sm:hidden">
-          <img className="max-h-[80px] mx-auto col-span-1 col-start-1 row-span-2 row-start-1 flex justify-center p-2" src={imageUrl} alt="" />
+          <img className="max-h-[80px] mx-auto col-span-1 col-start-1 row-span-2 row-start-1 flex justify-center p-2" src={imageUrl} alt={`${item.brand} ${item.displayName}`} />
           <div className="col-span-3 col-start-2 row-span-1 row-start-1 p-2 xs:pt-4">
             {displayName}
             <div className="text-xs">&nbsp;&nbsp;color: {color} </div>
@@ -47,7 +47,7 @@ const CartItem = ({ item, orderPage, uid }: CartItemProp) => {
             : 'max-h-[130px] hidden grid-cols-cartXL text-sm sm:grid lg:text-base xl:text-lg'
         } items-center`}
       >
-        <img className={`${orderPage?'max-h-[80px]':'max-h-[130px]'} mx-auto p-2`} src={imageUrl} alt="" />
+        <img className={`${orderPage?'max-h-[80px]':'max-h-[130px]'} mx-auto p-2`} src={imageUrl} alt={`${item.brand} ${item.displayName}`}  />
         {!orderPage && (
           <div className="w-4/5">
             {displayName}

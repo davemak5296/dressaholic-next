@@ -10,23 +10,25 @@ const BigMenu = () => {
         <div
           onClick={() => router.push('/shop/men')}
           className="absolute top-0 right-0 left-0 bottom-0 hidden cursor-pointer items-center justify-center bg-black/50 group-hover:flex"
+          role="link"
         >
           <h1 className="text-center text-2xl text-white drop-shadow-lg sm:text-4xl md:text-6xl xl:text-8xl">
-            <Link href="/news">For men</Link>
+            For men
           </h1>
         </div>
-        <img className="h-full" src="./for-men.jpg" alt="" />
+        <img className="h-full" src="./for-men.jpg" alt="for men" />
       </div>
       <div className="group relative w-1/2">
         <div
           onClick={() => router.push('/shop/women')}
           className="absolute top-0 right-0 left-0 bottom-0 hidden cursor-pointer items-center justify-center bg-black/50 group-hover:flex"
+          role="link"
         >
           <h1 className="text-center text-2xl text-white drop-shadow-lg sm:text-4xl md:text-6xl xl:text-8xl">
-            <Link href="/shop/men">For Women</Link>
+            For Women
           </h1>
         </div>
-        <img className="h-full" src="./for-women.jpg" alt="" />
+        <img className="h-full" src="./for-women.jpg" alt="for women" />
       </div>
     </div>
   )

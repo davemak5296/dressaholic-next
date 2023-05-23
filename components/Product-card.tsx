@@ -48,6 +48,7 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
           src={ !hasMount ? "/gray.png" : imageUrls[colors[0]]['thumbnail']}
           ref={imgRef}
           className={`w-full max-h-[200px] transition-all ${isOutOfStock ? 'grayscale' : 'grayscale-0'}`}
+          alt={`${brand} ${displayName}`}
         />
         {isOutOfStock && (
           <div className="absolute right-0 left-0 bottom-[50%] flex justify-center bg-slate-100 text-xl text-black opacity-80">
@@ -75,7 +76,7 @@ const ProductCard = ({ card: { sku, brand, displayName, imageUrls, stocks, price
             isOutOfStock ? 'daisy-btn-ghost daisy-btn-active' : 'daisy-btn-secondary'
           }`}
         >
-          <div className="flex w-full justify-center">View</div>
+          <button className="flex w-full justify-center" aria-label={`click to enter detailed page of ${brand} ${displayName}`}>View</button>
         </Link>
       </section>
     </motion.div>

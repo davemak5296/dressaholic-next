@@ -79,26 +79,23 @@ const Carousel = ({ dataSource }: CarouselProp) => {
       </div>
       {/* arrows for moving back and forth */}
       <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-between text-slate-500">
-        <Image src={LeftArrow} onClick={handleClickPrev} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" alt="previous-slide" />
-        <Image src={RightArrow} onClick={handleClickNext} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" alt="next-slide" />
+        <Image src={LeftArrow} onClick={handleClickPrev} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" role="button" aria-label="click to see previous slide" alt="previous-slide" />
+        <Image src={RightArrow} onClick={handleClickNext} className="h-6 w-6 cursor-pointer sm:h-10 sm:w-10 arrow-filter" role="button" aria-label="click to see next side" alt="next-slide" />
       </div>
       <section className="absolute left-[50%] top-[80%] z-10 flex h-[66.7vw] translate-x-[-50%] justify-center">
         {/* dots from jumping to different pic */}
         {/* spread the array iterator to an array of consecutive numbers from 0 to dataSource.length-1 */}
         {[...Array(dataSource.length).keys()].map((key, index) => (
           <div
-            onClick={() => {
-              setCurrentIndex(index);
-            }}
+            onClick={() => setCurrentIndex(index)}
             key={key}
-            className={`${
-              index == currentIndex ? 'bg-black' : 'bg-none'
-            } ml-2 h-3 w-3 cursor-pointer rounded-full border border-solid border-black transition-all sm:ml-4 sm:h-4 sm:w-4`}
+            className={`${ index == currentIndex ? 'bg-black' : 'bg-none' } ml-2 h-3 w-3 cursor-pointer rounded-full border border-solid border-black transition-all sm:ml-4 sm:h-4 sm:w-4`}
+            role="button"
+            aria-label={`click to see slide no. ${index + 1}`}
           ></div>
         ))}
       </section>
     </div>
-
   )
 }
 

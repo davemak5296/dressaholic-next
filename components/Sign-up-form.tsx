@@ -88,7 +88,9 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
             onChange={handleChange}
             name="displayName"
             value={displayName}
+            aria-label="enter your preferred display name"
             required
+            aria-required="true"
           />
           <FormInput
             label="Email"
@@ -96,7 +98,9 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
             onChange={handleChange}
             name="email"
             value={email}
+            aria-label="enter your email address"
             required
+            aria-required="true"
           />
           <FormInput
             label="Password"
@@ -104,7 +108,9 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
             onChange={handleChange}
             name="password"
             value={password}
+            aria-label="enter your preferred password"
             required
+            aria-required="true"
           />
           <FormInput
             label="Confirm Password"
@@ -112,13 +118,15 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
             onChange={handleChange}
             name="confirmPassword"
             value={confirmPassword}
+            aria-label="enter your preferred password again"
             required
+            aria-required="true"
           />
           <div className="flex flex-col xs:flex-row">
-            <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase">
+            <button type="submit" className="daisy-btn-primary px-8 py-4 uppercase" aria-label="click to sign up">
               sign up
             </button>
-          </div>
+            </div>
         </form>
       </div>
     </>
