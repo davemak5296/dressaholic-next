@@ -35,7 +35,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("daisyui"), require('tw-elements/dist/plugin'), require('@tailwindcss/container-queries')],
+  plugins: [require("daisyui"), require('@tailwindcss/container-queries')],
   daisyui: {
     themes: ['lemonade'],
     prefix: 'daisy-',
