@@ -47,7 +47,7 @@ const DeleteButton = ({uid, item}: DelButtonProps) => {
       }
     }}
     className='ml-1 h-4 w-4 cursor-pointer'
-    alt='plus-sign'
+    alt='delete-sign'
     tabIndex={0}
   />
   )

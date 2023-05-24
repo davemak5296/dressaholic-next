@@ -45,7 +45,8 @@ const MinusButton = ({uid, item}: MinusButtonProps) => {
           })
         }
       }}
-      className='ml-1 h-4 w-4 cursor-pointer' alt='plus-sign'
+      className='ml-1 h-4 w-4 cursor-pointer'
+      alt='minus-sign'
       tabIndex={0}
     />
   )

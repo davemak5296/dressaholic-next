@@ -48,7 +48,7 @@ const CartDropDown = () => {
               ? 'justify-center'
               : ''
             : 'justify-center'
-        } flex h-[160px] flex-col overflow-y-scroll bg-white xl:h-[240px]`}
+        } dropdown-container flex h-[160px] flex-col overflow-y-scroll bg-white xl:h-[240px]`}
       >
         {/* items */}
         { cookies['user']
