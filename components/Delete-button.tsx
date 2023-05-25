@@ -30,7 +30,8 @@ const DeleteButton = ({uid, item}: DelButtonProps) => {
         targetItem: item
       },
       refetchQueries: [
-        GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+        // GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+        'GetCurrentCart', 'GetSumOfItems', 'GetCurrentCartAndTotal'
       ]
     })}
     onKeyDown={e => {
@@ -41,7 +42,8 @@ const DeleteButton = ({uid, item}: DelButtonProps) => {
             targetItem: item
           },
           refetchQueries: [
-            GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+            // GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+            'GetCurrentCart', 'GetSumOfItems', 'GetCurrentCartAndTotal'
           ]
         })
       }

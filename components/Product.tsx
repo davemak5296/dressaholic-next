@@ -97,7 +97,8 @@ const Product = ({ product, param }: ProductProps) => {
         }
       },
       refetchQueries: [
-        GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+        // GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
+        'GetCurrentCart', 'GetSumOfItems', 'GetCurrentCartAndTotal'
       ]
     })
 
