@@ -8,10 +8,11 @@ import { CartItemType } from "@/src/types";
 import { addItemToCart, clearItemInCart, subtractItemInCart } from "@/src/utils/cart.utils";
 import { Resolvers } from "resolvers-types";
 import { readFileSync } from "fs";
+import path from 'path';
 import Cors from 'cors';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
-const typeDefs = readFileSync('./src/gql/schema.graphql', 'utf8');
+const typeDefs = readFileSync(path.resolve('./src/gql/schema.graphql'), 'utf8');
 
 const resolvers: Resolvers = {
   Query: {
