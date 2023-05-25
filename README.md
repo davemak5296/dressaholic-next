@@ -5,7 +5,7 @@ This is a personal project created for self-educational purposes only. The proje
 ## **Introduction**
 Dressaholic is a simple e-commerce web application designed for users to browse, filter and purchase clothing items.
 
-You can visit the demo site here: {url}
+You can visit the demo site here: https://dressaholic-next.vercel.app
 
 ## **Tech Stacks**
 This project is built using the following technologies, services and libraries:
