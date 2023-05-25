@@ -32,6 +32,7 @@ const CartDropDown = () => {
       uid: cookies.user
     },
     skip: !cookies.user,
+    pollInterval: 1000
   });
 
   const navHandler: MouseEventHandler = () => {
