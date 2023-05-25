@@ -1,46 +1,81 @@
-# Getting Started with Create React App
+# **Dressaholic-next**
+> **Disclaimer**  
+This is a personal project created for self-educational purposes only. The project is not intended for commercial use and should not be used for any business purposes. The sample data provided in the project is for demonstration purposes only and should not be used in a production environment.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+&nbsp;
+## **Introduction**
+Dressaholic is a simple e-commerce web application designed for users to browse, filter, and purchase clothing items.  
 
-## Available Scripts
+You can visit the demo site here: {url}
 
-In the project directory, you can run:
+&nbsp;
+## **Tech Stak**
+This project is built using the following technologies and libraries:
+- **HTML & CSS** - The foundation of web apps, with `TailwindCSS` for utility-first styling and responsive design, and `daisy-ui` as component library.
+- **TypeScript** - A superset of JavaScript that adds static types, enhancing code quality and maintainability.
+- **Next.js** - A React framework for server-rendered applications, providing features like page routing and static site generation.
+- **`jotai` & `immer`** - `jotai` uses atoms for global state management, while `immer` simplifies state updates by creating a new immutable state behind the scenes.
+- **`framer-motion`** - A library for creating smooth and performant animations and page transitions.
+- **Firebase** - A BaaS for user authentication, database management and more.
+- **GraphQL** - A query language for APIs, used with `@apollo/server` and `@apollo/client` for efficient data fetching and manipulation.
+- **Stripe** - A payment gateway for secure and reliable credit card transactions.
 
-### `yarn start`
+&nbsp;
+## **Features**
+Dressaholic offers the following features:
+1. **User Authentication** - Users can sign in using their existing Google account or register a new account.
+2. **Product Filtering** - Users can filter products by brand and price range.
+3. **Shopping Cart** - Users can add products to their cart and proceed to place an order by providing customer information.
+4. **Payment** - Users can securely pay for their order using a test credit card.
+5. **Persistent Cart** - Users' cart items are stored in the database, ensuring that items are not lost upon logout.
+6. **Accessibility** - With aria-labels on interactive elements; also users can use keyboard to navigate the site.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+&nbsp;
+## **Getting Started**
+To run this project locally, follow these steps:
+1. Clone the repository: `git clone https://github.com/yourusername/dressaholic.git`
+2. Install dependencies: `npm install` or `yarn install`
+3. Set up environment variables for Firebase and Stripe.
+4. Start the development server: `npm run dev` or `yarn dev`
+5. Open your browser and navigate to http://localhost:3000
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+&nbsp;
+## **Credits**
+- Logo: [flaticon](https://www.flaticon.com/free-icons/letter-d)
+- Pictures on HomePage: [Unsplash](https://unsplash.com/)
+- Product pictures: [Costco](https://www.costco.com/), [UNIQLO](https://www.uniqlo.com/) & [Decathlon](https://www.decathlon.com/)
 
-### `yarn test`
+&nbsp;
+## **Screenshos**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+&nbsp;
+### **Home page**
+![home-page](others/misc/home-page.png)
 
-### `yarn build`
+&nbsp;
+### **Auth page**
+![auth-page](others/misc/auth-page.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+&nbsp;
+### **Category page for men**
+![category-page-men](others/misc/category-page-men.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+&nbsp;
+### **Category page for women**
+![category-page-women](others/misc//category-page-women.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+&nbsp;
+### **List of products page**
+![product-list-page](others/misc/product-lists-page.png)
 
-### `yarn eject`
+&nbsp;
+### **Product detail page**
+![product-detail-page](others/misc/product-detail-page.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+&nbsp;
+### **Cart page**
+![cart-page](others/misc/cart-page.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+&nbsp;
+### **Order page**
+![order-page](others/misc/order-page.png)
