@@ -8,6 +8,8 @@ import { CartItemType } from "@/src/types";
 import { addItemToCart, clearItemInCart, subtractItemInCart } from "@/src/utils/cart.utils";
 import { Resolvers } from "resolvers-types";
 import { readFileSync } from "fs";
+import Cors from 'cors';
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 const typeDefs = readFileSync('./src/gql/schema.graphql', 'utf8');
 
@@ -87,12 +89,33 @@ const resolvers: Resolvers = {
 //     deleteItem (uid: String!, targetItem: CartItemInput!): String
 //   }
 // `;
-
+const cors = Cors({
+  methods: ['POST', 'GET', 'HEAD'],
+})
 const server = new ApolloServer({
   resolvers,
   typeDefs,
 });
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
 
-export default startServerAndCreateNextHandler(server, {
-  context: async (req,res) => ({ req, res })
-});
+      return resolve(result);
+    });
+  });
+}
+
+const handler = startServerAndCreateNextHandler(server);
+
+const graphqlServer: NextApiHandler = async (req, res) => {
+  await runMiddleware(req, res, cors);
+  await handler(req, res)
+}
+
+export default graphqlServer;
+// export default startServerAndCreateNextHandler(server, {
+//   context: async (req,res) => ({ req, res })
+// });
