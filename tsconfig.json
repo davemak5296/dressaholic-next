@@ -33,10 +33,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-    // "src", "netlify"
+, "cypress/support/commands.js"    // "src", "netlify"
   ],
   "exclude": [
     "node_modules",
-    "build"
+    "build",
   ]
 }

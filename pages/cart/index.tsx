@@ -77,7 +77,13 @@ const Cart = ( { isAuth }: CartPageProps ) => {
               ? loading
                 ? <Spinner />
                 : data && data?.currentCartAndTotal?.cart?.length > 0
-                  ? data.currentCartAndTotal.cart.map(({__typename, ...otherfields}, index) => <CartItem uid={cookies.user} key={index} item={otherfields} />)
+                  ? data.currentCartAndTotal.cart && data.currentCartAndTotal.cart.map((item, index) => {
+                      if (item?.__typename ) {
+                        const {__typename, ...otherfields} = item;
+                        return <CartItem uid={cookies.user} key={index} item={otherfields} />
+                      }
+                      return null
+                  } )
                   : <div className="flex w-full h-[200px] justify-center items-center text-3xl">Your cart is empty, let's go shopping!</div> 
               : <div className='flex w-full h-[200px] justify-center items-center text-3xl'>Login to shop!</div>
             }

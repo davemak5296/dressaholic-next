@@ -8,15 +8,16 @@ import { Provider as JotaiProvider, atom } from 'jotai';
 import { stripePromise } from '@/src/utils/stripe.utils';
 import './styles/globals.css';
 import Layout from '../components/Layout';
-import { Noto_Sans_HK } from 'next/font/google';
+// import { Noto_Sans_HK } from 'next/font/google';
 import client from "@/src/utils/apollo.utils";
 import Spinner from "@/components/Spinner";
 
-const Noto = Noto_Sans_HK({
-  weight:['100', '300', '500', '700'],
-  variable: '--my-font',
-  subsets: ['latin']
-})
+// font-family: ${Noto.style.fontFamily}, system-ui, sans-serif
+// const Noto = Noto_Sans_HK({
+//   weight:['100', '300', '500', '700'],
+//   variable: '--my-font',
+//   subsets: ['latin']
+// })
 
 export const cartOpenAtom = atom(false);
 
@@ -46,8 +47,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <ApolloProvider client={client}>
         <Elements stripe={stripePromise}>
           <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@100;300;500;700&display=swap');
           body {
-            font-family: ${Noto.style.fontFamily}, system-ui, sans-serif
+            font-family: 'Noto Sans HK', system-ui, sans-serif
           }
         `}</style>
           <JotaiProvider>

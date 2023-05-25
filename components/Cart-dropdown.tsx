@@ -56,13 +56,13 @@ const CartDropDown = () => {
               ? <Spinner />
               : data?.currentCart?.length == 0
                 ? <div>Your cart is empty, let&apos;s go shopping now!</div>
-                : data?.currentCart?.map(({ displayName, size, color, imageUrl, price, qty }, index) => (
+                : data?.currentCart?.map((item, index) => (
                     <section key={index} className='ml-[-8px] mb-3.5 grid grid-cols-[50px_80px_60px] h-[35px] gap-x-2 items-center text-[10px] leading-[12px]'>
-                      <img className="mx-auto max-h-[35px]" src={imageUrl} alt={displayName} />
-                      <p>{displayName}</p>
+                      <img className="mx-auto max-h-[35px]" src={item?.imageUrl} alt={item?.displayName} />
+                      <p>{item?.displayName}</p>
                       <div>
-                        <p><strong>{qty}</strong>{` - \$${price}`}</p>
-                        <p>{`${color}, ${size}`}</p>
+                        <p><strong>{item?.qty}</strong>{` - \$${item?.price}`}</p>
+                        <p>{`${item?.color}, ${item?.size}`}</p>
                       </div>
                     </section>
                   ))

@@ -1,4 +1,4 @@
-import { MouseEventHandler, KeyboardEventHandler, Dispatch, SetStateAction } from 'react';
+import { MouseEventHandler, KeyboardEventHandler, Dispatch, SetStateAction, SyntheticEvent } from 'react';
 
 type BrandFilterProps = {
   brandDedup: string[];
@@ -6,9 +6,9 @@ type BrandFilterProps = {
 };
 
 const BrandFilter = ({ brandDedup, setChosenBrands }: BrandFilterProps) => {
-  const toggleBrand = (e: MouseEvent | KeyboardEvent) => {
+  const toggleBrand = (e: SyntheticEvent | MouseEvent | KeyboardEvent) => {
     let target = e.target as HTMLInputElement;
-    if (e.nativeEvent instanceof KeyboardEvent) {target.checked = !target.checked} 
+    if ( e.type === 'keydown' ) {target.checked = !target.checked} 
     target.checked
       ? setChosenBrands((prev) => prev.concat([target.value]))
       : setChosenBrands((prev) => prev.filter((el) => el !== target.value));

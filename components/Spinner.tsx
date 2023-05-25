@@ -7,7 +7,6 @@ const Spinner = ({ sm }: SpinnerProps) => {
   let scrolH = body?.scrollHeight as number;
   let clientH = window.innerHeight as number;
   let scrolTop = window.scrollY as number;
-  console.log(`scrollTop is ${window.scrollY}`)
   
   return (
     <div
