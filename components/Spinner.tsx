@@ -10,15 +10,23 @@ const Spinner = ({ sm }: SpinnerProps) => {
   
   return (
     <div
-      style={{ bottom: `-${scrolH - clientH}px`}}
+      style={{ bottom: sm ? '0px' : `-${scrolH - clientH}px`}}
       className={`${
         sm ? 'pt-[5%]' : 'pt-[15%]'
       } absolute top-0 right-0 left-0 z-50 flex justify-center bg-white/80`}
     >
       <div
         style={{
-          top: scrolTop > 0 ? `-${scrolTop}px` : '0px',
-          bottom: scrolTop > 0 ? `-${(scrolTop)}px` :  `${scrolH - clientH}px`
+          top: sm
+                ? '0px'
+                : scrolTop > 0
+                  ? `-${scrolTop}px`
+                  : '0px',
+          bottom: sm
+                  ? '0px'
+                  : scrolTop > 0
+                    ? `-${(scrolTop)}px`
+                    :  `${scrolH - clientH}px`
         }}
         className={`${
           sm ? 'h-[30px] w-[30px]' : 'h-[100px] w-[100px]'

@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import FormInput from '@/components/FormInput/Form-input';
 import Spinner from './Spinner';
-import { popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase.utils';
+import { createUserDocFromAuth, initialCartForUser, popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase.utils';
 
 type SignInFormProps = {
   prev: string | false;
@@ -40,10 +40,17 @@ const SignInForm = ({ prev }: SignInFormProps) => {
     const handler = async () => {
       try {
         const user = await signInWithGooglePopup();
-        setCookie('user', user.user.uid, {
-          path: '/',
-          maxAge: 3600
-        })
+        if (!!user && 'user' in user) {
+          const {displayName, uid} = user.user;
+          await createUserDocFromAuth(user.user, {displayName});
+          await initialCartForUser(uid);
+
+          setCookie('user', user.user.uid, {
+            path: '/',
+            maxAge: 3600
+          })
+        }
+        
         backToProductOrHomePage(prev);
         setIsLoading(false)
 
