@@ -86,7 +86,7 @@ const OrderPage = ( { isAuth, uid, displayName, cart, total }: OrderPageProps) =
   return (
     <div className='flex flex-col min-h-screen'>
       <NavBar isAuth={isAuth} scrollY={scrollH} />
-      <main className="main-container px-3 sm:container sm:px-0">
+      <main className="w-full main-container px-2 xl:px-0">
         <h1 className="mx-auto flex justify-center py-2 text-xl font-light md:py-4 md:text-2xl lg:py-4 lg:text-2xl xl:py-5 xl:text-3xl">
           Order Info
         </h1>

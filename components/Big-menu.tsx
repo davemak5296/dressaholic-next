@@ -6,7 +6,7 @@ const BigMenu = () => {
 
   return (
     <div className="mx-auto flex xl:container">
-      <div className="group relative w-1/2">
+      <div className="group relative w-1/2 max-h-[50vh]">
         <div
           onClick={() => router.push('/shop/men')}
           className="absolute top-0 right-0 left-0 bottom-0 hidden cursor-pointer items-center justify-center bg-black/50 group-hover:flex"
@@ -18,9 +18,9 @@ const BigMenu = () => {
         <img
           onClick={() => router.push('/shop/men')}
           onKeyDown={ e => e.key === 'Enter' && router.push('/shop/men')}
-          className="h-full" src="./for-men.jpg" alt="for men" role="link" tabIndex={0}/>
+          className="h-full max-w-full" src="./for-men.jpg" alt="for men" role="link" tabIndex={0}/>
       </div>
-      <div className="group relative w-1/2">
+      <div className="group relative w-1/2 max-h-[50vh]">
         <div
           onClick={() => router.push('/shop/women')}
           className="absolute top-0 right-0 left-0 bottom-0 hidden cursor-pointer items-center justify-center bg-black/50 group-hover:flex"
@@ -32,7 +32,7 @@ const BigMenu = () => {
         <img 
           onClick={() => router.push('/shop/women')}
           onKeyDown={ e => e.key === 'Enter' && router.push('/shop/women')}
-          className="h-full" src="./for-women.jpg" alt="for women" role="link" tabIndex={0}/>
+          className="h-full max-w-full" src="./for-women.jpg" alt="for women" role="link" tabIndex={0}/>
       </div>
     </div>
   )
