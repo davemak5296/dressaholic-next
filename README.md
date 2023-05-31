@@ -8,6 +8,12 @@ Dressaholic is a simple e-commerce web application designed for users to browse,
 You can visit the demo site here: https://dressaholic-next.vercel.app
 
 ## **Tech Stacks**
+> Originally this project is built using create-react-app, with redux as state management library.
+> 
+> Old repo: https://github.com/davemak5296/dressaholic-ecommerce
+> 
+> Old deployed site: https://cool-chaja-9b8218.netlify.app/#/
+
 This project is built using the following technologies, services and libraries:
 - `HTML & CSS` (with `TailwindCSS` for utility-first styling and responsive design, and component library `daisy-ui`)
 - `TypeScript`
