@@ -61,14 +61,18 @@ const Product = ({ product, param }: ProductProps) => {
   const qtyBoxChgHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
     const str = e.target.value;
     if (validator.isNumeric(str)) {
-      if (str == '0') return setQtyToAdd(1); //when input 0, set to 1
+      if (str == '0') return setQtyToAdd(''); //when input 0, set to 1
 
-      return attrsForSelectedColor.stockNum >= parseInt(str)
+      return parseInt(str) < 99
         ? setQtyToAdd(parseInt(str))
-        : setQtyToAdd(attrsForSelectedColor.stockNum); // when input > stockNum, set to stockNum
+        : setQtyToAdd(99)
+      // return attrsForSelectedColor.stockNum >= parseInt(str)
+      //   ? setQtyToAdd(parseInt(str))
+      //   : setQtyToAdd(attrsForSelectedColor.stockNum); // when input > stockNum, set to stockNum
     }
-
-    setQtyToAdd(''); // when input is not number, clear
+    
+    if (str === '') setQtyToAdd('');
+    // setQtyToAdd(''); // when input is not number, clear
   };
 
   const btnClickHandler: MouseEventHandler = () => {

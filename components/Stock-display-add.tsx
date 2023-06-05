@@ -21,8 +21,8 @@ const StockDisplayAndAdd = ({
 }: StockDisplayAndAddProps) => {
   return (
     <div className="flex w-full items-center">
-      <div className="flex w-full flex-col">
-        <p className="mt-2 sm:mt-8">
+      <div className="my-2 sm:my-8 flex w-full flex-col">
+        {/* <p className="mt-2 sm:mt-8">
           <span className="text-base text-secondary-focus underline underline-offset-4 sm:text-lg">
             Stocks left:
           </span>
@@ -33,14 +33,15 @@ const StockDisplayAndAdd = ({
           >
             &nbsp;&nbsp;&nbsp;{stockNum}
           </span>
-        </p>
+        </p> */}
         <div className="flex items-center">
           <Image src={PlusSign} alt='plus-sign'
             className="h-4 w-4 cursor-pointer sm:h-6 sm:w-6 lg:h-8 lg:w-8"
             onClick={() => {
               setQtyToAdd((prev) => {
                 if (typeof prev == 'number') {
-                  return stockNum > prev ? prev + 1 : prev;
+                  return prev < 99 ? prev + 1 : prev
+                  // return stockNum > prev ? prev + 1 : prev;
                 }
                 return 1; // when input is empty, set to 1
               });
