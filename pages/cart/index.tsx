@@ -5,11 +5,12 @@ import CartItem from '@/components/Cart-item';
 import { GetServerSideProps } from 'next';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
-import { useCookies } from 'react-cookie';
 import { useQuery } from '@apollo/client';
 import { graphql } from '@/src/gql';
 import ClientOnly from '@/components/ClientOnly';
 import Spinner from '@/components/Spinner';
+import { verifyAuthStatus } from '@/src/utils/verifyAuthStatus';
+import useAuthStateListener from '@/src/hooks/useAuthListener';
 
 export const GET_CART_AND_TOTAL = graphql(`
   query GetCurrentCartAndTotal($uid: String!) {
@@ -32,7 +33,9 @@ type CartPageProps = {
   isAuth: boolean;
 }
 export const getServerSideProps: GetServerSideProps<CartPageProps>= async ({req}) => {
-  const isAuth = req.cookies.user ? true : false;
+  const { csrf , session } = req.cookies;
+  const { isAuth } = await verifyAuthStatus(csrf, session);
+
   return { props: { isAuth }};
 }
 
@@ -40,13 +43,13 @@ const colTitleStyles = clsx('bg-secondary text-secondary-content text-base lg:te
 
 const Cart = ( { isAuth }: CartPageProps ) => {
   const { scrollH } = useNavbarHeight();
+  const { currUser } = useAuthStateListener();
 
-  const [ cookies ] = useCookies();
   const {loading, error, data} = useQuery(GET_CART_AND_TOTAL, {
     variables: {
-      uid: cookies.user
+      uid: currUser?.uid as string,
     },
-    skip: !cookies.user,
+    skip: !currUser?.uid,
   });
 
   return (
@@ -73,14 +76,14 @@ const Cart = ( { isAuth }: CartPageProps ) => {
         <ClientOnly>
           <>
             {/* items */}
-            { cookies.user
+            { currUser?.uid
               ? loading
                 ? <Spinner />
                 : data && data?.currentCartAndTotal?.cart?.length > 0
                   ? data.currentCartAndTotal.cart && data.currentCartAndTotal.cart.map((item, index) => {
                       if (item?.__typename ) {
                         const {__typename, ...otherfields} = item;
-                        return <CartItem uid={cookies.user} key={index} item={otherfields} />
+                        return <CartItem uid={currUser?.uid} key={index} item={otherfields} />
                       }
                       return null
                   } )
@@ -89,7 +92,7 @@ const Cart = ( { isAuth }: CartPageProps ) => {
             }
 
             {/* Total */}
-            { cookies.user
+            { currUser?.uid
               ? loading || data?.currentCartAndTotal?.total == 0
                 ? null 
                 : <div className='float-right mt-4 text-2xl'>{`Total: ${data?.currentCartAndTotal?.total}`}</div>

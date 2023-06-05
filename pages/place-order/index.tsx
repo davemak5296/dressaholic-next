@@ -12,6 +12,7 @@ import useNavbarHeight from '@/src/hooks/useNavbarHeight';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/src/utils/firebase.utils';
 import { CartItemType } from '@/src/types';
+import { verifyAuthStatus } from '@/src/utils/verifyAuthStatus';
 type OrderPageProps = {
   isAuth: boolean;
   uid: string;
@@ -21,10 +22,11 @@ type OrderPageProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<OrderPageProps>= async ({req}) => {
-  const isAuth = req.cookies.user ? true : false; 
+  const { csrf , session } = req.cookies;
+  const { isAuth, data } = await verifyAuthStatus(csrf, session);
   if (!isAuth) return { redirect: { destination: '/', permanent: false } }
 
-  const uid = req.cookies.user as string;
+  const uid = data.uid as string;
   const userSnapShot = await getDoc( doc(db, 'users', uid));
   const displayName = userSnapShot.data()?.displayName as string;
 

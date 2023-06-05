@@ -5,18 +5,28 @@ import SignUpForm from '@/components/Sign-up-form';
 import Footer from '@/components/Footer';
 import NavBar from '@/components/Nav-bar';
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+import generateCsrfToken from '@/src/utils/csrf';
+import { verifyAuthStatus } from '@/src/utils/verifyAuthStatus';
+import { serialize } from 'cookie';
 
 type AuthPageProps = {
   isAuth: boolean;
   prev: string | false;
+  csrf: string
 }
 
-export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}) => {
-  const isAuth = req.cookies.user ? true : false;
+export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req, res}) => {
+  let { csrf , session } = req.cookies;
+  if (!csrf) {
+    csrf = generateCsrfToken();
+    const expiresIn = 60*60;
+    res.setHeader('Set-Cookie', serialize('csrf', csrf, { path: '/', maxAge: expiresIn }))
+  }
+  const { isAuth } = await verifyAuthStatus(csrf, session);
   const prev = req.cookies.prev ?? false;
 
   return !isAuth
-    ? { props: { isAuth, prev } }
+    ? { props: { isAuth, prev, csrf } }
     : {
         redirect: {
           destination: '/',
@@ -25,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<AuthPageProps>= async ({req}
       }
 }
 
-const Authentication = ( { isAuth, prev }: AuthPageProps ) => {
+const Authentication = ( { isAuth, prev, csrf }: AuthPageProps ) => {
   const { scrollH } = useNavbarHeight();
 
   return (
@@ -46,8 +56,8 @@ const Authentication = ( { isAuth, prev }: AuthPageProps ) => {
         }}
         className="main-container flex w-full flex-col items-center py-4 lg:h-[calc(100vh-180px)] lg:w-[850px] lg:flex-row lg:items-start lg:justify-between"
       >
-        <SignInForm prev={prev} />
-        <SignUpForm prev={prev} />
+        <SignInForm csrf={csrf} prev={prev} />
+        <SignUpForm csrf={csrf} prev={prev} />
       </motion.main>
       <Footer />
     </div>

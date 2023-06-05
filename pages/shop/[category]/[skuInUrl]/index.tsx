@@ -5,6 +5,7 @@ import useNavbarHeight from "@/src/hooks/useNavbarHeight";
 import { getCategoriesAndDocs } from "@/src/utils/firebase.utils";
 import Custom404 from "pages/404";
 import Footer from "@/components/Footer";
+import { verifyAuthStatus } from "@/src/utils/verifyAuthStatus";
 type ProductPageProps = {
   isAuth: boolean;
   product: Product | null;
@@ -12,7 +13,9 @@ type ProductPageProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<ProductPageProps>= async ({req, params}) => {
-  const isAuth = req.cookies.user ? true : false;
+  const { csrf , session } = req.cookies;
+  const { isAuth } = await verifyAuthStatus(csrf, session);
+
   const paramCat = params?.category as string;
   const paramSku = params?.skuInUrl as string;
 

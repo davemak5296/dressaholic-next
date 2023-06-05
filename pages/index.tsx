@@ -1,10 +1,15 @@
 import { GetServerSideProps } from "next";
+// import * as cookie from 'cookie';
+import { server } from 'config';
 import { motion } from "framer-motion";
 import NavBar from "@/components/Nav-bar";
 import Footer from "@/components/Footer";
 import BigMenu from "@/components/Big-menu";
 import Carousel from "@/components/Carousel";
 import useNavbarHeight from '@/src/hooks/useNavbarHeight';
+import { headers } from "next/dist/client/components/headers";
+import { serialize } from "cookie";
+import { verifyAuthStatus } from "@/src/utils/verifyAuthStatus";
 
 const dataSource = ['./landing-carousel-1.jpg', './landing-carousel-2.jpg'];
 
@@ -13,7 +18,9 @@ type HomePageProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<HomePageProps>= async ({req}) => {
-  const isAuth = req.cookies.user ? true : false;
+  const { csrf , session } = req.cookies;
+  const { isAuth } = await verifyAuthStatus(csrf, session);
+
   return { props: { isAuth } };
 }
 export default function HomePage( { isAuth }: HomePageProps) {
