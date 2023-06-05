@@ -1,15 +1,17 @@
 import {useState, FormEventHandler, ChangeEventHandler, useEffect} from 'react';
 import FormInput from './FormInput/Form-input';
 import Spinner from './Spinner';
-import { createAuthUserWithEmailAndPw, createUserDocFromAuth, initialCartForUser, popUpError } from '@/src/utils/firebase.utils';
+import { createAuthUserWithEmailAndPw, createUserDocFromAuth, popUpError } from '@/src/utils/firebase.utils';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
+import { server } from 'config';
 
 type SignUpFormProps = {
+  csrf: string;
   prev: string | false;
 }
 
-const SignUpForm = ({ prev }: SignUpFormProps) => {
+const SignUpForm = ({ prev, csrf }: SignUpFormProps) => {
   const [ cookies, setCookie ] = useCookies();
   const router = useRouter();
   const [formFields, setFormFields] = useState({
@@ -39,11 +41,17 @@ const SignUpForm = ({ prev }: SignUpFormProps) => {
         const user = await createAuthUserWithEmailAndPw(email, password);
         if (!!user && 'user' in user) {
           await createUserDocFromAuth(user.user, { displayName });
-          await initialCartForUser(user.user.uid);
+          // await initialCartForUser(user.user.uid);
 
-          setCookie('user', user.user.uid, {
-            path: '/',
-            maxAge: 3600
+          const idToken = await user.user.getIdToken();
+          console.log(document.cookie)
+          await fetch(`${server}/api/auth/login`, {
+            method: 'post',
+            // credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idToken: idToken, csrf: csrf })
           })
           alert('You have successfully registered!')
 

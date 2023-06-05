@@ -1,11 +1,13 @@
 import {useState, ChangeEventHandler, FormEventHandler } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
+import { server } from 'config';
 import FormInput from '@/components/FormInput/Form-input';
 import Spinner from './Spinner';
-import { createUserDocFromAuth, initialCartForUser, popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase.utils';
+import { createUserDocFromAuth, popUpError, signInAuthUserWithEmailAndPw, signInWithGooglePopup } from '@/src/utils/firebase.utils';
 
 type SignInFormProps = {
+  csrf: string;
   prev: string | false;
 }
 const defaultFormFields = {
@@ -13,7 +15,7 @@ const defaultFormFields = {
   password: '',
 };
 
-const SignInForm = ({ prev }: SignInFormProps) => {
+const SignInForm = ({ prev, csrf }: SignInFormProps) => {
   const [ cookies, setCookie ] = useCookies();
   const router = useRouter();
   const [formFields, setFormFields] = useState(defaultFormFields);
@@ -43,13 +45,16 @@ const SignInForm = ({ prev }: SignInFormProps) => {
         if (!!user && 'user' in user) {
           const {displayName, uid} = user.user;
           await createUserDocFromAuth(user.user, {displayName});
-          await initialCartForUser(uid);
-
-          setCookie('user', user.user.uid, {
-            path: '/',
-            maxAge: 3600
-          })
         }
+        const idToken = await user.user.getIdToken();
+        await fetch(`${server}/api/auth/login`, {
+          method: 'post',
+          // credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ idToken: idToken, csrf: csrf })
+        })
         
         backToProductOrHomePage(prev);
         setIsLoading(false)
@@ -74,9 +79,15 @@ const SignInForm = ({ prev }: SignInFormProps) => {
           alert('no user found!');
           return
         } else {
-          setCookie('user', user.user.uid, {
-            path: '/',
-            maxAge: 3600
+          const idToken = await user.user.getIdToken();
+          console.log(document.cookie)
+          await fetch(`${server}/api/auth/login`, {
+            method: 'post',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idToken: idToken, csrf: csrf })
           })
           backToProductOrHomePage(prev);
           setIsLoading(false);

@@ -6,6 +6,7 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -57,6 +58,8 @@ export const createUserDocFromAuth = async (
         createAt,
         ...additionalInfo,
       });
+      await initialCartForUser(userAuth.uid)
+
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log('error creating the user', error.message);
@@ -75,7 +78,7 @@ export const signInAuthUserWithEmailAndPw = async (email: string, pw: string) =>
   return signInWithEmailAndPassword(auth, email, pw);
 };
 
-export const initialCartForUser = async (uid: UserCredential['user']['uid']) => {
+const initialCartForUser = async (uid: UserCredential['user']['uid']) => {
   const cartDocRef = doc(db, 'cart', uid);
   await setDoc(cartDocRef, {
     cart: []
@@ -126,3 +129,5 @@ export const popUpError = (error: FirebaseError | unknown) => {
     console.log(error);
   }
 }
+
+export const signOutUser = async () => signOut(auth);
