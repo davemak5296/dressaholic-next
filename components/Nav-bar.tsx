@@ -10,6 +10,7 @@ import LoginIcon from '@/assets/icons-and-logos/icon-login.svg'
 import LogoutIcon from '@/assets/icons-and-logos/icon-logout.svg'
 import { useAtom } from 'jotai';
 import { cartOpenAtom } from 'pages/_app';
+import { auth, signOutUser } from '@/src/utils/firebase.utils';
 
 type NavBarProps = {
   scrollY: number;
@@ -20,11 +21,20 @@ const iconStyle = 'mr-3 h-[25px] w-[25px] cursor-pointer md:hidden';
 
 const NavBar = ({ scrollY, isAuth }: NavBarProps) => {
   const [isCartOpen] = useAtom(cartOpenAtom);
-  const [ cookie, setCookies ] = useCookies();
+  const [ _, setCookies ] = useCookies();
   const router = useRouter();
   const isScrolledOver = scrollY > 36;
 
   const signOutHandler: React.MouseEventHandler = () => {
+    signOutUser();
+    setCookies('session', '', {
+      path: '/',
+      maxAge: -1
+    })
+    setCookies('csrf', '', {
+      path: '/',
+      maxAge: -1
+    })
     setCookies('user', '', {
       path: '/',
       maxAge: -1

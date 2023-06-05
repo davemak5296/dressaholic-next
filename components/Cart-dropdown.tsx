@@ -2,10 +2,10 @@ import { MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { graphql } from '@/src/gql';
-import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
 import { cartOpenAtom } from 'pages/_app';
 import { useAtom } from 'jotai';
+import useAuthStateListener from '@/src/hooks/useAuthListener';
 
 export const GET_CART_ITEM = graphql(`
   query GetCurrentCart($uid: String!) {
@@ -25,13 +25,13 @@ export const GET_CART_ITEM = graphql(`
 const CartDropDown = () => {
   const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
   const router = useRouter();
+  const { currUser } = useAuthStateListener();
 
-  const [ cookies ] = useCookies();
   const {loading, error, data} = useQuery(GET_CART_ITEM, {
     variables: {
-      uid: cookies.user
+      uid: currUser?.uid as string
     },
-    skip: !cookies.user,
+    skip: !currUser?.uid,
     pollInterval: 1000
   });
 
@@ -44,7 +44,7 @@ const CartDropDown = () => {
     <div className="absolute top-[64px] right-[3%] z-[1] flex w-60 flex-col border border-solid border-black bg-white p-2 lg:top-[72px]">
       <div
         className={`${
-          cookies['user']
+          currUser?.uid
             ? data?.currentCart?.length == 0
               ? 'justify-center'
               : ''
@@ -52,7 +52,7 @@ const CartDropDown = () => {
         } dropdown-container flex h-[160px] flex-col overflow-y-scroll bg-white xl:h-[240px]`}
       >
         {/* items */}
-        { cookies['user']
+        { currUser?.uid
             ? loading
               ? <Spinner />
               : data?.currentCart?.length == 0

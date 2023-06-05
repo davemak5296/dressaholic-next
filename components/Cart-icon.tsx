@@ -1,13 +1,13 @@
-import { MouseEventHandler, useRef, useEffect } from 'react';
+import { MouseEventHandler, useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useQuery } from '@apollo/client';
-import { useCookies } from 'react-cookie';
 import { useAtom } from 'jotai';
 
 import { graphql } from '@/src/gql';
 import ShoppingBag from '@/assets/icons-and-logos/icon-shopping-bag.svg'
 import ClientOnly from './ClientOnly';
 import { cartOpenAtom } from 'pages/_app';
+import useAuthStateListener from '@/src/hooks/useAuthListener';
 
 export const GET_SUMOFITEM = graphql(`
   query GetSumOfItems($uid: String!) {
@@ -17,18 +17,18 @@ export const GET_SUMOFITEM = graphql(`
 const CartIcon = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
+  const { currUser } = useAuthStateListener();
 
   const toggleDropDown: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
     setIsCartOpen(!isCartOpen);
   };
-
-  const [ cookies ] = useCookies();
+  
   const {loading, error, data} = useQuery(GET_SUMOFITEM, {
     variables: {
-      uid: cookies.user
+      uid: currUser?.uid as string
     },
-    skip: !cookies.user,
+    skip: !currUser?.uid,
   });
 
   const handleClickOutside = (event: MouseEvent): void => {
@@ -57,7 +57,7 @@ const CartIcon = () => {
       <Image src={ShoppingBag} className="h-6 w-6" alt='shopping-bag'/>
       <ClientOnly>
         <span className="absolute text-xs font-bold">
-          { cookies['user']
+          { currUser?.uid
               ? loading
                 ? ''
                 : data?.sumOfItems ?? '0'

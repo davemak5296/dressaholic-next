@@ -16,6 +16,7 @@ import { GET_CART_ITEM } from './Cart-dropdown';
 import { GET_SUMOFITEM } from './Cart-icon';
 import { GET_CART_AND_TOTAL } from 'pages/cart';
 import { cartOpenAtom } from 'pages/_app';
+import useAuthStateListener from '@/src/hooks/useAuthListener';
 
 export type ActiveStateType = {
   color: string;
@@ -43,7 +44,7 @@ type ProductProps = {
 const Product = ({ product, param }: ProductProps) => {
   const { sku, brand, displayName, colors, imageUrls, stocks, price } = product;
   const [isCartOpen, setIsCartOpen] = useAtom(cartOpenAtom);
-  const [ cookie ] = useCookies();
+  const { currUser } = useAuthStateListener();
   
   const { asPath, push } = useRouter();
   const [ cookies, setCookies ] = useCookies();
@@ -73,7 +74,7 @@ const Product = ({ product, param }: ProductProps) => {
   const btnClickHandler: MouseEventHandler = () => {
     if (attrsForSelectedColor.stockNum == 0 || qtyToAdd == '') return;  // jump out if no stock or qty box is empty
 
-    if (!cookie.user) {
+    if (!currUser?.uid) {
       alert('Please login before shopping!');
       setCookies('prev', asPath, {
         path: '/',
@@ -84,7 +85,7 @@ const Product = ({ product, param }: ProductProps) => {
     }
     addItem({
       variables: {
-        uid: cookies.user,
+        uid: currUser?.uid,
         newItem: {
           sku: sku,
           brand: brand,
@@ -97,7 +98,6 @@ const Product = ({ product, param }: ProductProps) => {
         }
       },
       refetchQueries: [
-        // GET_CART_ITEM, GET_SUMOFITEM, GET_CART_AND_TOTAL
         'GetCurrentCart', 'GetSumOfItems', 'GetCurrentCartAndTotal'
       ]
     })
