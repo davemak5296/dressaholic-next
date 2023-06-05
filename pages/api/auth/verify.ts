@@ -1,14 +1,8 @@
 import * as admin from 'firebase-admin';
-// import serviceAccount from 'C:/Users/hk56_/Downloads/ztm-crwn-2d3cc-firebase-adminsdk-xyenl-9fc23a1a28.json'
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import Cors from 'cors';
-import { server } from 'config';
 
-const serviceAccountPath = resolve('C:/Users/hk56_/Downloads/ztm-crwn-2d3cc-firebase-adminsdk-xyenl-9fc23a1a28.json');
-
-const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'))
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT!)
 
 if (!admin.apps.length) {
   admin.initializeApp({
